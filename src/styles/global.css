@@ -1,0 +1,18 @@
+/* Reset mínimo y neutro. El diseño llega con Impeccable (B-06). */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: system-ui, sans-serif;
+	line-height: 1.5;
+}
+
+img,
+svg {
+	max-width: 100%;
+}
