@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-15. Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-15 (tras el repaso de decisiones). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -23,9 +23,9 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 |---|---|---|---|
 | A-01 | Fecha del torneo de Navidad, fecha de apertura y cierre de inscripciones, deporte, lugar, precio (si lo hay) | M | C-04, C-05 |
 | A-02 | Confirmar reglas del torneo: categorías (infantil+cadet / sénior), máximos de equipos y jugadores, edades exactas de cada categoría | M | C-05 |
-| A-03 | Decidir cómo se verifica la autorización de menores: correo al tutor, firma digital, papel entregado en Softco, o varias | M + S | C-05 |
+| A-03 | Comprobar si la autorización del tutor **por correo** es válida legalmente (firma digital y papel en Softco ya están aceptadas) | M + S | C-05 |
 | A-04 | Quién de Montca gestiona solicitudes e inscritos (personas y correos) | M | C-03, C-06 |
-| A-05 | Mapa: ilustración a medida u OpenStreetMap con estilo propio | M + P | C-02 |
+| A-05 | Ilustración a medida del mapa de Mariola (cada botón, un pico): boceto, visto bueno de Montca y versión final en SVG | P + M | C-02 |
 | A-06 | ¿Las actividades normales de la agenda tienen "Apunta't" con plazas, o se piden por formulario/WhatsApp? | M + S + P | C-02, C-06 |
 | A-07 | Logo en buena calidad, fotos de cada actividad y de Montca Sports | M | B-06, C-01 |
 | A-08 | Por actividad: dónde, edades, duración, tamaño de grupo, precio orientativo, qué incluye, ubicación en Mariola | M | C-01 |
@@ -55,7 +55,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 | ID | Tarea | Notas |
 |---|---|---|
-| A-20 | Repasar decisiones.md juntos y confirmar las marcadas "por confirmar" | |
+| A-20 | Cerrar lo que sigue "por confirmar" en decisiones.md: content collections (tras ver Astro), avisos con `wa.me`, scripts `sh` en Windows | Repaso general hecho el 2026-11-15 |
 | A-21 | Limpieza del repo por consenso: mover `MD's/Instruccions web i bot` a `docs/fase-2/bot-reels.md` o borrarlo; revisar `docs/ideas/`, `sprint-01.md` y qué sobra | No dejar basura |
 | A-22 | Rehacer el backlog del sprint 1 y crear los issues a partir de este archivo | |
 
@@ -67,7 +67,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 |---|---|---|---|---|---|
 | B-01 | Estructura del proyecto Astro: carpetas, layout base, `lang` correcto, quitar plantilla por defecto | P | S | Astro | — |
 | B-02 | Netlify: conectar repo, vistas previas por PR, `netlify.toml` | S | S | Netlify | — |
-| B-03 | Inicializar Spec Kit en rama propia, sin perder el `CLAUDE.md` actual | S | S | Spec Kit | A-20 |
+| B-03 | Inicializar Spec Kit en rama propia con `--script sh`, sin perder el `CLAUDE.md` actual; comprobar que los scripts corren en el Windows de Saúl (Git Bash) | S | S | Spec Kit | — |
 | B-04 | Escribir la constitución (`/speckit.constitution`) y actualizar `CLAUDE.md` con el flujo nuevo | S + P | M | Spec Kit | B-03 |
 | B-05 | Mover los hooks de Impeccable de `settings.local.json` a `.claude/settings.json` para que los tengamos los dos | P | S | Claude Code | — |
 | B-06 | `/impeccable init` → PRODUCT.md y DESIGN.md | P | M | Impeccable | A-07 |
@@ -89,7 +89,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 | ID | Feature | Quién | Tecnología | Depende de |
 |---|---|---|---|---|
-| C-01 | **Actividades**: modelo de datos, ficha y página de cada actividad | S (datos) + P (UI) | Astro content collections | B-07, A-08 |
+| C-01 | **Actividades**: modelo de datos, ficha y página de cada actividad (sin reels hasta D-01) | S (datos) + P (UI) | Astro content collections (por confirmar) | B-07, A-08 |
 | C-02 | **Portada**: buscador (Qui sou? / Què vos ve de gust?) que filtra mapa y agenda | P | Astro + JS en cliente | C-01, A-05, A-06 |
 | C-03 | **Formulario de solicitudes + CRM** | S | Astro + Apps Script + Google Sheets | A-13, B-08 |
 | C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, lista de equipos inscritos por categoría, botón Inscribir-se | S (datos) + P (UI) | Astro + Supabase | A-14, A-01 |
@@ -116,14 +116,15 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 - Apartado "Equips inscrits": aparece cuando hay al menos un equipo; separado en dos categorías: **Infantil + Cadet** (una sola) y **Sénior**.
 - Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
 - Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
-- Qué datos de un equipo son públicos (nombre del equipo sí; nombres de menores, por decidir → A-19).
+- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los menores, solo el primer nombre, sin apellidos.
 - Pensado para reutilizarse con el siguiente evento sin reprogramar.
 
 **C-05 · Inscripción de equipos** (la lógica se cierra en la spec; esto es lo que hay de las notas de la reunión)
 - El capitán crea el equipo y da sus datos; recibe un enlace para pasar por WhatsApp.
 - Cada jugador abre el enlace y se apunta a ese equipo; al completar sus datos aparece en la página del equipo.
 - Mayor de edad: acepta derechos de imagen.
-- Menor: datos del menor y del tutor; correo al tutor para autorizar participación e imagen; **no queda inscrito hasta que se verifica**. Formas de verificación por decidir (A-03).
+- Menor: datos del menor y del tutor; el tutor autoriza participación e imagen; **no queda inscrito hasta que se verifica**. Vale la firma digital o el papel entregado en Softco; la autorización por correo, solo si A-03 confirma que es legal.
+- Pedir el dorsal de cada jugador (se muestra en la página del equipo).
 - Límites: Infantil+Cadet máx. 8 equipos, 5–10 jugadores; Sénior máx. 6 equipos, 5–12 jugadores.
 - Casos a resolver en `clarify`: equipo que no llega al mínimo, enlace reenviado a desconocidos, jugador que se borra, capitán menor de edad, lista de espera, duplicados.
 
@@ -135,7 +136,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 **C-07 · Avisos por correo**
 - Confirmación al inscribirse, aviso al capitán cuando se apunta alguien, recordatorio el día antes con punto de encuentro, hora y qué traer.
-- Siempre por correo; WhatsApp solo con botones `wa.me`.
+- Siempre por correo. Botones `wa.me` con el mensaje escrito: por confirmar.
 
 ---
 
@@ -143,7 +144,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 | ID | Tarea | Notas |
 |---|---|---|
-| D-01 | Bot de Telegram que publica reels en la web | Guía ya escrita por Pablo |
+| D-01 | Bot de Telegram que publica reels en la web | Guía ya escrita por Pablo. Hasta entonces la web no muestra reels |
 | D-02 | Lectura automática de Instagram para publicar próximas actividades | Requiere app de Meta y cuenta Business |
 | D-03 | Recordatorios por WhatsApp Business API | De pago por mensaje |
 | D-04 | Pago online de inscripciones | Solo si Montca lo pide |
