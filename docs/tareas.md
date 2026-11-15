@@ -1,0 +1,163 @@
+# Tareas · Web Montca Actiu
+
+Actualizado: 2026-11-15. Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+
+Cada tarea está clasificada por **cómo se hace**:
+
+- **A · Gestión** — sin código: hablar, comprar, configurar cuentas.
+- **B · Claude Code directo** — tarea pequeña: issue → rama → PR, sin spec.
+- **C · Spec Kit** — feature con lógica, datos o varios estados: specify → clarify → plan → tasks → implement.
+- **D · Fase 2** — aparcado.
+
+Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medio día) · L (un día o más).
+
+> **Fecha crítica: torneo de Navidad.** Las inscripciones tienen que abrir con margen antes del torneo, así que el camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+
+---
+
+## A · Gestión (sin código)
+
+### A1. Decisiones y contenido que dependen de Montca
+
+| ID | Tarea | Quién | Bloquea a |
+|---|---|---|---|
+| A-01 | Fecha del torneo de Navidad, fecha de apertura y cierre de inscripciones, deporte, lugar, precio (si lo hay) | M | C-04, C-05 |
+| A-02 | Confirmar reglas del torneo: categorías (infantil+cadet / sénior), máximos de equipos y jugadores, edades exactas de cada categoría | M | C-05 |
+| A-03 | Decidir cómo se verifica la autorización de menores: correo al tutor, firma digital, papel entregado en Softco, o varias | M + S | C-05 |
+| A-04 | Quién de Montca gestiona solicitudes e inscritos (personas y correos) | M | C-03, C-06 |
+| A-05 | Mapa: ilustración a medida u OpenStreetMap con estilo propio | M + P | C-02 |
+| A-06 | ¿Las actividades normales de la agenda tienen "Apunta't" con plazas, o se piden por formulario/WhatsApp? | M + S + P | C-02, C-06 |
+| A-07 | Logo en buena calidad, fotos de cada actividad y de Montca Sports | M | B-06, C-01 |
+| A-08 | Por actividad: dónde, edades, duración, tamaño de grupo, precio orientativo, qué incluye, ubicación en Mariola | M | C-01 |
+| A-09 | Próximas fechas de actividades, los 5 cimas del Repte | M | C-02 |
+| A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos | M | B-08 |
+
+### A2. Cuentas e infraestructura
+
+| ID | Tarea | Quién | Notas |
+|---|---|---|---|
+| A-11 | Comprar dominio .es en OVH a nombre de la asociación | M + S | ~6 €/año |
+| A-12 | Apuntar el DNS del dominio a Netlify y comprobar HTTPS | S | Tras A-11 y B-02 |
+| A-13 | Cuenta de Google de Montca: confirmar acceso; ahí vivirán el Sheet-CRM y el Apps Script | M + S | Bloquea C-03 |
+| A-14 | Proyecto Supabase (región UE) a nombre de Montca, con Saúl y Pablo como miembros | S | Bloquea C-04 |
+| A-15 | Servicio de envío de correo para inscripciones y avisos (decidir proveedor y verificar el dominio) | S | Tras A-11 |
+| A-16 | Ficha de Google Business | M + S | Mejor con el dominio ya activo |
+
+### A3. Legal
+
+| ID | Tarea | Quién | Notas |
+|---|---|---|---|
+| A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** |
+| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores) | S + M | Bloquea C-05 |
+| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve | S + M | Entra en la privacidad y en las specs |
+
+### A4. Equipo (Saúl + Pablo)
+
+| ID | Tarea | Notas |
+|---|---|---|
+| A-20 | Repasar decisiones.md juntos y confirmar las marcadas "por confirmar" | |
+| A-21 | Limpieza del repo por consenso: mover `MD's/Instruccions web i bot` a `docs/fase-2/bot-reels.md` o borrarlo; revisar `docs/ideas/`, `sprint-01.md` y qué sobra | No dejar basura |
+| A-22 | Rehacer el backlog del sprint 1 y crear los issues a partir de este archivo | |
+
+---
+
+## B · Claude Code directo (issue → rama → PR)
+
+| ID | Tarea | Quién | Talla | Tecnología | Depende de |
+|---|---|---|---|---|---|
+| B-01 | Estructura del proyecto Astro: carpetas, layout base, `lang` correcto, quitar plantilla por defecto | P | S | Astro | — |
+| B-02 | Netlify: conectar repo, vistas previas por PR, `netlify.toml` | S | S | Netlify | — |
+| B-03 | Inicializar Spec Kit en rama propia, sin perder el `CLAUDE.md` actual | S | S | Spec Kit | A-20 |
+| B-04 | Escribir la constitución (`/speckit.constitution`) y actualizar `CLAUDE.md` con el flujo nuevo | S + P | M | Spec Kit | B-03 |
+| B-05 | Mover los hooks de Impeccable de `settings.local.json` a `.claude/settings.json` para que los tengamos los dos | P | S | Claude Code | — |
+| B-06 | `/impeccable init` → PRODUCT.md y DESIGN.md | P | M | Impeccable | A-07 |
+| B-07 | i18n VAL/CAST: rutas, diccionarios en `src/i18n`, selector de idioma | S | M | Astro i18n | B-01 |
+| B-08 | Páginas legales (aviso legal, privacidad, cookies) y enlaces en el pie | S | S | Astro | A-17 |
+| B-09 | Menú fijo, pie y barra inferior en móvil (Agenda · Activitats · WhatsApp) | P | M | Astro + Impeccable | B-06 |
+| B-10 | Botón de WhatsApp siempre visible (`wa.me` con mensaje escrito) | P | S | Astro | B-09 |
+| B-11 | Páginas informativas: Qui som, Contacte, Escoles i AMPA (parte informativa) | P (UI) + S (textos) | M | Astro | B-07, B-09 |
+| B-12 | Imágenes optimizadas con `<Image>` de Astro; nada de fotos incrustadas en el HTML | P | S | Astro | A-07 |
+| B-13 | Cuenta atrás de Montca Sports / próximo evento ("Properament" si no hay fecha) | P | S | Astro | C-04 |
+| B-14 | SEO técnico: metadatos, sitemap, `hreflang`, robots, schema `LocalBusiness`, Open Graph | S | M | Astro | B-07, A-12 |
+| B-15 | Aviso de cookies (solo si se usa algo que lo exija: analítica, embeds de Instagram) | S | S | Astro | A-17 |
+| B-16 | Página Repte 5 Cims (informativa) | P | M | Astro | A-09 |
+| B-17 | Revisión final antes de publicar: `/impeccable audit` + `polish`, enlaces rotos, móvil | P + S | M | Impeccable | Todo |
+
+---
+
+## C · Spec Kit (una spec por feature)
+
+| ID | Feature | Quién | Tecnología | Depende de |
+|---|---|---|---|---|
+| C-01 | **Actividades**: modelo de datos, ficha y página de cada actividad | S (datos) + P (UI) | Astro content collections | B-07, A-08 |
+| C-02 | **Portada**: buscador (Qui sou? / Què vos ve de gust?) que filtra mapa y agenda | P | Astro + JS en cliente | C-01, A-05, A-06 |
+| C-03 | **Formulario de solicitudes + CRM** | S | Astro + Apps Script + Google Sheets | A-13, B-08 |
+| C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, lista de equipos inscritos por categoría, botón Inscribir-se | S (datos) + P (UI) | Astro + Supabase | A-14, A-01 |
+| C-05 | **Inscripción de equipos**: página de inscripción, capitán, enlace para jugadores, límites, menores | S | Supabase + Netlify Functions + correo | C-04, A-02, A-03, A-18, B-08 |
+| C-06 | **Gestión para Montca**: ver inscritos, validar autorizaciones, abrir/cerrar inscripciones, crear eventos; fechas de la agenda si así se decide | S | Supabase (login) + Astro | C-04, A-04 |
+| C-07 | **Avisos por correo**: confirmaciones, "qué llevar", recordatorio el día antes | S | Netlify Scheduled Functions + correo | C-05, A-15 |
+
+### Qué tiene que cubrir cada spec (para no olvidarlo al escribirla)
+
+**C-03 · Formulario + CRM**
+- Un solo formulario para todo tipo de contacto: particular, grupo, escuela/AMPA, empresa. Campos que cambian según el tipo (p. ej. escuela → centro, nº de alumnos, edades, fecha aproximada).
+- Destino: Apps Script en la cuenta de Google de Montca → fila nueva en un Sheet.
+- El Sheet es el CRM y tiene que ser cómodo: columnas de estado (nova / contestada / en curs / tancada), quién la lleva, notas, fecha; filtros por tipo y estado; colores por estado; vista resumen.
+- Aviso al equipo por correo con los datos y enlace directo a la fila.
+- Respuesta automática a quien escribe, en su idioma (VAL/CAST).
+- Antispam: campo trampa oculto + validación en el script.
+- Casilla de privacidad obligatoria con enlace a la política.
+- Qué pasa si se supera la cuota diaria de correos de Apps Script (que la fila se guarde siempre aunque el correo falle).
+- "Avisa'm" (Montca Camp, eventos sin fecha): decidir si es este mismo formulario con otro tipo.
+
+**C-04 · Eventos y torneo**
+- Sección Eventos independiente del formulario de contacto; el torneo de Navidad es el primer evento.
+- Página del torneo: información, fechas, categorías, normas.
+- Apartado "Equips inscrits": aparece cuando hay al menos un equipo; separado en dos categorías: **Infantil + Cadet** (una sola) y **Sénior**.
+- Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
+- Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
+- Qué datos de un equipo son públicos (nombre del equipo sí; nombres de menores, por decidir → A-19).
+- Pensado para reutilizarse con el siguiente evento sin reprogramar.
+
+**C-05 · Inscripción de equipos** (la lógica se cierra en la spec; esto es lo que hay de las notas de la reunión)
+- El capitán crea el equipo y da sus datos; recibe un enlace para pasar por WhatsApp.
+- Cada jugador abre el enlace y se apunta a ese equipo; al completar sus datos aparece en la página del equipo.
+- Mayor de edad: acepta derechos de imagen.
+- Menor: datos del menor y del tutor; correo al tutor para autorizar participación e imagen; **no queda inscrito hasta que se verifica**. Formas de verificación por decidir (A-03).
+- Límites: Infantil+Cadet máx. 8 equipos, 5–10 jugadores; Sénior máx. 6 equipos, 5–12 jugadores.
+- Casos a resolver en `clarify`: equipo que no llega al mínimo, enlace reenviado a desconocidos, jugador que se borra, capitán menor de edad, lista de espera, duplicados.
+
+**C-06 · Gestión para Montca**
+- Acceso con login solo para las personas de A-04.
+- Ver equipos y jugadores, estado de cada autorización, marcar como verificada la entregada en papel.
+- Exportar inscritos.
+- Abrir y cerrar inscripciones, crear el siguiente evento.
+
+**C-07 · Avisos por correo**
+- Confirmación al inscribirse, aviso al capitán cuando se apunta alguien, recordatorio el día antes con punto de encuentro, hora y qué traer.
+- Siempre por correo; WhatsApp solo con botones `wa.me`.
+
+---
+
+## D · Fase 2 (aparcado)
+
+| ID | Tarea | Notas |
+|---|---|---|
+| D-01 | Bot de Telegram que publica reels en la web | Guía ya escrita por Pablo |
+| D-02 | Lectura automática de Instagram para publicar próximas actividades | Requiere app de Meta y cuenta Business |
+| D-03 | Recordatorios por WhatsApp Business API | De pago por mensaje |
+| D-04 | Pago online de inscripciones | Solo si Montca lo pide |
+| D-05 | Pasaporte digital con sellos del Repte 5 Cims | |
+| D-06 | SEO de contenidos (artículos, palabras clave) | Tras publicar |
+
+---
+
+## Orden recomendado
+
+1. **Base** (en paralelo): B-01, B-02, B-05, B-06, B-07 · A-20, A-21, A-22 · A-11, A-13, A-14 · pedir a Montca A-01, A-02, A-07, A-08, A-10.
+2. **Spec Kit listo**: B-03, B-04.
+3. **Legal**: A-17, A-18, A-19 → B-08.
+4. **Camino del torneo** (prioridad por fecha): C-04 → C-05 → C-06 (mínimo) → C-07.
+5. **Formulario**: C-03 (puede ir en paralelo con el paso 4; lo lleva Saúl, así que va detrás de C-05 si hay que elegir).
+6. **Web pública**: B-09, B-10, C-01, C-02, B-11, B-12, B-13, B-16.
+7. **Salida**: A-12, B-14, B-15, A-16, B-17.
