@@ -29,7 +29,7 @@ Montca es una asociación local sin ánimo de lucro, no una empresa de turismo a
 
 - Las visitas llegan sobre todo desde reels de Instagram y TikTok, en el móvil.
 - Las fechas y las plazas las actualiza la gente de Montca desde un panel o archivo sencillo. Todavía no se ha decidido quién lo hará.
-- Un bot de Telegram publica los reels en la web: crea archivos JSON en `src/content/reels/` y Netlify vuelve a generar la web (ver `MD's/Instruccions web i bot`).
+- Un bot de Telegram publica los reels en la web: crea archivos JSON en `src/content/reels/` y Netlify vuelve a generar la web (ver `MD's/Instruccions web i bot`; si ese archivo se mueve a `docs/`, hay que actualizar esta referencia).
 - WhatsApp es el canal de contacto principal y está siempre visible.
 - La web la desarrollan dos personas, cada una con su Claude, trabajando con issues, ramas y PR revisados.
 
@@ -45,7 +45,8 @@ Montca es una asociación local sin ánimo de lucro, no una empresa de turismo a
 ## Brand Commitments
 
 - Nombre: **Montca Actiu**. Marcas propias: **Montca Sports**, **Repte 5 Cims** (con *Passaport* de sellos) y **Montca Camp**.
-- Tono: **cercano pero serio**. Tutea y es amable, pero deja claro que hay seguridad: monitores titulados, seguro y certificados. Eso es lo que necesitan los padres y los centros educativos.
+- Tono: **cercano pero serio**. Tutea y es amable, pero transmite seguridad, que es lo que necesitan los padres y los centros educativos.
+- Los monitores de Montca no están certificados a día de hoy (2026-11-16): la web no habla de títulos ni de certificados. Si eso cambia, se actualiza este archivo.
 - Los textos de la interfaz van en valenciano (Apunta't, Avisa'm, Lo vull per al meu grup, Ho portem al teu poble).
 
 ## Evidence on Hand
