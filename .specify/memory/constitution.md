@@ -1,50 +1,67 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Constitución de la web de Montca Actiu
 
-## Core Principles
+## Principios fundamentales
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Móvil primero
+La web se diseña primero para el móvil y para quien llega desde un reel de Instagram o TikTok;
+el escritorio se adapta después. Todo recorrido típico hasta apuntarse o pedir la actividad para
+un grupo MUST completarse en tres toques como máximo. Toda pantalla nueva MUST comprobarse en un
+ancho de unos 375 px antes de darse por terminada.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Valenciano por defecto y castellano
+El idioma por defecto es el valenciano y el castellano es la segunda opción, con selector
+VAL / CAST. Todo texto visible MUST salir de los diccionarios de idioma y MUST NOT escribirse
+directamente en componentes o páginas. Cada texto nuevo MUST existir en los dos idiomas.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. No se inventan datos
+Los precios, las fechas, las plazas, los testimonios y los datos de seguridad MUST provenir de
+Montca. Mientras Montca no los entregue, se usan textos de prueba marcados de forma visible como
+tales. La web no afirma títulos ni certificados de monitores mientras Montca no los tenga
+(ver `PRODUCT.md`).
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Privacidad y menores
+Un formulario MUST NOT publicarse sin sus textos legales. Un menor MUST NOT quedar inscrito
+hasta que su tutor autorice la participación y los derechos de imagen. Los datos personales
+recogidos MUST limitarse a lo imprescindible para la inscripción o el presupuesto.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Accesibilidad
+- Los botones y las zonas pulsables miden al menos 44 px de alto.
+- Toda imagen lleva texto alternativo en valenciano y en castellano; no se publica ninguna sin él
+  (`docs/decisiones.md`).
+- El mapa tiene siempre una alternativa en lista (Mapa / Llista), que en móvil es la vista
+  por defecto.
+- WCAG 2.2 AA es la referencia, pendiente de confirmar como estándar formal (`PRODUCT.md`).
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Sencillez
+La base es Astro y Netlify. El contenido editorial que cambia poco (actividades, textos,
+páginas) vive en archivos que la gente de Montca pueda mantener; el formato concreto está por
+confirmar en `docs/decisiones.md`. Los datos que cambian con el uso (inscripciones, plazas,
+solicitudes) usan solo los servicios acordados en la sección "Arquitectura y tecnología" de
+`docs/decisiones.md` o en la spec de la feature.
+Toda librería nueva MUST justificarse por escrito en el issue o en el PR y MUST aceptarla la otra
+persona del equipo antes de añadirse.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### VII. Flujo de trabajo
+Todo cambio parte de un issue, se hace en una rama propia (`tipo/descripcion-corta`) y entra en
+`main` mediante un PR revisado por la otra persona del equipo. `main` MUST compilar y funcionar
+en todo momento.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Contenido y datos
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Las categorías de actividades usan los identificadores en valenciano ya definidos: `activitats`,
+  `rutes`, `sports`, `repte`, `camp`, `aventura`.
+- Las marcas propias se escriben tal cual: Montca Actiu, Montca Sports, Repte 5 Cims y Montca Camp.
+- El tono es cercano pero serio: tutea y es amable, y transmite seguridad.
+- Las decisiones técnicas o de producto que cambien lo anterior se anotan en `docs/decisiones.md`.
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+## Gobierno
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+Esta constitución prevalece sobre cualquier otra práctica del proyecto, salvo lo que pida
+expresamente una persona del equipo en la conversación; toda excepción así se anota en
+`docs/decisiones.md`. Se modifica mediante un PR que explique el motivo y que revise la otra
+persona del equipo; el cambio se anota en `docs/decisiones.md`. El versionado sigue semver:
+MAJOR si se elimina o redefine un principio, MINOR si se añade un principio o sección o se
+amplía su alcance, PATCH para aclaraciones de redacción. Toda revisión de PR MUST comprobar que
+se cumplen estos principios; cualquier excepción se justifica por escrito en el propio PR.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Versión**: 1.0.0 | **Ratificada**: 2026-11-16 | **Última modificación**: 2026-11-16
