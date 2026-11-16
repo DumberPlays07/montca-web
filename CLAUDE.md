@@ -2,7 +2,17 @@
 
 Estas instrucciones se aplican a cualquier proyecto de programación de este repositorio (Java, web u otros), trabajado con Git/GitHub de forma individual o en pareja.
 
-Orden de prioridad cuando haya conflicto: 1) lo que el usuario pida en la conversación, 2) las convenciones que ya existan en el proyecto, 3) este archivo.
+Orden de prioridad cuando haya conflicto: 1) lo que el usuario pida en la conversación, 2) la constitución (`.specify/memory/constitution.md`), 3) las convenciones que ya existan en el proyecto, 4) este archivo.
+
+---
+
+## Flujo de trabajo de este proyecto
+
+- **Tipo de tarea:** `docs/tareas.md` dice si una tarea es tipo B o tipo C.
+- **Tareas pequeñas (tipo B):** issue, rama y PR, sin spec.
+- **Features con lógica, datos o varios estados (tipo C):** el flujo acordado en `docs/decisiones.md`: `/speckit-specify` → `/speckit-clarify` → `/impeccable shape` (si hay interfaz) → `/speckit-plan` → `/speckit-tasks` → `/speckit-analyze` → PR de la spec revisado por el otro → issues por zonas → `/speckit-implement` por issue → `/impeccable audit` → PR. Los comandos de Spec Kit van con guion, no con punto.
+- **Todo lo visual** pasa por la skill Impeccable y respeta `PRODUCT.md` y `DESIGN.md`.
+- **Zonas:** cada uno trabaja en su zona según `docs/decisiones.md`. Pablo: componentes, layouts, estilos y `DESIGN.md`. Saúl: contenido, i18n, formularios y `netlify.toml`. Compartido: `pages`, `CLAUDE.md` y `docs`. Se avisa antes de tocar la zona del otro o lo compartido.
 
 ---
 
