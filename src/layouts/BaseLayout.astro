@@ -3,11 +3,30 @@ import '../styles/global.css';
 
 interface Props {
 	title: string;
-	description?: string;
+	description: string;
+	/** Ruta o URL de la imagen que se ve al compartir la página. */
+	image: string;
 	lang?: 'ca' | 'es';
 }
 
-const { title, description, lang = 'ca' } = Astro.props;
+const { title, description, image, lang = 'ca' } = Astro.props;
+
+// `astro build` no comprueba los tipos de las props, así que una página sin estos
+// datos se publicaría sin avisar. Se corta aquí para que el build falle.
+const requiredProps = { title, description, image };
+for (const [name, value] of Object.entries(requiredProps)) {
+	if (typeof value !== 'string' || value.trim() === '') {
+		throw new Error(
+			`BaseLayout: falta "${name}" en la página ${Astro.url.pathname}. ` +
+				'Cada página necesita title, description e image (imagen para compartir).',
+		);
+	}
+}
+
+// Las redes sociales necesitan la URL completa de la imagen, no una ruta relativa.
+// TODO: definir `site` en astro.config.mjs cuando exista el dominio (A-11); hasta
+// entonces la URL sale con el host local y no sirve para compartir de verdad.
+const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -17,7 +36,10 @@ const { title, description, lang = 'ca' } = Astro.props;
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-		{description && <meta name="description" content={description} />}
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={imageUrl} />
 		<title>{title}</title>
 	</head>
 	<body>

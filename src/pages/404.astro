@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// TODO: sustituir por la imagen para compartir definitiva cuando llegue el logo (A-07, B-14).
+const SHARE_IMAGE = '/favicon.svg';
+
+// TODO: estas rutas todavía no existen; las fija la tarea de i18n (B-07). Si cambian,
+// hay que actualizarlas aquí.
+const AGENDA_PATH = '/agenda/';
+const ACTIVITIES_PATH = '/activitats/';
+
+// Número de WhatsApp de Montca en formato internacional, sin "+" ni espacios.
+// TODO: pedir el número a Montca; no se inventa. Mientras esté vacío, el enlace no se muestra.
+const WHATSAPP_NUMBER = '';
+const whatsappUrl = WHATSAPP_NUMBER === '' ? null : `https://wa.me/${WHATSAPP_NUMBER}`;
+
+// TODO: pasar estos textos a los diccionarios de src/i18n cuando existan (B-07).
+// Una 404 no sabe en qué idioma navegaba la persona, por eso muestra los dos.
+const blocks = [
+	{
+		lang: 'ca',
+		heading: 'No hem trobat esta pàgina',
+		text: 'Pot ser que l\'enllaç estiga trencat o que la pàgina ja no existisca.',
+		agenda: 'Agenda',
+		activities: 'Activitats',
+	},
+	{
+		lang: 'es',
+		heading: 'No hemos encontrado esta página',
+		text: 'Puede que el enlace esté roto o que la página ya no exista.',
+		agenda: 'Agenda',
+		activities: 'Actividades',
+	},
+];
+---
+
+<BaseLayout
+	title="Pàgina no trobada · Montca Actiu"
+	description="No hem trobat esta pàgina. No hemos encontrado esta página."
+	image={SHARE_IMAGE}
+>
+	<main>
+		{
+			blocks.map((block, index) => (
+				<section lang={block.lang}>
+					{index === 0 ? <h1>{block.heading}</h1> : <h2>{block.heading}</h2>}
+					<p>{block.text}</p>
+					<ul>
+						<li>
+							<a href={AGENDA_PATH}>{block.agenda}</a>
+						</li>
+						<li>
+							<a href={ACTIVITIES_PATH}>{block.activities}</a>
+						</li>
+						{whatsappUrl && (
+							<li>
+								<a href={whatsappUrl}>WhatsApp</a>
+							</li>
+						)}
+					</ul>
+				</section>
+			))
+		}
+	</main>
+</BaseLayout>
