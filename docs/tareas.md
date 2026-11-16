@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-15 (tras el repaso de decisiones y las mejoras de SEO, confianza y conversión). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-16 (estado de las tareas; el reparto es el del repaso del 2026-11-15, con las mejoras de SEO, confianza y conversión). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -12,6 +12,22 @@ Cada tarea está clasificada por **cómo se hace**:
 Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medio día) · L (un día o más).
 
 > **Fecha crítica: torneo de Navidad.** Las inscripciones tienen que abrir con margen antes del torneo, así que el camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+
+
+## Estado a 2026-11-16
+
+Solo aparecen las tareas empezadas; el resto sigue pendiente.
+
+| ID   | Estado | PR | Qué falta |
+| ---- | ------ | -- | --------- |
+| B-01 | Parcial, fusionada | #2 | Página 404 bilingüe; que el layout exija `description` e imagen para compartir (ahora `description` es opcional y no hay imagen) |
+| B-03 | Hecha, fusionada sin revisión | #5 | Que Saúl pruebe los scripts `sh` en su Windows; fijar la misma versión de Spec Kit en los dos equipos |
+| B-04 | En revisión | #7 | Que Saúl lea la constitución y el flujo nuevo de `CLAUDE.md` |
+| B-05 | Hecha, fusionada sin revisión | #4 | Al hacer `pull`, a Saúl se le borra su `.claude/settings.local.json` local |
+| B-06 | Parcial, fusionada | #3 | `PRODUCT.md` hecho. `DESIGN.md` no lo crea `/impeccable init`: saldrá con la primera pieza visual (B-09) |
+| A-21 | Empezada | — | Borrado el archivo vacío `Docs`; sigue pendiente decidir qué se hace con `MD's/Instruccions web i bot`, `docs/ideas/` y `sprint-01.md` |
+
+Los PR #4, #5 y #6 se fusionaron sin revisión porque Saúl no podía revisar en ese momento; está anotado en [decisiones.md](decisiones.md) con el PR #7.
 
 ---
 
