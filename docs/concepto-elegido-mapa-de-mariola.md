@@ -88,7 +88,7 @@ La mayoría llegará desde Instagram y TikTok, es decir, desde el móvil, así q
 | Repte 5 Cims | Los 5 cimas con mapa y dificultad, el pasaporte con sellos, inscripción y galería de fotos de cumbre |
 | Montca Sports | Cuenta atrás, formato del torneo, fotos y vídeos de la última edición, inscripción de equipos |
 | Escoles i AMPA | Propuestas cerradas por edad y formulario de presupuesto |
-| Qui som | Historia, equipo de monitores y seguridad (títulos, seguro, certificados) |
+| Qui som | Historia y equipo de monitores. No se habla de títulos ni certificados (no los tienen a día de hoy); el seguro, por confirmar con Montca |
 | Contacte | Teléfonos, email, WhatsApp y redes |
 
 En todas las páginas:
