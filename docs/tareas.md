@@ -18,13 +18,13 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 Solo aparecen las tareas empezadas; el resto sigue pendiente.
 
-| ID   | Estado | PR | Qué falta |
-| ---- | ------ | -- | --------- |
-| B-01 | Parcial, fusionada | #2 | Página 404 bilingüe; que el layout exija `description` e imagen para compartir (ahora `description` es opcional y no hay imagen) |
-| B-03 | Hecha, fusionada sin revisión | #5 | Que Saúl pruebe los scripts `sh` en su Windows; fijar la misma versión de Spec Kit en los dos equipos |
-| B-04 | En revisión | #7 | Que Saúl lea la constitución y el flujo nuevo de `CLAUDE.md` |
-| B-05 | Hecha, fusionada sin revisión | #4 | Al hacer `pull`, a Saúl se le borra su `.claude/settings.local.json` local |
-| B-06 | Parcial, fusionada | #3 | `PRODUCT.md` hecho. `DESIGN.md` no lo crea `/impeccable init`: saldrá con la primera pieza visual (B-09) |
+| ID   | Estado | PR | Notas |
+| ---- | ------ | -- | ----- |
+| B-01 | Acabada | #2, #9 | El #9 está pendiente de fusionar. El enlace de WhatsApp de la 404 aparecerá cuando Montca dé el número (A-24) |
+| B-03 | Acabada | #5 | Fusionada sin revisión. Falta que Saúl pruebe los scripts `sh` en su Windows y fijar la misma versión de Spec Kit en los dos equipos |
+| B-05 | Acabada | #4 | Fusionada sin revisión. Al hacer `pull`, a Saúl se le borra su `.claude/settings.local.json` local |
+| B-06 | Acabada | #3 | `PRODUCT.md` hecho. `DESIGN.md` no lo crea `/impeccable init`: pasa a B-09, donde sale con la primera pieza visual |
+| B-04 | En revisión | #7 | Falta que Saúl lea la constitución y el flujo nuevo de `CLAUDE.md` |
 | A-21 | Empezada | — | Borrado el archivo vacío `Docs`; sigue pendiente decidir qué se hace con `MD's/Instruccions web i bot`, `docs/ideas/` y `sprint-01.md` |
 
 Los PR #4, #5 y #6 se fusionaron sin revisión porque Saúl no podía revisar en ese momento; está anotado en [decisiones.md](decisiones.md) con el PR #7.
@@ -48,6 +48,7 @@ Los PR #4, #5 y #6 se fusionaron sin revisión porque Saúl no podía revisar en
 | A-09 | Próximas fechas de actividades, los 5 cimas del Repte                                                                                                           | M         | C-02             |
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       |
+| A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       |
 
 ### A2. Cuentas e infraestructura
 
