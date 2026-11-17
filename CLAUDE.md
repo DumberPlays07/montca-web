@@ -2,7 +2,7 @@
 
 Estas instrucciones se aplican a cualquier proyecto de programación de este repositorio (Java, web u otros), trabajado con Git/GitHub de forma individual o en pareja.
 
-Orden de prioridad cuando haya conflicto: 1) lo que el usuario pida en la conversación, 2) la constitución (`.specify/memory/constitution.md`), 3) las convenciones que ya existan en el proyecto, 4) este archivo.
+Orden de prioridad cuando haya conflicto: 1) la constitución (`.specify/memory/constitution.md`), 2) lo que el usuario pida en la conversación, 3) las convenciones que ya existan en el proyecto, 4) este archivo. Una excepción a la constitución no se decide en la conversación: se justifica en el PR y la aprueba la otra persona.
 
 ---
 

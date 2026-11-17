@@ -4,14 +4,14 @@
 
 ### I. Móvil primero
 La web se diseña primero para el móvil y para quien llega desde un reel de Instagram o TikTok;
-el escritorio se adapta después. Todo recorrido típico hasta apuntarse o pedir la actividad para
-un grupo MUST completarse en tres toques como máximo. Toda pantalla nueva MUST comprobarse en un
+el escritorio se adapta después. Todo recorrido típico hasta llegar al formulario de inscripción
+o de solicitud MUST completarse en tres toques como máximo. Toda pantalla nueva MUST comprobarse en un
 ancho de unos 375 px antes de darse por terminada.
 
 ### II. Valenciano por defecto y castellano
 El idioma por defecto es el valenciano y el castellano es la segunda opción, con selector
-VAL / CAST. Todo texto visible MUST salir de los diccionarios de idioma y MUST NOT escribirse
-directamente en componentes o páginas. Cada texto nuevo MUST existir en los dos idiomas.
+VAL / CAST. Todo texto visible MUST salir de los diccionarios de idioma o del contenido por
+idioma (fichas, textos legales) y MUST NOT escribirse directamente en componentes o páginas. Cada texto nuevo MUST existir en los dos idiomas.
 
 ### III. No se inventan datos
 Los precios, las fechas, las plazas, los testimonios y los datos de seguridad MUST provenir de
@@ -22,7 +22,8 @@ tales. La web no afirma títulos ni certificados de monitores mientras Montca no
 ### IV. Privacidad y menores
 Un formulario MUST NOT publicarse sin sus textos legales. Un menor MUST NOT quedar inscrito
 hasta que su tutor autorice la participación y los derechos de imagen. Los datos personales
-recogidos MUST limitarse a lo imprescindible para la inscripción o el presupuesto.
+recogidos MUST limitarse a lo imprescindible para la inscripción o el presupuesto y MUST
+guardarse en servidores de la Unión Europea.
 
 ### V. Accesibilidad
 - Los botones y las zonas pulsables miden al menos 44 px de alto.
@@ -40,6 +41,9 @@ solicitudes) usan solo los servicios acordados en la sección "Arquitectura y te
 `docs/decisiones.md` o en la spec de la feature.
 Toda librería nueva MUST justificarse por escrito en el issue o en el PR y MUST aceptarla la otra
 persona del equipo antes de añadirse.
+El coste es 0 € salvo el dominio: si algo cuesta dinero, se plantea y se decide con Montca antes
+de pagar. Las cuentas del proyecto (dominio, Google, Supabase, Netlify) MUST estar a nombre de
+Montca, con nosotros como colaboradores.
 
 ### VII. Flujo de trabajo
 Todo cambio parte de un issue, se hace en una rama propia (`tipo/descripcion-corta`) y entra en
@@ -56,12 +60,12 @@ en todo momento.
 
 ## Gobierno
 
-Esta constitución prevalece sobre cualquier otra práctica del proyecto, salvo lo que pida
-expresamente una persona del equipo en la conversación; toda excepción así se anota en
+Esta constitución prevalece sobre cualquier otra práctica del proyecto. Toda excepción se
+justifica por escrito en el PR, la aprueba la otra persona del equipo y se anota en
 `docs/decisiones.md`. Se modifica mediante un PR que explique el motivo y que revise la otra
 persona del equipo; el cambio se anota en `docs/decisiones.md`. El versionado sigue semver:
 MAJOR si se elimina o redefine un principio, MINOR si se añade un principio o sección o se
 amplía su alcance, PATCH para aclaraciones de redacción. Toda revisión de PR MUST comprobar que
-se cumplen estos principios; cualquier excepción se justifica por escrito en el propio PR.
+se cumplen estos principios.
 
-**Versión**: 1.0.0 | **Ratificada**: 2026-11-16 | **Última modificación**: 2026-11-16
+**Versión**: 1.0.0 | **Ratificada**: 2026-11-17 | **Última modificación**: 2026-11-17
