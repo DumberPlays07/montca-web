@@ -4,7 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 // TODO: sustituir por la imagen para compartir definitiva cuando llegue el logo (A-07, B-14).
 const SHARE_IMAGE = '/favicon.svg';
 
-// TODO: estas rutas todavía no existen; las fija la tarea de i18n (B-07). Si cambian,
+const HOME_PATH = '/';
+
+// TODO: Agenda y Activitats todavía no existen; las fija la tarea de i18n (B-07). Si cambian,
 // hay que actualizarlas aquí.
 const AGENDA_PATH = '/agenda/';
 const ACTIVITIES_PATH = '/activitats/';
@@ -20,6 +22,7 @@ const blocks = [
 	{
 		lang: 'ca',
 		heading: 'No hem trobat esta pàgina',
+		home: 'Inici',
 		text: 'Pot ser que l\'enllaç estiga trencat o que la pàgina ja no existisca.',
 		agenda: 'Agenda',
 		activities: 'Activitats',
@@ -27,6 +30,7 @@ const blocks = [
 	{
 		lang: 'es',
 		heading: 'No hemos encontrado esta página',
+		home: 'Inicio',
 		text: 'Puede que el enlace esté roto o que la página ya no exista.',
 		agenda: 'Agenda',
 		activities: 'Actividades',
@@ -46,6 +50,9 @@ const blocks = [
 					{index === 0 ? <h1>{block.heading}</h1> : <h2>{block.heading}</h2>}
 					<p>{block.text}</p>
 					<ul>
+						<li>
+							<a href={HOME_PATH}>{block.home}</a>
+						</li>
 						<li>
 							<a href={AGENDA_PATH}>{block.agenda}</a>
 						</li>
