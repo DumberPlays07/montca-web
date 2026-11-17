@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-15 (tras el repaso de decisiones y las mejoras de SEO, confianza y conversión). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-16 (estado de las tareas; el reparto es el del repaso del 2026-11-15, con las mejoras de SEO, confianza y conversión). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -12,6 +12,22 @@ Cada tarea está clasificada por **cómo se hace**:
 Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medio día) · L (un día o más).
 
 > **Fecha crítica: torneo de Navidad.** Las inscripciones tienen que abrir con margen antes del torneo, así que el camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+
+
+## Estado a 2026-11-16
+
+Solo aparecen las tareas empezadas; el resto sigue pendiente.
+
+| ID   | Estado | PR | Notas |
+| ---- | ------ | -- | ----- |
+| B-01 | Acabada | #2, #9 | Revisada por Saúl. El enlace de WhatsApp de la 404 aparecerá cuando Montca dé el número (A-24) |
+| B-03 | Acabada | #5, #7 | Scripts `sh` probados por Saúl en su Windows. Versión fijada en v1.4.1 en el PR #7 |
+| B-04 | Acabada | #7 | Constitución con los cambios de la revisión de Saúl |
+| B-05 | Acabada | #4 | Resuelto: Saúl no perdió nada al borrarse su `settings.local.json` |
+| B-06 | Acabada | #3 | `PRODUCT.md` hecho. `DESIGN.md` no lo crea `/impeccable init`: pasa a B-09, donde sale con la primera pieza visual |
+| A-21 | Empezada | — | Borrado el archivo vacío `Docs`; falta decidir entre los dos qué se hace con `MD's/Instruccions web i bot`, `docs/ideas/` y `sprint-01.md` |
+
+Los PR #4, #5 y #6 se fusionaron sin revisión como excepción, revisados después por Saúl; está anotado en [decisiones.md](decisiones.md). A partir de ahora, cada tarea lleva su issue y su PR revisado.
 
 ---
 
@@ -32,6 +48,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 | A-09 | Próximas fechas de actividades, los 5 cimas del Repte                                                                                                           | M         | C-02             |
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       |
+| A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       |
 
 ### A2. Cuentas e infraestructura
 

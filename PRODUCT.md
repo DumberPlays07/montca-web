@@ -10,7 +10,7 @@ web
 
 Montca Actiu es una associació juvenil i esportiva de Cocentaina. La web tiene dos públicos con el mismo peso:
 
-- **Gente que se apunta a título individual a fechas abiertas:** familias con hijos que buscan plan para el fin de semana (los menores los inscribe el tutor) y jóvenes y adolescentes (la franja de edad exacta está por confirmar), que suelen llegar desde un reel de Instagram o TikTok.
+- **Gente que se apunta a título individual a fechas abiertas:** familias con hijos que buscan plan para el fin de semana (un menor no queda inscrito hasta que su tutor lo autoriza) y jóvenes y adolescentes (la franja de edad exacta está por confirmar), que suelen llegar desde un reel de Instagram o TikTok.
 - **Grupos que piden una actividad a medida:** profesorado y AMPA que organizan salidas escolares y empresas. Necesitan datos claros (edades, duración, tamaño de grupo, precio orientativo) y una forma rápida de pedir presupuesto.
 
 La mayoría llega desde el móvil, a través de redes sociales. La versión móvil es la principal.
@@ -28,19 +28,23 @@ Montca es una asociación local sin ánimo de lucro, no una empresa de turismo a
 ## Operating Context
 
 - Las visitas llegan sobre todo desde reels de Instagram y TikTok, en el móvil.
-- Las fechas y las plazas las actualiza la gente de Montca desde un panel o archivo sencillo. Todavía no se ha decidido quién lo hará.
-- Un bot de Telegram publica los reels en la web: crea archivos JSON en `src/content/reels/` y Netlify vuelve a generar la web (ver `MD's/Instruccions web i bot`; si ese archivo se mueve a `docs/`, hay que actualizar esta referencia).
+- Las fechas y las plazas las mantiene la gente de Montca. Todavía no se ha decidido quién lo hará ni de dónde salen las fechas de la agenda (archivos del repositorio, un Sheet o Supabase).
+- La web no muestra reels en la primera versión. El bot de Telegram que los publicaría queda para la fase 2 (guía en `MD's/Instruccions web i bot`; si ese archivo se mueve, hay que actualizar esta referencia).
+- El primer evento grande es el torneo de Navidad, que marca el calendario del proyecto: sus inscripciones tienen que abrir con margen.
 - WhatsApp es el canal de contacto principal y está siempre visible.
 - La web la desarrollan dos personas, cada una con su Claude, trabajando con issues, ramas y PR revisados.
 
 ## Capabilities and Constraints
 
-- **Stack:** Astro, desplegado en Netlify con vistas previas por PR (`docs/decisiones.md`).
+- **Stack:** Astro, desplegado en Netlify con vistas previas por PR. Para los datos que cambian con el uso: Supabase (eventos e inscripciones), Google Apps Script + Google Sheets (formulario de solicitudes, el Sheet hace de CRM) y Netlify Functions (validación y correos). El detalle y el porqué están en `docs/decisiones.md`.
 - **Idiomas:** valenciano por defecto y castellano como segunda opción, con selector VAL / CAST. Las categorías de actividades de los datos están en valenciano: `activitats`, `rutes`, `sports`, `repte`, `camp`, `aventura`.
-- **Concepto de portada elegido:** Mapa de Mariola, junto con un buscador ("Qui sou?" + "Què vos ve de gust?"), una agenda deslizable con plazas y la cuenta atrás de Montca Sports. El detalle está en `docs/concepto-elegido-mapa-de-mariola.md`.
-- **Inscripción:** el botón **Apunta't** es el mismo desde el mapa, la ficha y la agenda, y con menores rellena el formulario el tutor.
+- **Concepto de portada elegido:** Mapa de Mariola, una ilustración a medida en la que cada botón es un pico de la sierra, junto con un buscador ("Qui sou?" + "Què vos ve de gust?"), una agenda deslizable con plazas y la cuenta atrás de Montca Sports. El detalle está en `docs/concepto-elegido-mapa-de-mariola.md`.
+- **Dos vías separadas:** el formulario de solicitudes sirve para pedir actividades o información (particulares, grupos, escuelas/AMPA y empresas) y las inscripciones son para eventos, con su propia lógica. Existe una sección Eventos.
+- **Inscripción a eventos:** propia, sin plataforma externa. Un menor no queda inscrito hasta que su tutor autoriza la participación y los derechos de imagen. De los menores solo se publica el primer nombre.
+- **Botón Apunta't:** es el mismo desde el mapa, la ficha y la agenda.
+- **Legal:** las páginas legales se publican antes de activar cualquier formulario.
 - **Montca Camp:** muestra "Properament" y un botón *Avisa'm* hasta que tenga fechas.
-- **Pendiente de decidir:** si el mapa es una ilustración a medida o OpenStreetMap con estilo propio, si las inscripciones van por la web o por una plataforma externa (Spond, Playoff), si se cobra por la web y quién gestiona fechas, plazas y datos de inscritos.
+- **Pendiente de decidir** (lista completa en `docs/decisiones.md`): si las actividades normales de la agenda tienen Apunta't con plazas reales o se piden por formulario o WhatsApp, de dónde salen las fechas de la agenda, si se cobra la inscripción y cómo, quién de Montca gestiona solicitudes e inscritos, y si la autorización del tutor por correo es válida.
 
 ## Brand Commitments
 
