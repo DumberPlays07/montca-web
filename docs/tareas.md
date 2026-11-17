@@ -20,14 +20,14 @@ Solo aparecen las tareas empezadas; el resto sigue pendiente.
 
 | ID   | Estado | PR | Notas |
 | ---- | ------ | -- | ----- |
-| B-01 | Acabada | #2, #9 | El #9 está pendiente de fusionar. El enlace de WhatsApp de la 404 aparecerá cuando Montca dé el número (A-24) |
-| B-03 | Acabada | #5 | Fusionada sin revisión. Falta que Saúl pruebe los scripts `sh` en su Windows y fijar la misma versión de Spec Kit en los dos equipos |
-| B-05 | Acabada | #4 | Fusionada sin revisión. Al hacer `pull`, a Saúl se le borra su `.claude/settings.local.json` local |
+| B-01 | Acabada | #2, #9 | Revisada por Saúl. El enlace de WhatsApp de la 404 aparecerá cuando Montca dé el número (A-24) |
+| B-03 | Acabada | #5, #7 | Scripts `sh` probados por Saúl en su Windows. Versión fijada en v1.4.1 en el PR #7 |
+| B-04 | Acabada | #7 | Constitución con los cambios de la revisión de Saúl |
+| B-05 | Acabada | #4 | Resuelto: Saúl no perdió nada al borrarse su `settings.local.json` |
 | B-06 | Acabada | #3 | `PRODUCT.md` hecho. `DESIGN.md` no lo crea `/impeccable init`: pasa a B-09, donde sale con la primera pieza visual |
-| B-04 | En revisión | #7 | Falta que Saúl lea la constitución y el flujo nuevo de `CLAUDE.md` |
-| A-21 | Empezada | — | Borrado el archivo vacío `Docs`; sigue pendiente decidir qué se hace con `MD's/Instruccions web i bot`, `docs/ideas/` y `sprint-01.md` |
+| A-21 | Empezada | — | Borrado el archivo vacío `Docs`; falta decidir entre los dos qué se hace con `MD's/Instruccions web i bot`, `docs/ideas/` y `sprint-01.md` |
 
-Los PR #4, #5 y #6 se fusionaron sin revisión porque Saúl no podía revisar en ese momento; está anotado en [decisiones.md](decisiones.md) con el PR #7.
+Los PR #4, #5 y #6 se fusionaron sin revisión como excepción, revisados después por Saúl; está anotado en [decisiones.md](decisiones.md). A partir de ahora, cada tarea lleva su issue y su PR revisado.
 
 ---
 
