@@ -81,6 +81,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-18 | Lo que el código necesita pero no se muestra (p. ej. el correo que recibe los avisos) va en las propiedades del Apps Script o en variables de entorno de Netlify, nunca en el código | El repo va a ser público                                                 | Acordada                     |
 | 2026-11-18 | La casilla de imagen va en el mismo formulario de inscripción del jugador. En el de menores es una sola casilla, sin separar por edad, junto a los datos del menor y del tutor | Más sencillo; si la revisión legal (A-17) pide otra cosa, se cambia         | Acordada                     |
 | 2026-11-18 | Quien no marca la casilla de imagen (menor o adulto) queda **marcado** en la gestión, y Montca puede sacar la **lista de quién no puede salir en fotos y vídeos** (nombre y equipo) para los encargados de redes sociales | Que redes sepa quién puede salir y quién no; el consentimiento de imagen debe ser libre y separado de la inscripción (AEPD, PS/00468/2021) | Acordada                     |
+| 2026-11-18 | Las fotos de la web salen del Drive de Montca, **excepto la carpeta "Fotos scape room salesianos"**, que no se usa | No hay derechos de imagen de los niños que aparecen                      | Acordada                     |
 | 2026-11-15 | Los textos legales se hacen con plantilla y los revisa alguien con criterio legal                                                                                       | Hay datos de menores; no queremos problemas                              | Acordada                     |
 
 ## 4. Forma de trabajar
@@ -117,8 +118,6 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | Cómo se apuntan los equipos desde el 23/11 hasta que la web esté lista, y cómo se pasan después a la web               | Montca + Saúl                    | Inscripción de equipos    |
 | ¿La casilla de autorización del tutor sustituye a la firma digital o al papel en Softco, o hace falta además?           | Montca + Saúl                    | Inscripción de equipos    |
 | Número de WhatsApp para los enlaces `wa.me`: ¿el mismo teléfono de contacto?                                          | Montca                           | B-01, B-10                |
-| Correo y teléfono de contacto **de la asociación** que se pueden publicar en la web                                    | Montca                           | B-08, FAQ                 |
-| Domicilio que aparece en el aviso legal: la ley pide uno y el actual es la casa de Iker                                | Montca + Saúl                    | B-08                      |
 | ¿Se publica el repo? (falta el visto bueno de Pablo)                                                                   | Los dos                          | B-02                      |
 
 ## 6. Sustituidas o descartadas
