@@ -65,7 +65,7 @@ Las autorizaciones en papel pueden entregarse en sobre cerrado en un establecimi
 
 ### 2.5. Fotografías y vídeos
 
-Durante los eventos podemos hacer fotografías y vídeos para publicarlos en esta web y en nuestras redes sociales. Solo aparecerán en ellos las personas que hayan dado su permiso marcando la casilla correspondiente al inscribirse. En el caso de los menores, ese permiso lo da su tutor.
+Durante los eventos podemos hacer fotografías y vídeos para publicarlos en esta web y en nuestros perfiles de Instagram y TikTok. Solo aparecerán en ellos las personas que hayan dado su permiso marcando la casilla correspondiente al inscribirse. En el caso de los menores, ese permiso lo da su tutor. Las imágenes son solo del evento en el que se ha inscrito, y en ellas no nombramos ni etiquetamos a nadie.
 
 - **Finalidad:** difundir las actividades de la asociación.
 - **Base legal:** su consentimiento (art. 6.1.a del RGPD), que es opcional y no condiciona la inscripción.

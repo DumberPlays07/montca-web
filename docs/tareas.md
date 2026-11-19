@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-19 (A-19: registro de tratamientos de datos; seguro en A-26; dorsal, teléfono y correo del administrador en C-05; A-17: borrador de la política de privacidad). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-19 (A-19: registro de tratamientos de datos; seguro en A-26; dorsal, teléfono y correo del administrador en C-05; A-17: borrador de la política de privacidad; A-18: borrador de los textos de consentimiento). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -57,7 +57,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | ID   | Tarea                                                                                                                   | Quién | Notas                                      | Estado |
 | ---- | ----------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------ | ------ |
 | A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borrador de privacidad y capas de los formularios en [legal/](legal/), pendiente de la revisión legal de Montca; faltan aviso legal y cookies |
-| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | ⬜ Pendiente |
+| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en [legal/consentimientos.md](legal/consentimientos.md), pendiente de la revisión legal de Montca |
 | A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
 
 ### A4. Equipo (Saúl + Pablo)
