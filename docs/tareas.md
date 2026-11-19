@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-18 (datos del torneo de Montca, diseño de la inscripción y columna de estado en todas las tareas). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-19 (A-19: registro de tratamientos de datos; seguro en A-26; dorsal, teléfono y correo del administrador en C-05). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -37,7 +37,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             | ✅ Acabada: el teléfono de contacto y el domicilio son los de Iker, según Montca (datos en el Drive) |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       | ✅ Acabada: las del torneo, en [info-montca.md](info-montca.md). Las de escuelas/AMPA se añaden cuando se haga B-11 |
 | A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       | ⬜ Pendiente |
-| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma | S         | C-05, C-06, B-08 | ⬜ Pendiente |
+| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | ⬜ Pendiente |
 
 ### A2. Cuentas e infraestructura
 
@@ -58,7 +58,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | ---- | ----------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------ | ------ |
 | A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | ⬜ Pendiente |
 | A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | ⬜ Pendiente |
-| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ⬜ Pendiente |
+| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
 
 ### A4. Equipo (Saúl + Pablo)
 
@@ -134,7 +134,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 - Apartado "Equips inscrits": aparece cuando hay al menos un equipo **confirmado** (los pendientes no salen); separado en dos categorías: **Infantil/Cadet** y **Juvenil/Sènior**.
 - Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
 - Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
-- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los menores, solo el primer nombre, sin apellidos.
+- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los adultos, nombre y primer apellido; de los menores, solo el primer nombre. La lista se quita de la web una semana después del torneo.
 - Pensado para reutilizarse con el siguiente evento sin reprogramar.
 - Mientras las inscripciones estén abiertas, franja del torneo en lo alto de la portada, visible sin hacer scroll.
 - Preguntas frecuentes en la página del torneo: el texto está en [info-montca.md](info-montca.md).
@@ -143,8 +143,8 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 **C-05 · Inscripción de equipos** (diseño de Saúl del 2026-11-18; los casos raros se cierran en `clarify`)
 - Cualquier jugador puede crear un equipo; quien lo crea queda como **administrador del equipo**.
 - Lo primero que se pregunta es la **edad**: mayor de edad → formulario de adultos; menor → formulario de menores (uno solo para todos los menores, sin distinguir categoría).
-- **Adultos**: nombre y apellidos, DNI, fecha de nacimiento, teléfono, correo, casilla de derechos de imagen (opcional) y casilla para recibir información de otras actividades (opcional).
-- **Menores**: nombre y apellidos, DNI y fecha de nacimiento del menor; datos del tutor legal (los mismos que en adultos); casilla de derechos de imagen del menor (opcional); casilla para recibir información de otras actividades en el correo del tutor (opcional); **autorización del tutor para que el menor participe, la única casilla obligatoria**.
+- **Adultos**: nombre y apellidos, DNI, fecha de nacimiento, correo, dorsal, teléfono (solo si es el administrador del equipo, y entonces obligatorio), casilla de derechos de imagen (opcional) y casilla para recibir información de otras actividades (opcional).
+- **Menores**: nombre y apellidos, DNI, fecha de nacimiento y dorsal del menor; teléfono y correo del menor (solo si es el administrador del equipo, y entonces obligatorios); datos del tutor legal (nombre y apellidos, DNI, fecha de nacimiento para comprobar que es mayor de edad, teléfono y correo); casilla de derechos de imagen del menor (opcional); casilla para recibir información de otras actividades en el correo del tutor (opcional); **autorización del tutor para que el menor participe, la única casilla obligatoria**.
 - La casilla de imagen es una sola en cada formulario (en el de menores, sin separar por edad). Se guarda si cada jugador la ha marcado, para la lista de C-06.
 - Al crear el equipo, el administrador recibe **por correo un enlace único del equipo** para pasarlo a quien quiera. **Solo se entra en un equipo con ese enlace.** Quien entra sigue los mismos pasos: edad → formulario de adulto o de menor.
 - Categoría por año de nacimiento: **Infantil/Cadet** 2011–2014 · **Juvenil/Sènior** 2010 o antes. Hay menores en las dos.
@@ -152,12 +152,12 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 - Estados: **pendiente** (no llega al mínimo o falta la revisión de Montca) → **confirmado** (llega al mínimo y Montca lo revisa). Solo los confirmados ocupan plaza y salen en la web. Con las plazas llenas, los demás equipos van a **lista de espera**.
 - Página de confirmación tras crear el equipo: dice que el enlace llega por correo. Otra más sencilla para cada jugador que se apunta.
 - Las páginas con enlace de equipo no se indexan (`noindex`).
-- Dorsal: estaba previsto pedirlo y mostrarlo en la página del equipo, pero no está en la lista de campos del 2026-11-18. Confirmar si se mantiene.
+- Dorsal obligatorio, del 1 al 99, sin repetirse dentro del equipo; se muestra junto al nombre del jugador.
+- El administrador del equipo no ve los datos de sus jugadores, solo lo que ve todo el mundo.
 - Casos a resolver en `clarify`:
   - Equipo que no llega al mínimo antes del cierre.
   - Enlace reenviado a desconocidos.
   - Jugador que se borra.
-  - Administrador menor de edad: ¿el correo con el enlace va al tutor?
   - Jugador nacido en un año que no es de la categoría del equipo.
   - El mismo DNI en dos equipos.
   - Menores de 14 sin DNI.
