@@ -21,9 +21,13 @@ tales. La web no afirma títulos ni certificados de monitores mientras Montca no
 
 ### IV. Privacidad y menores
 Un formulario MUST NOT publicarse sin sus textos legales. Un menor MUST NOT quedar inscrito
-hasta que su tutor autorice la participación y los derechos de imagen. Los datos personales
-recogidos MUST limitarse a lo imprescindible para la inscripción o el presupuesto y MUST
-guardarse en servidores de la Unión Europea.
+hasta que su tutor autorice su participación. Los derechos de imagen, de menores y de adultos,
+son opcionales y MUST NOT condicionar la inscripción: quien no los da no sale en fotos ni vídeos.
+Los datos personales recogidos MUST limitarse a lo imprescindible para la inscripción o el
+presupuesto y MUST figurar en `docs/legal/tratamientos.md`. Se prefieren servidores de la Unión
+Europea; un servicio que guarde o procese datos personales fuera de ella MUST cubrir esa
+transferencia con una garantía válida (por ejemplo, el Marco de Privacidad de Datos UE-EE. UU.
+o cláusulas contractuales tipo) y MUST aparecer en la política de privacidad.
 
 ### V. Accesibilidad
 - Los botones y las zonas pulsables miden al menos 44 px de alto.
@@ -68,4 +72,4 @@ MAJOR si se elimina o redefine un principio, MINOR si se añade un principio o s
 amplía su alcance, PATCH para aclaraciones de redacción. Toda revisión de PR MUST comprobar que
 se cumplen estos principios.
 
-**Versión**: 1.0.0 | **Ratificada**: 2026-11-17 | **Última modificación**: 2026-11-17
+**Versión**: 2.0.0 | **Ratificada**: 2026-11-17 | **Última modificación**: 2026-11-19
