@@ -1,6 +1,6 @@
 # Decisiones · Web Montca Actiu
 
-Actualizado: 2026-11-20 (el mapa de Mariola es una imagen con botones encima). Las tareas que salen de aquí están en [tareas.md](tareas.md).
+Actualizado: 2026-11-20 (el mapa de Mariola es una imagen con botones encima; el repositorio pasa a público). Las tareas que salen de aquí están en [tareas.md](tareas.md).
 
 Estado: **Acordada** (Saúl y Pablo, o Montca) · **Por confirmar** (propuesta de uno, falta el visto bueno del otro) · **Pendiente** (aún sin decidir).
 
@@ -67,7 +67,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-15 | Coste objetivo: 0 € salvo el dominio. Si algo no se puede hacer gratis, se plantea y se decide entre todos antes de pagar  | Es una asociación                                                                                                                                  | Acordada                                              |
 | 2026-11-18 | El dominio se compra ya; la web se publica cuando esté lista (no se publica una versión mínima antes)                                     | Quitarse el dominio de encima sin publicar algo a medias                                                                                           | Acordada                                              |
 | 2026-11-18 | El correo profesional se pedirá con **Google Workspace para entidades sin ánimo de lucro** cuando la web esté publicada                    | Google pide que la asociación tenga web                                                                                                             | Acordada                                              |
-| 2026-11-18 | El repositorio pasa a **público** para conectarlo a Netlify                                                                                | Netlify gratis con el repo de la organización                                                                                                      | Por confirmar (Pablo)                                 |
+| 2026-11-20 | El repositorio pasa a **público** para conectarlo a Netlify                                                                                | El plan gratuito de Netlify con un repo privado solo admite un contribuidor y somos dos. Auditoría del historial hecha (issue #32): sin secretos; los datos de contacto que había en el boceto de portada ya están publicados en la web actual de Montca y se aceptan sin reescribir el historial | Acordada                                              |
 | 2026-11-15 | Cuentas (dominio, Google, Supabase, Netlify) a nombre de Montca, con nosotros como colaboradores                           | Que la web no dependa de nuestras cuentas personales                                                                                               | Acordada                                              |
 
 ## 3. Legal y datos
