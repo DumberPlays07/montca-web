@@ -1,6 +1,6 @@
 # Mapa de la Serra de Mariola (tarea A-05)
 
-Genera el mapa de la Serra de Mariola a partir de datos reales, sin dibujarlo a mano. De momento produce tres SVG de prueba para elegir estilo; el componente de la web se hará después.
+Genera el mapa de la Serra de Mariola a partir de datos reales, sin dibujarlo a mano. El mapa que usa la web es una imagen con un botón encima de cada pico: ver [Versión definitiva](#versión-definitiva). Los SVG de `generar_mapa.py` se quedan como pruebas de estilo.
 
 ## Cómo se ejecuta
 
@@ -76,14 +76,42 @@ Posiciones de referencia (OpenStreetMap, proyectadas con la cámara `sur` de `ge
 
 Las versiones de Gemini desplazan algo el relieve: en `mapa-base-pueblo.jpg` el terreno está unos 30-40 px a la derecha y 10 px más abajo que en el render, así que esas posiciones hay que corregirlas a ojo comparando con el render. Gemini dibujó el pueblo unos 90 px por debajo de donde está Cocentaina de verdad (que caería hacia 83,9 %, 69,5 % en esa imagen).
 
+## Versión definitiva
+
+**Qué es.** La imagen del mapa que usa la web: el diorama 3D de la cámara `sur` (render de `generar_mapa_3d.py` a partir del relieve real), retocado con Gemini a partir de `mapa-base-pueblo.jpg`, con el pueblo y el castillo de Cocentaina. Encima, la web pone un botón HTML por pico, colocado en % de la imagen, que se adapta a cualquier ancho.
+
+**Dónde está.**
+
+| Archivo | Qué es |
+| --- | --- |
+| `src/assets/mapa/mapa-mariola.png` | La imagen que usa la web (1024 × 572 px). |
+| `fuentes/mapa-definitivo.png` | El original, igual que el anterior, guardado junto a las demás fuentes de Gemini. |
+| `src/data/picos-mapa.json` | Un objeto por pico: `nombre`, `altura` (m), `x`, `y` (en % del ancho y del alto de la imagen, desde arriba a la izquierda) y `visible`. La lista de picos es provisional hasta que Montca dé los 5 cims (A-09). |
+
+**Cómo se recalculan los picos.** Gemini desplaza algo el relieve, así que las posiciones de `picos-3d.json` no caen exactas sobre esta imagen. Para recolocarlas:
+
+```sh
+uv run scripts/mapa/generar_mapa_3d.py        # si no existe salida/ (render y picos-3d.json)
+uv run scripts/mapa/colocar_picos_definitivo.py
+cd scripts/mapa/salida && uv run python -m http.server 8765
+# y abrir http://127.0.0.1:8765/previa-definitiva.html (también funciona con doble clic)
+```
+
+`colocar_picos_definitivo.py` lleva cada pico del render a la imagen con una transformación global (`Y_RENDER`, `Y_DEFINITIVA`, `ESCALA_Y`, medidas con el alto del bloque en las dos imágenes) y lo afina buscando dónde encajan mejor los bordes de los escalones del render sobre los de la imagen. Si un pico sale con un desplazamiento muy distinto al del resto (la coincidencia falla donde Gemini cambió más el dibujo), le aplica el desplazamiento mediano y lo avisa. En `previa-definitiva.html` cada botón se puede arrastrar si no cae en su cumbre; la página muestra el JSON final, que se copia a `src/data/picos-mapa.json`. La plantilla de la página es `previa-definitiva.plantilla.html`.
+
+**Falta.** La imagen es provisional en tamaño: hay que sustituirla por una versión en alta resolución (≥ 2400 px de ancho) con el mismo encuadre antes de publicar (tarea A-29). Al cambiarla, copia la nueva a los dos sitios de la tabla y vuelve a ejecutar `colocar_picos_definitivo.py`: si el encuadre es el mismo, las posiciones en % no deberían moverse; si cambia, hay que volver a medir la transformación global.
+
+**Variantes con más relieve.** Las versiones con exageración vertical x3 y x4 (`VARIANTES_RELIEVE`, con los JSON de picos y de Cocentaina y su castillo) están en la rama `experimento/mapa-relieve-x3-x4`. No se usan de momento.
+
 ## Fuentes hechas con Gemini (`fuentes/`)
 
-Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del render y no se pueden regenerar, por eso son lo único de imágenes que se sube al repositorio. Están en JPG de calidad alta y ninguna pasa de 400 KB.
+Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del render y no se pueden regenerar, por eso son lo único de imágenes que se sube al repositorio. Las de Gemini por pasos están en JPG de calidad alta y ninguna pasa de 400 KB; `mapa-definitivo.png` va en PNG tal como salió (530 KB).
 
 | Archivo | Qué es |
 | --- | --- |
 | `mapa-base-pueblo.jpg` | El diorama retocado con el pueblo de Cocentaina dibujado y un punto azul donde va el castillo (2752 × 1536 px). |
 | `castillo.jpg` | La torre del castillo suelta sobre fondo blanco (recortada con margen blanco; el script quita el fondo). |
+| `mapa-definitivo.png` | El mapa definitivo, retocado con Gemini a partir de `mapa-base-pueblo.jpg` (1024 × 572 px, PNG). Ver [Versión definitiva](#versión-definitiva). |
 
 **`mapa-base-pueblo.jpg`.** Hecha con Gemini (Nano Banana Pro) en varias vueltas, partiendo de `mapa-3d.png` (render de `generar_mapa_3d.py`). Resumen de lo que se pidió en cada vuelta:
 
@@ -99,6 +127,7 @@ Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del 
 2. `generar_mapa_3d.py`: usa los mismos datos y genera los renders 3D y los JSON con la posición de los picos. El render de la cámara `sur` es la base que se retocó con Gemini.
 3. (A mano, ya hecho) retoque con Gemini: el resultado está en `fuentes/`.
 4. `colocar_castillo.py`: solo necesita `fuentes/`; se puede ejecutar sin haber ejecutado los anteriores.
+5. `colocar_picos_definitivo.py`: necesita el render y `picos-3d.json` del paso 2 y `fuentes/mapa-definitivo.png`; escribe la vista previa para revisar las posiciones de los picos.
 
 Todo lo que generan los scripts va a `salida/`, que está en `.gitignore` igual que `datos/`.
 

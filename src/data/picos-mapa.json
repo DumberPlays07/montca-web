@@ -1,0 +1,79 @@
+[
+  {
+    "nombre": "Montcabrer",
+    "altura": 1390,
+    "x": 66.7,
+    "y": 54.2,
+    "visible": true
+  },
+  {
+    "nombre": "Alt de la Codolla",
+    "altura": 1167,
+    "x": 57.03,
+    "y": 57.52,
+    "visible": true
+  },
+  {
+    "nombre": "Alt de la Reja",
+    "altura": 1128,
+    "x": 66.41,
+    "y": 49.48,
+    "visible": true
+  },
+  {
+    "nombre": "Mola Alta de Serelles",
+    "altura": 1104,
+    "x": 66.11,
+    "y": 65.56,
+    "visible": true
+  },
+  {
+    "nombre": "el Portell de Just d'Alfafara",
+    "altura": 1087,
+    "x": 49.32,
+    "y": 53.85,
+    "visible": true
+  },
+  {
+    "nombre": "Alt de la Replana",
+    "altura": 1086,
+    "x": 43.07,
+    "y": 73.43,
+    "visible": true
+  },
+  {
+    "nombre": "Tossal Redó",
+    "altura": 987,
+    "x": 58.3,
+    "y": 66.96,
+    "visible": true
+  },
+  {
+    "nombre": "Alt de Santa Maria",
+    "altura": 965,
+    "x": 42.48,
+    "y": 58.04,
+    "visible": true
+  },
+  {
+    "nombre": "Morro del Porc",
+    "altura": 964,
+    "x": 19.82,
+    "y": 66.08,
+    "visible": true
+  },
+  {
+    "nombre": "Alt de Sant Jaume",
+    "altura": 957,
+    "x": 29.88,
+    "y": 59.79,
+    "visible": true
+  },
+  {
+    "nombre": "Tossal del Mas de Miró",
+    "altura": 914,
+    "x": 49.61,
+    "y": 78.5,
+    "visible": true
+  }
+]
