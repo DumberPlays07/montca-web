@@ -21,6 +21,7 @@ Uso:  uv run scripts/mapa/generar_mapa_3d.py
 import json
 import shutil
 import sys
+import urllib.request
 from pathlib import Path
 
 import matplotlib
@@ -33,7 +34,7 @@ from scipy.ndimage import gaussian_filter, median_filter, zoom
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from generar_mapa import (  # noqa: E402  (va después de ajustar sys.path)
-    LAT_NORTE, LAT_SUR, LON_ESTE, LON_OESTE, RUTA_DEM, SALIDA,
+    DATOS, LAT_NORTE, LAT_SUR, LON_ESTE, LON_OESTE, RUTA_DEM, SALIDA,
     descargar_datos, elegir_picos, leer_picos,
 )
 
@@ -69,7 +70,23 @@ CAMARAS = {
     "sureste": {"acimut": 135, "elevacion": 24, "angulo": 28, "zoom": 1.6, "desplazamiento": 0.0},
     "este": {"acimut": 90, "elevacion": 24, "angulo": 28, "zoom": 1.7, "desplazamiento": 0.05},
 }
-CAMARA_PRINCIPAL = "sur"  # la que se copia como mapa-3d.png/.webp y picos-3d.json
+CAMARA_PRINCIPAL = "sur"  # la que se copia como mapa-3d.png/.webp, picos-3d.json y pueblos-3d.json
+
+# Variantes con más relieve: solo con la cámara principal y con exactamente el mismo encuadre
+# que la versión de EXAGERACION (se reutiliza su cámara, no se reencuadra). Los bordes de cada
+# escalón se marcan algo más bajando la luz ambiente y subiendo la sombra arrojada.
+VARIANTES_RELIEVE = {
+    "x3": {"exageracion": 3.0, "luz_ambiente": 0.45, "sombra_opacidad": 0.30},
+    "x4": {"exageracion": 4.0, "luz_ambiente": 0.40, "sombra_opacidad": 0.34},
+}
+
+# Lugares sacados de OpenStreetMap (API 0.6; se guardan en datos/ la primera vez): (nombre, tipo, id).
+API_OSM = "https://api.openstreetmap.org/api/0.6"
+RUTA_LUGARES = DATOS / "lugares_osm.json"
+LUGARES_OSM = [
+    ("Cocentaina", "node", 1470838222),  # place=town
+    ("Castell de Cocentaina", "way", 376877218),  # historic=castle
+]
 
 ANCHO_IMAGEN, ALTO_IMAGEN = 2400, 1350
 
@@ -116,6 +133,36 @@ def escalonar(alturas):
     return indice, umbrales
 
 
+def leer_lugares():
+    """Cocentaina y su castillo desde OpenStreetMap.
+
+    De una vía se usa el centro de su caja, como el `out center` de Overpass.
+    """
+    if not RUTA_LUGARES.exists():
+        print("Consultando Cocentaina y el castillo en la API de OpenStreetMap…")
+        elementos = []
+        for _, tipo, ident in LUGARES_OSM:
+            url = f"{API_OSM}/{tipo}/{ident}{'/full' if tipo == 'way' else ''}.json"
+            peticion = urllib.request.Request(url, headers={"User-Agent": "mapa-mariola/1.0"})
+            with urllib.request.urlopen(peticion, timeout=60) as respuesta:
+                elementos += json.load(respuesta)["elements"]
+        RUTA_LUGARES.write_text(json.dumps({"elements": elementos}, ensure_ascii=False), encoding="utf-8")
+    elementos = {(e["type"], e["id"]): e for e in json.loads(RUTA_LUGARES.read_text(encoding="utf-8"))["elements"]}
+    lugares = []
+    for nombre, tipo, ident in LUGARES_OSM:
+        elemento = elementos.get((tipo, ident))
+        if elemento is None:
+            sys.exit(f"OpenStreetMap no devolvió {tipo} {ident} ({nombre}). Borra {RUTA_LUGARES} y vuelve a probar.")
+        if tipo == "node":
+            lat, lon = elemento["lat"], elemento["lon"]
+        else:
+            nodos = [elementos[("node", n)] for n in elemento["nodes"]]
+            lats, lons = [n["lat"] for n in nodos], [n["lon"] for n in nodos]
+            lat, lon = (min(lats) + max(lats)) / 2, (min(lons) + max(lons)) / 2
+        lugares.append({"osm": f"{tipo}/{ident}", "nombre": nombre, "lat": lat, "lon": lon})
+    return lugares
+
+
 # ---------- iluminación (calculada aquí, no en la GPU) ----------
 
 def direccion_luz():
@@ -145,7 +192,7 @@ def sombra_arrojada(z, paso):
     return sombra.astype(float)
 
 
-def sombreado_celdas(z, paso):
+def sombreado_celdas(z, paso, luz_ambiente):
     """Factor de luz por celda: 1 en los techos planos, más claro u oscuro en los cantos.
 
     Los cantos usan la orientación del relieve suavizado: la de la propia celda va
@@ -161,8 +208,8 @@ def sombreado_celdas(z, paso):
     lambert_canto = np.clip(np.tensordot(luz, normal, axes=1), 0, 1)
     es_canto = (z[:-1, :-1] != z[1:, :-1]) | (z[:-1, :-1] != z[:-1, 1:]) | (z[:-1, :-1] != z[1:, 1:])
     lambert = np.where(es_canto, lambert_canto, luz[2])
-    plano = LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * luz[2]
-    return (LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * lambert) / plano
+    plano = luz_ambiente + (1 - luz_ambiente) * luz[2]
+    return (luz_ambiente + (1 - luz_ambiente) * lambert) / plano
 
 
 def en_celdas(valores):
@@ -176,10 +223,11 @@ def hex_a_rgb(color):
 
 # ---------- malla ----------
 
-def construir_malla(x, y, alturas):
+def construir_malla(x, y, alturas, exageracion=EXAGERACION, luz_ambiente=LUZ_AMBIENTE,
+                    sombra_opacidad=SOMBRA_OPACIDAD):
     """Superficie escalonada con faldón hasta la base, coloreada por celda (RGB ya iluminado)."""
     indice, umbrales = escalonar(alturas)
-    grosor_capa = (umbrales[1] - umbrales[0]) * EXAGERACION
+    grosor_capa = (umbrales[1] - umbrales[0]) * exageracion
     z = indice * grosor_capa + GROSOR_BASE
     paso = x[1] - x[0]
 
@@ -187,7 +235,7 @@ def construir_malla(x, y, alturas):
     # Cada celda toma el color de su esquina más alta: el canto pertenece a la capa de arriba.
     escalon_celda = np.maximum.reduce([indice[:-1, :-1], indice[1:, :-1], indice[:-1, 1:], indice[1:, 1:]])
     sombra = gaussian_filter(sombra_arrojada(z, paso), SOMBRA_DIFUMINADO)
-    luz = sombreado_celdas(z, paso) * (1 - SOMBRA_OPACIDAD * en_celdas(sombra))
+    luz = sombreado_celdas(z, paso, luz_ambiente) * (1 - sombra_opacidad * en_celdas(sombra))
     rgb = colores[escalon_celda] * luz[..., None]
 
     # Faldón: una fila/columna más en cada borde, a altura 0, con las mismas x/y.
@@ -203,7 +251,7 @@ def construir_malla(x, y, alturas):
     luz_dir = direccion_luz()
     for lado, normal in (((0, slice(None)), (0, -1)), ((-1, slice(None)), (0, 1)),
                          ((slice(None), 0), (-1, 0)), ((slice(None), -1), (1, 0))):
-        factor = LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * max(0.0, luz_dir[0] * normal[0] + luz_dir[1] * normal[1])
+        factor = luz_ambiente + (1 - luz_ambiente) * max(0.0, luz_dir[0] * normal[0] + luz_dir[1] * normal[1])
         rgb_total[lado] = canto * factor
 
     malla = pv.StructuredGrid(malla_x, malla_y, zs)
@@ -221,11 +269,19 @@ def altura_renderizada(z, x, y, px, py):
 
 # ---------- cámara y proyección ----------
 
-def preparar_escena(malla, ajustes, centro):
+def preparar_escena(malla, ajustes, centro, camara_fija=None):
+    """Escena con la cámara de `ajustes`; con `camara_fija` (de leer_camara) copia esa cámara tal cual."""
     escena = pv.Plotter(off_screen=True, window_size=(ANCHO_IMAGEN, ALTO_IMAGEN))
     escena.add_mesh(malla, scalars="rgb", rgb=True, lighting=False)
     escena.set_background(CIELO_HORIZONTE, top=CIELO_ARRIBA)
     escena.enable_anti_aliasing("ssaa")
+    if camara_fija is not None:
+        escena.camera.position = camara_fija["posicion"]
+        escena.camera.focal_point = camara_fija["foco"]
+        escena.camera.up = camara_fija["arriba"]
+        escena.camera.view_angle = camara_fija["angulo"]
+        escena.renderer.ResetCameraClippingRange()
+        return escena
     acimut, elevacion = np.radians(ajustes["acimut"]), np.radians(ajustes["elevacion"])
     direccion = np.array([np.sin(acimut) * np.cos(elevacion), np.cos(acimut) * np.cos(elevacion), np.sin(elevacion)])
     escena.camera.focal_point = centro
@@ -239,6 +295,12 @@ def preparar_escena(malla, ajustes, centro):
     escena.camera.focal_point = np.array(escena.camera.focal_point) + subida
     escena.camera.position = np.array(escena.camera.position) + subida
     return escena
+
+
+def leer_camara(escena):
+    camara = escena.camera
+    return {"posicion": tuple(camara.position), "foco": tuple(camara.focal_point),
+            "arriba": tuple(camara.up), "angulo": camara.view_angle}
 
 
 def proyectar(escena, punto):
@@ -317,20 +379,34 @@ def guardar_imagenes(imagen, base):
     return guardar_webp(imagen, SALIDA / f"{base}.webp")
 
 
-def generar_variante(nombre, ajustes, malla, superficie, z, x, y, picos, centro):
-    escena = preparar_escena(malla, ajustes, centro)
+def situar(escena, superficie, camara, z, x, y, lat, lon):
+    """Posición en la imagen (%) de una coordenada real, a la altura de su capa, y si se ve."""
+    px, py = metros(lon, lat)
+    py = -py + y[-1]  # mismo eje y que la malla (norte arriba)
+    punto = np.array([px, py, altura_renderizada(z, x, y, px, py)])
+    izquierda, arriba = proyectar(escena, punto)
+    return {"x": round(izquierda, 2), "y": round(arriba, 2),
+            "visible": bool(esta_visible(superficie, camara, punto))}
+
+
+def guardar_json(datos, archivo):
+    (SALIDA / archivo).write_text(json.dumps(datos, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def generar_variante(nombre, ajustes, malla, superficie, z, x, y, picos, lugares, centro, camara_fija=None):
+    """Imagen, versión con nombres, picos-3d-<nombre>.json y pueblos-3d-<nombre>.json.
+
+    Devuelve el peso del WebP mayor y la cámara usada (para repetirla en otra variante).
+    """
+    escena = preparar_escena(malla, ajustes, centro, camara_fija)
     imagen = Image.fromarray(escena.screenshot(return_img=True)).convert("RGB")
+    camara_usada = leer_camara(escena)
     camara = np.array(escena.camera.position)
 
-    resultado = []
-    for pico in picos:
-        px, py = metros(pico["lon"], pico["lat"])
-        py = -py + y[-1]  # mismo eje y que la malla (norte arriba)
-        punto = np.array([px, py, altura_renderizada(z, x, y, px, py)])
-        izquierda, arriba = proyectar(escena, punto)
-        resultado.append({"osm": pico["id"], "nombre": pico["nombre"], "altura": round(pico["altura"]),
-                          "x": round(izquierda, 2), "y": round(arriba, 2),
-                          "visible": bool(esta_visible(superficie, camara, punto))})
+    resultado = [{"osm": pico["id"], "nombre": pico["nombre"], "altura": round(pico["altura"]),
+                  **situar(escena, superficie, camara, z, x, y, pico["lat"], pico["lon"])} for pico in picos]
+    pueblos = [{"osm": lugar["osm"], "nombre": lugar["nombre"],
+                **situar(escena, superficie, camara, z, x, y, lugar["lat"], lugar["lon"])} for lugar in lugares]
     cx, cy = metros(COCENTAINA[1], COCENTAINA[0])
     cocentaina = proyectar(escena, np.array([cx, -cy + y[-1], GROSOR_BASE]))
     escena.close()
@@ -338,20 +414,20 @@ def generar_variante(nombre, ajustes, malla, superficie, z, x, y, picos, centro)
     peso, calidad, ancho = guardar_imagenes(imagen, f"mapa-3d-{nombre}")
     peso_nombres, _, _ = guardar_imagenes(rotular(imagen, resultado), f"mapa-3d-{nombre}-nombres")
     peso = max(peso, peso_nombres)
-    datos = {"camara": nombre, "imagen": f"mapa-3d-{nombre}.webp", "ancho": imagen.width,
-             "alto": imagen.height, "picos": resultado}
-    (SALIDA / f"picos-3d-{nombre}.json").write_text(json.dumps(datos, ensure_ascii=False, indent=2),
-                                                     encoding="utf-8")
+    comun = {"camara": ajustes["nombre_camara"], "imagen": f"mapa-3d-{nombre}.webp",
+             "exageracion": ajustes["exageracion"], "ancho": imagen.width, "alto": imagen.height}
+    guardar_json({**comun, "picos": resultado}, f"picos-3d-{nombre}.json")
+    guardar_json({**comun, "lugares": pueblos}, f"pueblos-3d-{nombre}.json")
 
     aviso = "" if peso <= PESO_MAXIMO_WEBP_KB else f"  ¡SUPERA {PESO_MAXIMO_WEBP_KB} KB!"
     print(f"\n[{nombre}] webp sin nombres y con nombres: el mayor pesa {peso:.0f} KB "
           f"(calidad {calidad}, {ancho} px){aviso}")
     dentro = 0 <= cocentaina[0] <= 100 and 0 <= cocentaina[1] <= 100
     print(f"  Cocentaina en ({cocentaina[0]:.1f} %, {cocentaina[1]:.1f} %): {'dentro' if dentro else 'FUERA'}")
-    for pico in resultado:
+    for pico in resultado + pueblos:
         estado = "" if pico["visible"] else "  (tapado por otra montaña)"
         print(f"  {pico['nombre']:<28} {pico['x']:6.1f} %  {pico['y']:6.1f} %{estado}")
-    return peso
+    return peso, camara_usada
 
 
 def main():
@@ -360,6 +436,7 @@ def main():
     if len(COLORES_ESCALONES) != NUM_ESCALONES:
         sys.exit(f"COLORES_ESCALONES tiene {len(COLORES_ESCALONES)} colores y NUM_ESCALONES es {NUM_ESCALONES}.")
     descargar_datos()
+    lugares = leer_lugares()
     x, y, alturas = leer_alturas()
     malla, z, umbrales = construir_malla(x, y, alturas)
     print(f"Malla: {malla.n_cells:,} celdas; escalones desde " + ", ".join(f"{u:.0f}" for u in umbrales) + " m")
@@ -368,16 +445,29 @@ def main():
     picos = elegir_picos(leer_picos())
     SALIDA.mkdir(exist_ok=True)
 
-    pesos = {nombre: generar_variante(nombre, ajustes, malla, superficie, z, x, y, picos, centro)
-             for nombre, ajustes in CAMARAS.items()}
+    pesos, camaras_usadas = {}, {}
+    for nombre, ajustes in CAMARAS.items():
+        ajustes = {**ajustes, "nombre_camara": nombre, "exageracion": EXAGERACION}
+        pesos[nombre], camaras_usadas[nombre] = generar_variante(
+            nombre, ajustes, malla, superficie, z, x, y, picos, lugares, centro)
     for sufijo in ("", "-nombres"):
         for extension in ("png", "webp"):
             shutil.copyfile(SALIDA / f"mapa-3d-{CAMARA_PRINCIPAL}{sufijo}.{extension}",
                             SALIDA / f"mapa-3d{sufijo}.{extension}")
-    principal = json.loads((SALIDA / f"picos-3d-{CAMARA_PRINCIPAL}.json").read_text(encoding="utf-8"))
-    principal["imagen"] = "mapa-3d.webp"
-    (SALIDA / "picos-3d.json").write_text(json.dumps(principal, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nPrincipal ({CAMARA_PRINCIPAL}) copiada como mapa-3d.png, mapa-3d.webp y picos-3d.json.")
+    for prefijo in ("picos", "pueblos"):
+        principal = json.loads((SALIDA / f"{prefijo}-3d-{CAMARA_PRINCIPAL}.json").read_text(encoding="utf-8"))
+        principal["imagen"] = "mapa-3d.webp"
+        guardar_json(principal, f"{prefijo}-3d.json")
+    print(f"\nPrincipal ({CAMARA_PRINCIPAL}) copiada como mapa-3d.png, mapa-3d.webp, picos-3d.json y pueblos-3d.json.")
+
+    # Más relieve con la misma cámara y el mismo encuadre que la principal.
+    for nombre, variante in VARIANTES_RELIEVE.items():
+        malla_v, z_v, _ = construir_malla(x, y, alturas, variante["exageracion"],
+                                          variante["luz_ambiente"], variante["sombra_opacidad"])
+        ajustes = {**CAMARAS[CAMARA_PRINCIPAL], "nombre_camara": CAMARA_PRINCIPAL,
+                   "exageracion": variante["exageracion"]}
+        pesos[nombre], _ = generar_variante(nombre, ajustes, malla_v, malla_v.extract_surface().triangulate(),
+                                            z_v, x, y, picos, lugares, centro, camaras_usadas[CAMARA_PRINCIPAL])
     if any(peso > PESO_MAXIMO_WEBP_KB for peso in pesos.values()):
         sys.exit(f"\nAlgún WebP supera {PESO_MAXIMO_WEBP_KB} KB.")
 
