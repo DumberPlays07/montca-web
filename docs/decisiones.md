@@ -1,6 +1,6 @@
 # Decisiones · Web Montca Actiu
 
-Actualizado: 2026-11-20 (el mapa de Mariola es una imagen con botones encima; el repositorio pasa a público). Las tareas que salen de aquí están en [tareas.md](tareas.md).
+Actualizado: 2026-11-20 (el mapa de Mariola es una imagen con botones encima; el repositorio pasa a público; nombre del responsable de datos aceptado por Montca). Las tareas que salen de aquí están en [tareas.md](tareas.md).
 
 Estado: **Acordada** (Saúl y Pablo, o Montca) · **Por confirmar** (propuesta de uno, falta el visto bueno del otro) · **Pendiente** (aún sin decidir).
 
@@ -79,6 +79,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-15 | El tutor puede autorizar con **firma digital** o con **papel entregado en Softco**. La autorización **por correo** queda pendiente de comprobar si es válida legalmente | Las dos primeras dejan constancia firmada; el correo hay que confirmarlo | Acordada (correo: Pendiente) |
 | 2026-11-18 | Las casillas de derechos de imagen y de información de otras actividades son **opcionales** para todos; la única obligatoria es la autorización del tutor si el inscrito es menor | Definido por Saúl                                                        | Acordada                     |
 | 2026-11-18 | **Ningún dato personal en el repositorio** (es público): ni el correo y el teléfono personales de Iker, ni el domicilio (es su casa), ni datos de miembros. Van en un **documento de Drive compartido** entre Saúl, Pablo y Montca. En el repo, en `docs/info-montca.md`, solo lo público de la asociación (nombre legal, NIF, contacto de la asociación, FAQ) | El repo va a ser público                                                 | Acordada                     |
+| 2026-11-20 | **Iker Moltó** figura como contacto y responsable de datos de Montca, y Montca acepta que su **nombre completo** aparezca en el repositorio público y en los textos legales. Su teléfono y su domicilio siguen fuera del repo (en el documento de Drive) | Lo ha aceptado Montca; antes de hacer público el repo quedó pendiente de su respuesta (issue #32) | Acordada (Montca) |
 | 2026-11-18 | Lo que el código necesita pero no se muestra (p. ej. el correo que recibe los avisos) va en las propiedades del Apps Script o en variables de entorno de Netlify, nunca en el código | El repo va a ser público                                                 | Acordada                     |
 | 2026-11-18 | La casilla de imagen va en el mismo formulario de inscripción del jugador. En el de menores es una sola casilla, sin separar por edad, junto a los datos del menor y del tutor | Más sencillo; si la revisión legal (A-17) pide otra cosa, se cambia         | Acordada                     |
 | 2026-11-18 | Quien no marca la casilla de imagen (menor o adulto) queda **marcado** en la gestión, y Montca puede sacar la **lista de quién no puede salir en fotos y vídeos** (nombre y equipo) para los encargados de redes sociales | Que redes sepa quién puede salir y quién no; el consentimiento de imagen debe ser libre y separado de la inscripción (AEPD, PS/00468/2021) | Acordada                     |
