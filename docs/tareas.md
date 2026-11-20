@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-20 (A-05 acabada; nueva A-29, mapa en alta resolución; repo público acordado). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-20 (A-05 y A-28 acabadas; nueva A-29, mapa en alta resolución). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -67,7 +67,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | A-20 | Cerrar lo que sigue "por confirmar" en decisiones.md: content collections (tras ver Astro) y avisos con `wa.me`                                                 | Repaso general hecho el 2026-11-15 | ⬜ Pendiente |
 | A-21 | Limpieza del repo por consenso: mover `MD's/Instruccions web i bot` a `docs/fase-2/bot-reels.md` o borrarlo; revisar `docs/ideas/`, `sprint-01.md` y qué sobra | No dejar basura                    | 🟡 Empezada: borrado `Docs`; faltan `MD's/`, `docs/ideas/` y `sprint-01.md` |
 | A-22 | Rehacer el backlog del sprint 1 y crear los issues a partir de este archivo                                                                                    |                                    | ✅ Acabada: issues #13–#51 creados con etiquetas de tipo, responsable y "camino del torneo"; qué entra en cada sprint se decide en la planning |
-| A-28 | Hacer público el repositorio, tras comprobar que no hay datos personales ni claves en los archivos ni en el historial                                          | Necesario para B-02                | ⬜ Pendiente |
+| A-28 | Hacer público el repositorio, tras comprobar que no hay datos personales ni claves en los archivos ni en el historial                                          | Necesario para B-02                | ✅ Acabada: PR #61; auditoría del historial en el issue #32 |
 | A-29 | Conseguir `mapa-definitivo` en alta resolución (≥ 2400 px de ancho) con el mismo encuadre y sustituir la de 1024 px | **Antes de publicar.** Si el encuadre cambia, hay que recolocar los picos (ver `scripts/mapa/README.md`) | ⬜ Pendiente |
 
 ---
