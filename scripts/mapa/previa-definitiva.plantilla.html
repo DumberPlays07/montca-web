@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Previa mapa definitiu</title>
+<style>
+ body{margin:0;font:15px/1.4 system-ui,sans-serif;background:#f4f4ef;color:#222}
+ main{max-width:1400px;margin:auto;padding:16px}
+ .mapa{position:relative;width:100%}
+ .mapa img{display:block;width:100%;height:auto}
+ .pico{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;
+   background:#b4452f;border:3px solid #fffdf6;box-shadow:0 1px 3px #0006;cursor:grab;padding:0;touch-action:none}
+ .pico span{position:absolute;left:22px;top:50%;transform:translateY(-50%);white-space:nowrap;font:600 13px system-ui;
+   color:#26261f;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;pointer-events:none}
+ .ocultar-nombres .pico span{display:none}
+ .movil{width:375px;margin-top:24px;border:1px solid #ccc}
+ .movil .pico{width:12px;height:12px;border-width:2px} .movil .pico span{display:none}
+ textarea{width:100%;height:260px;font:12px monospace}
+ label{margin-right:16px}
+</style></head><body><main>
+<h1>Mapa definitiu: posició dels cims</h1>
+<p>Imatge: <code>fuentes/mapa-definitivo.png</code> (1024 × 572). Arrossega un botó si no cau al seu cim; el JSON de baix s'actualitza.</p>
+<p><label><input type="checkbox" id="noms" checked> Noms</label></p>
+<div class="mapa" id="gran"><img src="../fuentes/mapa-definitivo.png" alt=""></div>
+<h2>A 375 px (mòbil)</h2>
+<div class="mapa movil" id="movil"><img src="../fuentes/mapa-definitivo.png" alt=""></div>
+<h2>JSON</h2>
+<textarea id="json" readonly></textarea>
+</main>
+<script>
+const picos = __PICOS__;
+const gran = document.getElementById("gran"), movil = document.getElementById("movil");
+function pintar() {
+  for (const cont of [gran, movil]) {
+    cont.querySelectorAll(".pico").forEach(b => b.remove());
+    picos.forEach((p, i) => {
+      const b = document.createElement("button");
+      b.className = "pico"; b.style.left = p.x + "%"; b.style.top = p.y + "%";
+      b.title = `${p.nombre} (${p.altura} m)`;
+      b.innerHTML = `<span>${p.nombre} ${p.altura}</span>`;
+      if (cont === gran) arrastrable(b, i);
+      cont.appendChild(b);
+    });
+  }
+  document.getElementById("json").value = JSON.stringify(picos, null, 2);
+}
+function arrastrable(b, i) {
+  b.addEventListener("pointerdown", e => {
+    b.setPointerCapture(e.pointerId);
+    const mover = ev => {
+      const r = gran.getBoundingClientRect();
+      picos[i].x = +(100 * (ev.clientX - r.left) / r.width).toFixed(2);
+      picos[i].y = +(100 * (ev.clientY - r.top) / r.height).toFixed(2);
+      b.style.left = picos[i].x + "%"; b.style.top = picos[i].y + "%";
+    };
+    b.addEventListener("pointermove", mover);
+    b.addEventListener("pointerup", () => { b.removeEventListener("pointermove", mover); pintar(); }, { once: true });
+  });
+}
+document.getElementById("noms").addEventListener("change", e => gran.classList.toggle("ocultar-nombres", !e.target.checked));
+pintar();
+</script></body></html>
