@@ -1,0 +1,137 @@
+---
+/**
+ * Barra fija abajo en el móvil: Agenda · Activitats · WhatsApp, al alcance del pulgar.
+ * Desde 64rem desaparece y sus destinos quedan en el menú de la cabecera.
+ * El botón flotante de WhatsApp es otra tarea (B-10).
+ */
+import Icono from './Icono.astro';
+import { urlWhatsapp } from './contacto';
+import { type Idioma, esSeccionActual, ruta, t } from './textos-navegacion';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const rutaActual = Astro.url.pathname;
+
+// Sin número de WhatsApp (A-24) el tercer hueco lleva a Contacte en lugar de a wa.me.
+const enlaceWhatsapp = urlWhatsapp(t(lang, 'mensajeWhatsapp'));
+
+const enlaces = [
+	{
+		texto: t(lang, 'agenda'),
+		href: ruta(lang, 'agenda'),
+		icono: 'agenda',
+		esActual: esSeccionActual(lang, 'agenda', rutaActual),
+	},
+	{
+		texto: t(lang, 'actividades'),
+		href: ruta(lang, 'actividades'),
+		icono: 'actividades',
+		esActual: esSeccionActual(lang, 'actividades', rutaActual),
+	},
+	enlaceWhatsapp === null
+		? {
+				texto: t(lang, 'contacto'),
+				href: ruta(lang, 'contacto'),
+				icono: 'correo',
+				esActual: esSeccionActual(lang, 'contacto', rutaActual),
+			}
+		: { texto: t(lang, 'whatsapp'), href: enlaceWhatsapp, icono: 'whatsapp', esActual: false },
+] as const;
+---
+
+<nav class="barra-inferior" aria-label={t(lang, 'navegacionRapida')}>
+	<ul>
+		{
+			enlaces.map((enlace) => (
+				<li>
+					<a
+						class="enlace-barra"
+						href={enlace.href}
+						aria-current={enlace.esActual ? 'page' : undefined}
+					>
+						<Icono nombre={enlace.icono} />
+						<span>{enlace.texto}</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>
+
+<style>
+	.barra-inferior {
+		position: fixed;
+		inset: auto 0 0;
+		z-index: 20;
+		padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+		background: var(--color-verd-bosc);
+		border-top: 1px solid var(--color-linea-sobre-verde);
+	}
+
+	/* Deja sitio al final de la página para que la barra no tape el pie. */
+	:global(body) {
+		padding-bottom: calc(var(--alto-barra-inferior) + env(safe-area-inset-bottom));
+	}
+
+	ul {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin: 0 auto;
+		padding: 0;
+		max-width: 32rem;
+		list-style: none;
+	}
+
+	.enlace-barra {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--espacio-1);
+		min-height: var(--alto-barra-inferior);
+		padding: var(--espacio-2) var(--espacio-1);
+		color: var(--color-boira);
+		font-size: 0.8125rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		text-align: center;
+		overflow-wrap: anywhere; /* Con el texto muy ampliado, la etiqueta parte antes que salirse. */
+		text-decoration: none;
+		transition: background-color var(--transicion);
+	}
+
+	.enlace-barra:hover {
+		background: var(--color-hover-sobre-verde);
+	}
+
+	/* Fondo verde bosque: foco y marca en teula clara (DESIGN.md, regla del fondo oscuro). */
+	.enlace-barra:focus-visible {
+		outline-color: var(--color-teula-clara);
+		outline-offset: -4px;
+	}
+
+	.enlace-barra[aria-current='page']::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 1.5rem;
+		height: 0.3125rem;
+		background: var(--color-teula-clara);
+		transform: translateX(-50%);
+	}
+
+	@media (min-width: 64rem) {
+		.barra-inferior {
+			display: none;
+		}
+
+		:global(body) {
+			padding-bottom: 0;
+		}
+	}
+</style>
