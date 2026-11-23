@@ -1,4 +1,51 @@
-/* Reset mínimo y neutro. El diseño llega con Impeccable (B-06). */
+/* Variables, reset y tipografía base. Los valores salen de DESIGN.md (B-09). */
+
+:root {
+	/* Colores medidos sobre el mapa (src/assets/mapa/mapa-mariola.png). */
+	--color-boira: #f1f6ef;
+	--color-herba-clara: #dff3d7;
+	--color-pedra: #f3e6c8;
+	--color-verd-prat: #99b561;
+	--color-verd-fulla: #527742;
+	--color-verd-bosc: #375639;
+	--color-tinta: #1f3324;
+	--color-teula: #9c5530;
+	--color-teula-fosca: #743d21;
+	--color-teula-clara: #f0b890;
+	--color-blanco: #ffffff;
+	--color-linea: rgb(55 86 57 / 0.18);
+	--color-linea-sobre-verde: rgb(241 246 239 / 0.16);
+	--color-hover-sobre-verde: rgb(241 246 239 / 0.08);
+
+	--fuente-texto: var(--font-overpass), system-ui, sans-serif;
+
+	/* Ritmo de 8 px, con 4 px para ajustes finos. */
+	--espacio-1: 0.25rem;
+	--espacio-2: 0.5rem;
+	--espacio-3: 0.75rem;
+	--espacio-4: 1rem;
+	--espacio-6: 1.5rem;
+	--espacio-8: 2rem;
+	--espacio-12: 3rem;
+
+	--radio-senal: 4px;
+	--radio-boton: 6px;
+
+	--zona-tactil: 2.75rem; /* 44 px: mínimo para el pulgar */
+	--alto-cabecera: 3.5rem;
+	--alto-barra-inferior: 4rem;
+	--ancho-maximo: 72rem;
+	--margen-lateral: 1rem;
+
+	--transicion: 160ms ease-out;
+}
+
+/* Desde tableta el margen lateral crece. */
+@media (min-width: 48rem) {
+	:root {
+		--margen-lateral: 2rem;
+	}
+}
 
 *,
 *::before,
@@ -6,13 +53,78 @@
 	box-sizing: border-box;
 }
 
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
 body {
 	margin: 0;
-	font-family: system-ui, sans-serif;
-	line-height: 1.5;
+	min-height: 100vh;
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-boira);
+	color: var(--color-tinta);
+	font-family: var(--fuente-texto);
+	font-size: 1rem;
+	line-height: 1.55;
+}
+
+/* Envoltorio del contenido de cada página (BaseLayout): empuja el pie hacia abajo. */
+.contenido {
+	flex: 1;
+}
+
+.contenido:focus {
+	outline: none;
+}
+
+h1,
+h2,
+h3 {
+	color: var(--color-verd-bosc);
+	font-weight: 800;
+	line-height: 1.15;
+	text-wrap: balance;
+}
+
+a {
+	color: var(--color-teula);
+	text-underline-offset: 0.15em;
 }
 
 img,
 svg {
 	max-width: 100%;
 }
+
+/* Foco visible en todo: teula sobre fondos claros. Los fondos verde bosque lo cambian
+   a teula clara (regla del fondo oscuro de DESIGN.md). */
+:focus-visible {
+	outline: 3px solid var(--color-teula);
+	outline-offset: 2px;
+	border-radius: var(--radio-senal);
+}
+
+::selection {
+	background: var(--color-herba-clara);
+	color: var(--color-tinta);
+}
+
+/* Texto que solo leen los lectores de pantalla. */
+.solo-lector {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Movimiento reducido: de momento solo hay transiciones de color, que no mueven nada en
+   pantalla. Cada componente que añada desplazamientos o animaciones ofrece su alternativa
+   con @media (prefers-reduced-motion: reduce). */
