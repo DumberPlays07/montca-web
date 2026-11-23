@@ -51,7 +51,10 @@ const enlaceWhatsapp = urlWhatsapp(lang);
 		}
 	}
 
-	/* Botón primario de DESIGN.md: teula, 6 px de radio, sin sombra. */
+	/* Botón secundario de DESIGN.md: verde bosque y sin teja, para no competir con
+	   Reserva, que es la acción principal. 6 px de radio, sin sombra. Boira sobre
+	   Verd bosc mide 7.5:1 y sobre Tinta (hover) 12.3:1. El foco es el general
+	   (teula), porque el anillo cae fuera del botón, sobre la neblina. */
 	.boton-whatsapp {
 		position: absolute;
 		right: var(--margen-lateral);
@@ -62,8 +65,8 @@ const enlaceWhatsapp = urlWhatsapp(lang);
 		min-height: var(--zona-tactil);
 		padding: 0 var(--espacio-6);
 		border-radius: var(--radio-boton);
-		background: var(--color-teula);
-		color: var(--color-blanco);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
 		font-weight: 600;
 		text-decoration: none;
 		transition: background-color var(--transicion);
@@ -71,7 +74,7 @@ const enlaceWhatsapp = urlWhatsapp(lang);
 
 	.boton-whatsapp:hover,
 	.boton-whatsapp:active {
-		background: var(--color-teula-fosca);
+		background: var(--color-tinta);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
 	}
