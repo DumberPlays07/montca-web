@@ -1,9 +1,11 @@
 /**
- * PROVISIONAL (B-09): textos y rutas de la cabecera, el pie y la barra inferior.
+ * PROVISIONAL (B-09): textos y rutas de la cabecera, el pie, la barra inferior y el
+ * botón de WhatsApp.
  *
  * Vive aquí porque `src/i18n` es zona de Saúl y la B-07 todavía no está hecha.
  * Al hacer la B-07 hay que mover este diccionario a `src/i18n` (o fundirlo con el
- * suyo) y cambiar los `import` de Cabecera, Pie, BarraInferior y EnlaceVolver.
+ * suyo) y cambiar los `import` de Cabecera, Pie, BarraInferior, EnlaceVolver, BotonWhatsApp
+ * y contacto.ts.
  * La forma `{ ca: {...}, es: {...} }` + `t(lang, clave)` está pensada para eso.
  *
  * Las rutas también son provisionales: las páginas las crean otras tareas y la
@@ -34,6 +36,7 @@ const textos = {
 		reserva: 'Reserva',
 		whatsapp: 'WhatsApp',
 		mensajeWhatsapp: 'Hola! Vull informació sobre les activitats de Montca.',
+		escribirWhatsapp: "Escriu-nos per WhatsApp (s'obri en una pestanya nova)",
 		idiomaActual: 'VAL',
 		otroIdioma: 'CAST',
 		// Nombre del otro idioma escrito en ese idioma (va con su `lang`).
@@ -65,6 +68,7 @@ const textos = {
 		reserva: 'Reserva',
 		whatsapp: 'WhatsApp',
 		mensajeWhatsapp: '¡Hola! Quiero información sobre las actividades de Montca.',
+		escribirWhatsapp: 'Escríbenos por WhatsApp (se abre en una pestaña nueva)',
 		idiomaActual: 'CAST',
 		otroIdioma: 'VAL',
 		nombreOtroIdioma: 'Valencià',

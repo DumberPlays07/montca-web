@@ -1,0 +1,78 @@
+---
+/**
+ * Botón de WhatsApp siempre visible en escritorio (B-10).
+ * En móvil y tableta no se pinta: ahí WhatsApp ya va en la barra inferior.
+ * Sin número (A-24) no aparece.
+ */
+import Icono from './Icono.astro';
+import { urlWhatsapp } from './contacto';
+import { type Idioma, t } from './textos-navegacion';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const enlaceWhatsapp = urlWhatsapp(lang);
+---
+
+{
+	enlaceWhatsapp !== null && (
+		<div class="ancla-whatsapp">
+			<a
+				class="boton-whatsapp"
+				href={enlaceWhatsapp}
+				target="_blank"
+				rel="noopener"
+				aria-label={t(lang, 'escribirWhatsapp')}
+			>
+				<Icono nombre="whatsapp" />
+				<span>{t(lang, 'whatsapp')}</span>
+			</a>
+		</div>
+	)
+}
+
+<style>
+	/* Va justo antes del pie y es sticky: mientras se baja se queda en la esquina, y al
+	   llegar al final se para encima del pie en lugar de taparlo (la teula no puede ir
+	   sobre verde bosque, DESIGN.md). Alto 0 para no empujar el contenido. */
+	.ancla-whatsapp {
+		display: none;
+	}
+
+	@media (min-width: 64rem) {
+		.ancla-whatsapp {
+			display: block;
+			position: sticky;
+			bottom: var(--espacio-6);
+			z-index: 10;
+			height: 0;
+		}
+	}
+
+	/* Botón primario de DESIGN.md: teula, 6 px de radio, sin sombra. */
+	.boton-whatsapp {
+		position: absolute;
+		right: var(--margen-lateral);
+		bottom: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		padding: 0 var(--espacio-6);
+		border-radius: var(--radio-boton);
+		background: var(--color-teula);
+		color: var(--color-blanco);
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color var(--transicion);
+	}
+
+	.boton-whatsapp:hover,
+	.boton-whatsapp:active {
+		background: var(--color-teula-fosca);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+</style>
