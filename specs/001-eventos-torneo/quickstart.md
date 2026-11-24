@@ -6,6 +6,9 @@ Guía para comprobar que la feature funciona. No contiene la implementación.
 
 - Node ≥ 22.23 y `npm install` hecho.
 - Para la fase con datos: A-14 hecha y las variables de Supabase en `.env` local (nunca en el repo).
+- **Spec Kit en otro ordenador**: `.specify/feature.json` no se sube (es estado local), y la rama no sigue el formato `NNN-nombre`. Para que los comandos de Spec Kit encuentren esta spec, haz una de estas dos cosas:
+  - crear `.specify/feature.json` con `{"feature_directory": "specs/001-eventos-torneo"}`;
+  - o lanzar los comandos con la variable `SPECIFY_FEATURE_DIRECTORY=specs/001-eventos-torneo` (en Git Bash de Windows: `export SPECIFY_FEATURE_DIRECTORY=specs/001-eventos-torneo`). La variable manda sobre el archivo, y los comandos que escriben la guardan también en `.specify/feature.json`.
 
 ## 1. Lógica (sin navegador)
 
