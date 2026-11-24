@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-22T18:23:34+00:00",
+  "generatedAt": "2026-11-23T19:10:00+00:00",
   "title": "Design System: Montca Actiu",
   "extensions": {
     "colorMeta": {
@@ -272,6 +272,14 @@
       "css": ".ds-senal { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 12px; color: var(--color-verd-bosc, #375639); font-family: Overpass, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.02em; text-decoration: none; border: 1px solid rgb(55 86 57 / 0.18); border-radius: 4px; transition: background-color 160ms ease-out; } .ds-senal:hover { background: var(--color-herba-clara, #dff3d7); } .ds-senal:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
     },
     {
+      "name": "Botón secundario (WhatsApp)",
+      "kind": "button",
+      "refersTo": "button-secundario",
+      "description": "Botón de WhatsApp de escritorio: importante, pero sin competir con Reserva; nunca en teja.",
+      "html": "<a class=\"ds-boton-secundario\" href=\"#\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20l1.3-4A8 8 0 1 1 8.4 19z\"/><path d=\"M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-1 .8a4 4 0 0 1-2.1-2.1l.8-1-1-2z\"/></svg><span>WhatsApp</span></a>",
+      "css": ".ds-boton-secundario { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 24px; background: var(--color-verd-bosc, #375639); color: var(--color-boira, #f1f6ef); font-family: Overpass, system-ui, sans-serif; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background-color 160ms ease-out; } .ds-boton-secundario:hover, .ds-boton-secundario:active { background: var(--color-tinta, #1f3324); text-decoration: underline; text-decoration-thickness: 2px; } .ds-boton-secundario:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    },
+    {
       "name": "Cabecera (escritorio)",
       "kind": "nav",
       "refersTo": "nav-cabecera",
@@ -352,7 +360,7 @@
       }
     ],
     "dos": [
-      "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.png`) y comprobar su contraste antes de usarlo.",
+      "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.",
       "**Do** reservar la teja (#9c5530) para la acción principal y la marca de \"estás aquí\".",
       "**Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.",
       "**Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.",

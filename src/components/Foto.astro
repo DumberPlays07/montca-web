@@ -1,0 +1,68 @@
+---
+/**
+ * Imagen optimizada de la web (B-12). Es la única forma de poner una foto o ilustración:
+ * genera AVIF y WebP en varios anchos (con el formato original de respaldo) y exige
+ * el texto alternativo en valenciano y castellano.
+ *
+ * Uso:
+ *   import Foto from '../components/Foto.astro';
+ *   import mapa from '../assets/mapa/mapa-mariola.webp';
+ *   <Foto src={mapa} alt={{ ca: '…', es: '…' }} lang={lang} principal />
+ *
+ * - `src`: imagen importada de `src/assets` (nunca una ruta de `public/` ni una URL).
+ * - `principal`: solo para la imagen grande de la primera pantalla; se carga enseguida.
+ *   Como mucho una por página. El resto se cargan al acercarse a la pantalla.
+ * - `ancho`: ancho máximo en pantalla, en px. Por defecto, el de la imagen sin pasar del
+ *   ancho máximo del contenido.
+ * - `sizes`: solo si la imagen ocupa menos que el ancho de la pantalla en móvil
+ *   (por ejemplo, en una rejilla de tarjetas).
+ */
+import type { ImageMetadata } from 'astro';
+import { Picture } from 'astro:assets';
+import { ANCHO_MAXIMO_CONTENIDO, type TextoAlternativo, exigirTextoAlternativo } from './imagenes';
+import type { Idioma } from './textos-navegacion';
+
+interface Props {
+	src: ImageMetadata;
+	alt: TextoAlternativo;
+	lang: Idioma;
+	principal?: boolean;
+	ancho?: number;
+	sizes?: string;
+	class?: string;
+}
+
+const { src, alt, lang, principal = false, ancho, sizes, class: clase } = Astro.props;
+
+exigirTextoAlternativo(alt, `la imagen ${src?.src ?? '(sin src)'} en ${Astro.url.pathname}`);
+
+const anchoMostrado = Math.min(ancho ?? src.width, src.width, ANCHO_MAXIMO_CONTENIDO);
+---
+
+<Picture
+	src={src}
+	alt={alt[lang]}
+	formats={['avif', 'webp']}
+	layout="constrained"
+	width={anchoMostrado}
+	sizes={sizes}
+	priority={principal}
+	class:list={['foto', clase]}
+	style={`max-width: ${anchoMostrado}px`}
+/>
+
+<style>
+	/* <Picture> solo pasa el atributo de estilos con ámbito al <picture>, no al <img>:
+	   por eso el selector parte de `picture`. La foto ocupa el ancho de su contenedor sin
+	   pasar de `anchoMostrado` (estilo en línea) y el alto sale de la proporción de
+	   `width` y `height`, así la página no salta mientras carga. */
+	picture {
+		display: block;
+	}
+
+	picture :global(.foto) {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>

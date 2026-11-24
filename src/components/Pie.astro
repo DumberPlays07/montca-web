@@ -4,7 +4,7 @@
  * Lleva todas las secciones para que la web se pueda recorrer también sin JavaScript.
  */
 import Icono from './Icono.astro';
-import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
+import { CORREO_CONTACTO, WHATSAPP_NUMEROS_PIE, numeroLegible, urlWhatsapp } from './contacto';
 import { type ClaveRuta, type Idioma, ruta, t } from './textos-navegacion';
 
 interface Props {
@@ -24,7 +24,6 @@ const secciones: ClaveRuta[] = [
 ];
 // Las páginas legales las crea la B-08.
 const avisosLegales: ClaveRuta[] = ['avisoLegal', 'privacidad', 'cookies'];
-const enlaceWhatsapp = urlWhatsapp(t(lang, 'mensajeWhatsapp'));
 const anioActual = new Date().getFullYear();
 // TODO: añadir los enlaces a Instagram y TikTok cuando Montca pase las cuentas.
 ---
@@ -44,14 +43,17 @@ const anioActual = new Date().getFullYear();
 				</a>
 			</li>
 			{
-				enlaceWhatsapp !== null && (
+				WHATSAPP_NUMEROS_PIE.map((numero) => (
 					<li>
-						<a class="enlace-pie enlace-contacto" href={enlaceWhatsapp}>
+						<a class="enlace-pie enlace-contacto" href={urlWhatsapp(lang, numero)}>
 							<Icono nombre="whatsapp" />
-							<span>{t(lang, 'whatsapp')}</span>
+							<span>
+								<span class="solo-lector">{t(lang, 'whatsapp')}: </span>
+								{numeroLegible(numero)}
+							</span>
 						</a>
 					</li>
-				)
+				))
 			}
 		</ul>
 
