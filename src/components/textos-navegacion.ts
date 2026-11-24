@@ -1,9 +1,11 @@
 /**
- * PROVISIONAL (B-09): textos y rutas de la cabecera, el pie y la barra inferior.
+ * PROVISIONAL (B-09): textos y rutas de la cabecera, el pie, la barra inferior y el
+ * botón de WhatsApp.
  *
  * Vive aquí porque `src/i18n` es zona de Saúl y la B-07 todavía no está hecha.
  * Al hacer la B-07 hay que mover este diccionario a `src/i18n` (o fundirlo con el
- * suyo) y cambiar los `import` de Cabecera, Pie, BarraInferior y EnlaceVolver.
+ * suyo) y cambiar los `import` de Cabecera, Pie, BarraInferior, EnlaceVolver, BotonWhatsApp
+ * y contacto.ts.
  * La forma `{ ca: {...}, es: {...} }` + `t(lang, clave)` está pensada para eso.
  *
  * Las rutas también son provisionales: las páginas las crean otras tareas y la
@@ -34,6 +36,7 @@ const textos = {
 		reserva: 'Reserva',
 		whatsapp: 'WhatsApp',
 		mensajeWhatsapp: 'Hola! Vull informació sobre les activitats de Montca.',
+		escribirWhatsapp: "Escriu-nos per WhatsApp (s'obri en una pestanya nova)",
 		idiomaActual: 'VAL',
 		otroIdioma: 'CAST',
 		// Nombre del otro idioma escrito en ese idioma (va con su `lang`).
@@ -44,6 +47,7 @@ const textos = {
 		privacidad: 'Privacitat',
 		cookies: 'Cookies',
 		volver: 'Tornar',
+		altImagenCompartir: 'Mapa il·lustrat de la Serra de Mariola, amb Cocentaina al peu de la serra.',
 	},
 	es: {
 		saltarAlContenido: 'Saltar al contenido',
@@ -65,6 +69,7 @@ const textos = {
 		reserva: 'Reserva',
 		whatsapp: 'WhatsApp',
 		mensajeWhatsapp: '¡Hola! Quiero información sobre las actividades de Montca.',
+		escribirWhatsapp: 'Escríbenos por WhatsApp (se abre en una pestaña nueva)',
 		idiomaActual: 'CAST',
 		otroIdioma: 'VAL',
 		nombreOtroIdioma: 'Valencià',
@@ -74,6 +79,7 @@ const textos = {
 		privacidad: 'Privacidad',
 		cookies: 'Cookies',
 		volver: 'Volver',
+		altImagenCompartir: 'Mapa ilustrado de la Serra de Mariola, con Cocentaina al pie de la sierra.',
 	},
 } as const;
 
@@ -82,6 +88,11 @@ export type ClaveTexto = keyof (typeof textos)['ca'];
 /** Devuelve el texto de `clave` en el idioma pedido. */
 export function t(lang: Idioma, clave: ClaveTexto): string {
 	return textos[lang][clave];
+}
+
+/** Devuelve el texto de `clave` en los dos idiomas (por ejemplo, para un texto alternativo). */
+export function textoEnLosDosIdiomas(clave: ClaveTexto): Record<Idioma, string> {
+	return { ca: textos.ca[clave], es: textos.es[clave] };
 }
 
 /** Rutas en valenciano, que es el idioma por defecto (sin prefijo). */

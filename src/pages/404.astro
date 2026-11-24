@@ -1,8 +1,7 @@
 ---
+import { urlWhatsapp } from '../components/contacto';
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-// TODO: sustituir por la imagen para compartir definitiva cuando llegue el logo (A-07, B-14).
-const SHARE_IMAGE = '/favicon.svg';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../components/imagen-compartir';
 
 const HOME_PATH = '/';
 
@@ -10,11 +9,6 @@ const HOME_PATH = '/';
 // hay que actualizarlas aquí.
 const AGENDA_PATH = '/agenda/';
 const ACTIVITIES_PATH = '/activitats/';
-
-// Número de WhatsApp de Montca en formato internacional, sin "+" ni espacios.
-// TODO: pedir el número a Montca; no se inventa. Mientras esté vacío, el enlace no se muestra.
-const WHATSAPP_NUMBER = '';
-const whatsappUrl = WHATSAPP_NUMBER === '' ? null : `https://wa.me/${WHATSAPP_NUMBER}`;
 
 // TODO: pasar estos textos a los diccionarios de src/i18n cuando existan (B-07).
 // Una 404 no sabe en qué idioma navegaba la persona, por eso muestra los dos.
@@ -26,6 +20,7 @@ const blocks = [
 		text: 'Pot ser que l\'enllaç estiga trencat o que la pàgina ja no existisca.',
 		agenda: 'Agenda',
 		activities: 'Activitats',
+		whatsappUrl: urlWhatsapp('ca'),
 	},
 	{
 		lang: 'es',
@@ -34,6 +29,7 @@ const blocks = [
 		text: 'Puede que el enlace esté roto o que la página ya no exista.',
 		agenda: 'Agenda',
 		activities: 'Actividades',
+		whatsappUrl: urlWhatsapp('es'),
 	},
 ];
 ---
@@ -41,7 +37,8 @@ const blocks = [
 <BaseLayout
 	title="Pàgina no trobada · Montca Actiu"
 	description="No hem trobat esta pàgina. No hemos encontrado esta página."
-	image={SHARE_IMAGE}
+	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
+	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
 >
 	<main>
 		{
@@ -59,9 +56,9 @@ const blocks = [
 						<li>
 							<a href={ACTIVITIES_PATH}>{block.activities}</a>
 						</li>
-						{whatsappUrl && (
+						{block.whatsappUrl && (
 							<li>
-								<a href={whatsappUrl}>WhatsApp</a>
+								<a href={block.whatsappUrl}>WhatsApp</a>
 							</li>
 						)}
 					</ul>

@@ -2,7 +2,7 @@
 /**
  * Barra fija abajo en el móvil: Agenda · Activitats · WhatsApp, al alcance del pulgar.
  * Desde 64rem desaparece y sus destinos quedan en el menú de la cabecera.
- * El botón flotante de WhatsApp es otra tarea (B-10).
+ * En escritorio, WhatsApp va en el botón flotante (BotonWhatsApp, B-10).
  */
 import Icono from './Icono.astro';
 import { urlWhatsapp } from './contacto';
@@ -16,7 +16,7 @@ const { lang } = Astro.props;
 const rutaActual = Astro.url.pathname;
 
 // Sin número de WhatsApp (A-24) el tercer hueco lleva a Contacte en lugar de a wa.me.
-const enlaceWhatsapp = urlWhatsapp(t(lang, 'mensajeWhatsapp'));
+const enlaceWhatsapp = urlWhatsapp(lang);
 
 const enlaces = [
 	{

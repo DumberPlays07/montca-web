@@ -1,36 +1,71 @@
 ---
-import { Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { Font, getImage } from 'astro:assets';
 import BarraInferior from '../components/BarraInferior.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import Cabecera from '../components/Cabecera.astro';
 import Pie from '../components/Pie.astro';
+import { type TextoAlternativo, exigirTextoAlternativo } from '../components/imagenes';
 import '../styles/global.css';
 
 interface Props {
 	title: string;
 	description: string;
-	/** Ruta o URL de la imagen que se ve al compartir la página. */
-	image: string;
+	/**
+	 * Imagen que se ve al compartir la página: importada de `src/assets`, nunca una ruta de
+	 * `public/`. Si la página no tiene una propia, usa `IMAGEN_COMPARTIR_POR_DEFECTO`.
+	 */
+	image: ImageMetadata;
+	/** Texto alternativo de la imagen para compartir, en los dos idiomas. */
+	imageAlt: TextoAlternativo;
 	lang?: 'ca' | 'es';
 }
 
-const { title, description, image, lang = 'ca' } = Astro.props;
+const { title, description, image, imageAlt, lang = 'ca' } = Astro.props;
 
 // `astro build` no comprueba los tipos de las props, así que una página sin estos
 // datos se publicaría sin avisar. Se corta aquí para que el build falle.
-const requiredProps = { title, description, image };
-for (const [name, value] of Object.entries(requiredProps)) {
+const requiredTexts = { title, description };
+for (const [name, value] of Object.entries(requiredTexts)) {
 	if (typeof value !== 'string' || value.trim() === '') {
 		throw new Error(
 			`BaseLayout: falta "${name}" en la página ${Astro.url.pathname}. ` +
-				'Cada página necesita title, description e image (imagen para compartir).',
+				'Cada página necesita title, description, image e imageAlt.',
 		);
 	}
 }
+if (typeof image !== 'object' || image === null || typeof image.width !== 'number') {
+	throw new Error(
+		`BaseLayout: falta "image" en la página ${Astro.url.pathname}, o no es una imagen ` +
+			'importada de src/assets. Usa IMAGEN_COMPARTIR_POR_DEFECTO si la página no tiene una propia.',
+	);
+}
+exigirTextoAlternativo(imageAlt, `la imagen para compartir de ${Astro.url.pathname}`);
+
+// Proporción que recomiendan las redes para compartir (1200 × 630 ≈ 1,91:1).
+const ANCHO_COMPARTIR = 1200;
+const PROPORCION_COMPARTIR = 1200 / 630;
+// No se amplía: con una imagen más estrecha (el mapa actual mide 1024 px) se usa su ancho
+// y se recorta a la misma proporción (1024 × 538).
+// TODO: con el mapa en alta resolución (A-29) saldrá ya a 1200 × 630.
+const anchoCompartir = Math.min(
+	ANCHO_COMPARTIR,
+	image.width,
+	Math.floor(image.height * PROPORCION_COMPARTIR),
+);
+const altoCompartir = Math.round(anchoCompartir / PROPORCION_COMPARTIR);
+const imagenCompartir = await getImage({
+	src: image,
+	width: anchoCompartir,
+	height: altoCompartir,
+	fit: 'cover',
+	format: 'jpg',
+});
 
 // Las redes sociales necesitan la URL completa de la imagen, no una ruta relativa.
 // TODO: definir `site` en astro.config.mjs cuando exista el dominio (A-11); hasta
 // entonces la URL sale con el host local y no sirve para compartir de verdad.
-const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
+const imageUrl = new URL(imagenCompartir.src, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -46,6 +81,10 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={imageUrl} />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content={String(anchoCompartir)} />
+		<meta property="og:image:height" content={String(altoCompartir)} />
+		<meta property="og:image:alt" content={imageAlt[lang]} />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -53,6 +92,7 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 		<div id="contenido" class="contenido" tabindex="-1">
 			<slot />
 		</div>
+		<BotonWhatsApp lang={lang} />
 		<Pie lang={lang} />
 		<BarraInferior lang={lang} />
 	</body>
