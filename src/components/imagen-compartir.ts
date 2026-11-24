@@ -4,7 +4,7 @@
  * TODO: sustituir por la imagen definitiva para compartir cuando lleguen el logo (A-07)
  * y la imagen de B-14. Mientras tanto se usa el mapa de Mariola.
  */
-import mapa from '../assets/mapa/mapa-mariola.png';
+import mapa from '../assets/mapa/mapa-mariola.webp';
 import type { ImageMetadata } from 'astro';
 import type { TextoAlternativo } from './imagenes';
 import { textoEnLosDosIdiomas } from './textos-navegacion';

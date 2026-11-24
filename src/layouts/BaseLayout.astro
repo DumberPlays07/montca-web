@@ -45,9 +45,8 @@ exigirTextoAlternativo(imageAlt, `la imagen para compartir de ${Astro.url.pathna
 // Proporción que recomiendan las redes para compartir (1200 × 630 ≈ 1,91:1).
 const ANCHO_COMPARTIR = 1200;
 const PROPORCION_COMPARTIR = 1200 / 630;
-// No se amplía: con una imagen más estrecha (el mapa actual mide 1024 px) se usa su ancho
-// y se recorta a la misma proporción (1024 × 538).
-// TODO: con el mapa en alta resolución (A-29) saldrá ya a 1200 × 630.
+// No se amplía: con una imagen de menos de 1200 px de ancho se usa su ancho
+// y se recorta a la misma proporción (por ejemplo, 1024 × 538).
 const anchoCompartir = Math.min(
 	ANCHO_COMPARTIR,
 	image.width,
