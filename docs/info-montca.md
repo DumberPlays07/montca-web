@@ -37,7 +37,7 @@ Texto de Montca, tal como lo enviaron. La traducción al castellano se hace con 
 
 - **Què inclou la inscripció?** La participació de l'equip en el torneig i en les tres modalitats esportives.
 - **Hi haurà premis?** Sí. Els premis s'anunciaran pròximament a través de les nostres xarxes socials.
-- **Com puc contactar amb l'organització?** A través del correu electrònic, les nostres xarxes socials o per telèfon al [teléfono de contacto, en el documento de Drive].
+- **Com puc contactar amb l'organització?** A través del correu electrònic, les nostres xarxes socials o per telèfon al 722 79 60 66.
 - **Què passa si el meu equip no arriba al mínim de jugadors?** La inscripció quedarà pendent fins que complete el nombre mínim de jugadors.
 - **Quan se celebra el torneig?** Els dies 27 de desembre de 2026 i 3 de gener de 2027.
 - **On se celebra?** Al Poliesportiu Municipal de Cocentaina.
