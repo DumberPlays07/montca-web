@@ -116,7 +116,7 @@ Aparte de `jugadores` porque se guarda más tiempo: hasta **un año después de 
 | `forma` | enum `casilla_web` \| `firma_digital` \| `papel` | `papel` = entregado en Softco (T4). No hay forma `softco` aparte |
 | `version_texto` | text | Versión del texto de autorización (`docs/legal/consentimientos.md`), también en papel |
 | `fecha_hora` | timestamptz | Cuándo autorizó (en papel, la fecha que figure en él) |
-| `recibida` | boolean | Montca confirma que la tiene (papel recogido de Softco). Por defecto `false`. Un menor sin una autorización `recibida` no sale en la vista (FR-024) |
+| `recibida` | boolean | Montca confirma que la ha recibido (vale para la firma digital y para el papel entregado en Softco). Por defecto `false`. Un menor sin una autorización `recibida` no sale en la vista (FR-024) |
 
 RLS activada en las cuatro tablas, sin políticas para `anon`. El borrado en sus fechas es de Montca (calendario de `tratamientos.md` §7), no de C-04.
 
