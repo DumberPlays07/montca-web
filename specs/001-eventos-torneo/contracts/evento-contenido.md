@@ -48,8 +48,11 @@ preguntas:   # las seis de docs/info-montca.md, en ca y es
     respuesta:
       ca: "La participació de l'equip en el torneig i en les tres modalitats esportives."
       es: "La participación del equipo en el torneo y en las tres modalidades deportivas."
-  # … el resto. En la de contacto, el teléfono de Iker NO va (está en el Drive):
-  # se responde con el correo público, las redes y WhatsApp cuando haya número (A-24).
+  - pregunta: { ca: "Com puc contactar amb l'organització?", es: "¿Cómo puedo contactar con la organización?" }
+    respuesta:   # ca: texto de Montca tal cual, de docs/info-montca.md (con el número principal, A-24)
+      ca: "A través del correu electrònic, les nostres xarxes socials o per telèfon al 722 79 60 66."
+      es: "A través del correo electrónico, nuestras redes sociales o por teléfono al 722 79 60 66."
+  # … el resto, igual: el texto en valenciano tal cual de docs/info-montca.md.
 ```
 
 Notas:
