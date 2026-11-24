@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-19 (A-19: registro de tratamientos de datos; seguro en A-26; dorsal, teléfono y correo del administrador en C-05; A-17: borrador de la política de privacidad; A-18: borrador de los textos de consentimiento; A-17: borrador de la política de cookies). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-20 (A-05 y A-28 acabadas; nueva A-29, mapa en alta resolución; A-19: registro de tratamientos de datos; seguro en A-26; dorsal, teléfono y correo del administrador en C-05; A-17: borradores de las políticas de privacidad y de cookies; A-18: borrador de los textos de consentimiento). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -29,7 +29,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-02 | Confirmar reglas del torneo: categorías (infantil+cadet / sénior), máximos de equipos y jugadores, edades exactas de cada categoría                             | M         | C-05             | ✅ Acabada |
 | A-03 | Comprobar si la autorización del tutor **por correo** es válida legalmente (firma digital y papel en Softco ya están aceptadas)                                 | M + S     | C-05             | ⬜ Pendiente |
 | A-04 | Quién de Montca gestiona solicitudes e inscritos (personas y correos), y qué plazo de respuesta se comprometen a cumplir                                        | M         | C-03, C-06       | 🟡 Empezada: plazo < 24 h; falta quién gestiona |
-| A-05 | Ilustración a medida del mapa de Mariola (cada botón, un pico): boceto, visto bueno de Montca y versión final en SVG                                            | P + M     | C-02             | ⬜ Pendiente |
+| A-05 | Ilustración a medida del mapa de Mariola (cada botón, un pico): boceto, visto bueno de Montca y versión final                                                   | P + M     | C-02             | ✅ Acabada: PR #12. Imagen en `src/assets/mapa/`, picos en `src/data/picos-mapa.json` (lista provisional hasta A-09); falta la versión en alta resolución (A-29) |
 | A-06 | ¿Las actividades normales de la agenda tienen "Apunta't" con plazas, o se piden por formulario/WhatsApp?                                                        | M + S + P | C-02, C-06       | ⬜ Pendiente |
 | A-07 | Logo en buena calidad, fotos de cada actividad y de Montca Sports; foto del equipo de monitores (con su permiso)                                                | M         | B-06, C-01, B-11 | ✅ Acabada: fotos, foto del equipo y logo en el Drive de Montca. **No usar la carpeta "Fotos scape room salesianos"** (sin derechos de imagen de los niños) |
 | A-08 | Por actividad: dónde, edades, duración, tamaño de grupo, precio orientativo, qué incluye, ubicación en Mariola, punto de encuentro para el enlace "Com arribar" | M         | C-01             | ⬜ Pendiente |
@@ -64,10 +64,11 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 
 | ID   | Tarea                                                                                                                                                          | Notas                              | Estado |
 | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------ |
-| A-20 | Cerrar lo que sigue "por confirmar" en decisiones.md: content collections (tras ver Astro), avisos con `wa.me`, repo público                                   | Repaso general hecho el 2026-11-15 | ⬜ Pendiente |
+| A-20 | Cerrar lo que sigue "por confirmar" en decisiones.md: content collections (tras ver Astro) y avisos con `wa.me`                                                 | Repaso general hecho el 2026-11-15 | ⬜ Pendiente |
 | A-21 | Limpieza del repo por consenso: mover `MD's/Instruccions web i bot` a `docs/fase-2/bot-reels.md` o borrarlo; revisar `docs/ideas/`, `sprint-01.md` y qué sobra | No dejar basura                    | 🟡 Empezada: borrado `Docs`; faltan `MD's/`, `docs/ideas/` y `sprint-01.md` |
-| A-22 | Rehacer el backlog del sprint 1 y crear los issues a partir de este archivo                                                                                    |                                    | ⬜ Pendiente |
-| A-28 | Hacer público el repositorio, tras comprobar que no hay datos personales ni claves en los archivos ni en el historial                                          | Necesario para B-02                | ⬜ Pendiente |
+| A-22 | Rehacer el backlog del sprint 1 y crear los issues a partir de este archivo                                                                                    |                                    | ✅ Acabada: issues #13–#51 creados con etiquetas de tipo, responsable y "camino del torneo"; qué entra en cada sprint se decide en la planning |
+| A-28 | Hacer público el repositorio, tras comprobar que no hay datos personales ni claves en los archivos ni en el historial                                          | Necesario para B-02                | ✅ Acabada: PR #61; auditoría del historial en el issue #32 |
+| A-29 | Conseguir `mapa-definitivo` en alta resolución (≥ 2400 px de ancho) con el mismo encuadre y sustituir la de 1024 px | **Antes de publicar.** Si el encuadre cambia, hay que recolocar los picos (ver `scripts/mapa/README.md`) | ⬜ Pendiente |
 
 ---
 
@@ -114,6 +115,11 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 - Toda imagen lleva texto alternativo obligatorio en VAL y CAST: es un campo del modelo y el build falla si falta.
 - Cada página de actividad enlaza a actividades relacionadas, a la agenda y al contacto.
 - Enlace "Com arribar" al punto de encuentro en Google Maps. Enlace, no mapa incrustado (evita cookies y peso).
+
+**C-02 · Portada**
+
+- El mapa lleva la atribución obligatoria completa de Copernicus DEM y OpenStreetMap (texto en `scripts/mapa/README.md`).
+- La imagen del mapa es apaisada (1024 × 572): revisar cómo se ve y si los botones se pueden pulsar en un móvil de 375 px.
 
 **C-03 · Formulario + CRM**
 - Un solo formulario para todo tipo de contacto: particular, grupo, escuela/AMPA, empresa. Campos que cambian según el tipo (p. ej. escuela → centro, nº de alumnos, edades, fecha aproximada).

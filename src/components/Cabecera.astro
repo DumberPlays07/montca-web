@@ -1,0 +1,435 @@
+---
+/**
+ * Cabecera fija de todas las páginas: marca, menú, selector VAL / CAST y Reserva.
+ * En el móvil el menú se abre con un botón; desde 64rem se ve en horizontal.
+ */
+import Icono from './Icono.astro';
+import {
+	type ClaveRuta,
+	type Idioma,
+	esSeccionActual,
+	ruta,
+	rutaEnOtroIdioma,
+	t,
+} from './textos-navegacion';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const rutaActual = Astro.url.pathname;
+
+const secciones: ClaveRuta[] = ['actividades', 'agenda', 'repte', 'sports', 'escuelas', 'contacto'];
+const seccionesMenuMovil: ClaveRuta[] = [
+	'actividades',
+	'agenda',
+	'repte',
+	'sports',
+	'escuelas',
+	'quienesSomos',
+	'contacto',
+];
+const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
+---
+
+<a class="saltar" href="#contenido">{t(lang, 'saltarAlContenido')}</a>
+
+<header class="cabecera">
+	<div class="cabecera-interior">
+		<!-- TODO: cambiar el texto por el logo cuando llegue en buena calidad (A-07). -->
+		<a class="marca" href={ruta(lang, 'inicio')}>Montca Actiu</a>
+
+		<nav class="nav-escritorio" aria-label={t(lang, 'navegacionPrincipal')}>
+			<ul>
+				{
+					secciones.map((clave) => {
+						const esActual = esSeccionActual(lang, clave, rutaActual);
+						return (
+							<li>
+								<a
+									class="enlace-seccion"
+									href={ruta(lang, clave)}
+									aria-current={esActual ? 'page' : undefined}
+								>
+									{t(lang, clave)}
+								</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</nav>
+
+		<div class="acciones">
+			<a
+				class="idioma"
+				href={rutaEnOtroIdioma(lang, rutaActual)}
+				hreflang={idiomaDestino}
+				lang={idiomaDestino}
+				aria-label={t(lang, 'nombreOtroIdioma')}
+			>
+				{t(lang, 'otroIdioma')}
+			</a>
+
+			<a class="boton-reserva" href={ruta(lang, 'agenda')}>{t(lang, 'reserva')}</a>
+
+			<button
+				class="boton-menu"
+				type="button"
+				aria-expanded="false"
+				aria-controls="menu-movil"
+				data-boton-menu
+				data-texto-abrir={t(lang, 'abrirMenu')}
+				data-texto-cerrar={t(lang, 'cerrarMenu')}
+			>
+				<span class="boton-menu-icono boton-menu-icono-abrir"><Icono nombre="menu" /></span>
+				<span class="boton-menu-icono boton-menu-icono-cerrar"><Icono nombre="cerrar" /></span>
+				<span class="boton-menu-texto" aria-hidden="true">{t(lang, 'menu')}</span>
+				<span class="solo-lector" data-texto-boton-menu>{t(lang, 'abrirMenu')}</span>
+			</button>
+		</div>
+	</div>
+
+	<nav id="menu-movil" class="menu-movil" aria-label={t(lang, 'navegacionPrincipal')} hidden>
+		<ul>
+			{
+				seccionesMenuMovil.map((clave) => {
+					const esActual = esSeccionActual(lang, clave, rutaActual);
+					return (
+						<li>
+							<a
+								class="enlace-seccion"
+								href={ruta(lang, clave)}
+								aria-current={esActual ? 'page' : undefined}
+							>
+								{t(lang, clave)}
+							</a>
+						</li>
+					);
+				})
+			}
+		</ul>
+		<a class="boton-reserva boton-reserva-menu" href={ruta(lang, 'agenda')}>{t(lang, 'reserva')}</a>
+	</nav>
+</header>
+
+<script>
+	// Menú del móvil: botón que despliega la lista (patrón disclosure).
+	const ANCHO_ESCRITORIO = '(min-width: 64rem)';
+
+	const CLASE_MENU_ABIERTO = 'menu-abierto';
+
+	const cabecera = document.querySelector<HTMLElement>('.cabecera');
+	const boton = document.querySelector<HTMLButtonElement>('[data-boton-menu]');
+	const panel = document.getElementById('menu-movil');
+	const textoBoton = document.querySelector<HTMLElement>('[data-texto-boton-menu]');
+
+	if (cabecera && boton && panel && textoBoton) {
+		const abrir = () => {
+			const bordeInferior = Math.round(cabecera.getBoundingClientRect().bottom);
+			panel.style.setProperty('--borde-inferior-cabecera', `${bordeInferior}px`);
+			document.documentElement.classList.add(CLASE_MENU_ABIERTO);
+			panel.hidden = false;
+			boton.setAttribute('aria-expanded', 'true');
+			textoBoton.textContent = boton.dataset.textoCerrar ?? '';
+		};
+
+		const cerrar = () => {
+			document.documentElement.classList.remove(CLASE_MENU_ABIERTO);
+			panel.hidden = true;
+			boton.setAttribute('aria-expanded', 'false');
+			textoBoton.textContent = boton.dataset.textoAbrir ?? '';
+		};
+
+		boton.addEventListener('click', () => {
+			if (panel.hidden) {
+				abrir();
+			} else {
+				cerrar();
+			}
+		});
+
+		document.addEventListener('keydown', (evento) => {
+			if (evento.key === 'Escape' && !panel.hidden) {
+				cerrar();
+				boton.focus();
+			}
+		});
+
+		// Al pasar a escritorio el menú horizontal sustituye al desplegable.
+		window.matchMedia(ANCHO_ESCRITORIO).addEventListener('change', (consulta) => {
+			if (consulta.matches) {
+				cerrar();
+			}
+		});
+	}
+</script>
+
+<style>
+	.saltar {
+		position: absolute;
+		top: var(--espacio-2);
+		left: var(--espacio-2);
+		z-index: 30;
+		padding: var(--espacio-3) var(--espacio-4);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
+		font-weight: 600;
+		border-radius: var(--radio-boton);
+		transform: translateY(-200%);
+	}
+
+	.saltar:focus-visible {
+		transform: none;
+		outline-color: var(--color-teula-clara);
+	}
+
+	.cabecera {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		background: var(--color-boira);
+		border-bottom: 1px solid var(--color-linea);
+	}
+
+	.cabecera-interior {
+		display: flex;
+		flex-wrap: wrap; /* Con el texto ampliado, las acciones bajan a otra línea en vez de salirse. */
+		align-items: center;
+		gap: var(--espacio-1) var(--espacio-4);
+		max-width: var(--ancho-maximo);
+		min-height: var(--alto-cabecera);
+		margin: 0 auto;
+		padding: var(--espacio-1) max(var(--margen-lateral), env(safe-area-inset-right))
+			var(--espacio-1) max(var(--margen-lateral), env(safe-area-inset-left));
+	}
+
+	.marca {
+		display: inline-flex;
+		align-items: center;
+		min-height: var(--zona-tactil);
+		margin-right: auto;
+		color: var(--color-verd-bosc);
+		font-size: 1.25rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Enlace de sección con la marca de pintura en la página actual. */
+	.enlace-seccion {
+		position: relative;
+		display: flex;
+		align-items: center;
+		min-height: var(--zona-tactil);
+		color: var(--color-tinta);
+		font-weight: 600;
+		text-decoration: none;
+		transition: color var(--transicion);
+	}
+
+	.enlace-seccion:hover {
+		color: var(--color-verd-bosc);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	.enlace-seccion[aria-current='page'] {
+		color: var(--color-verd-bosc);
+	}
+
+	.enlace-seccion[aria-current='page']::after {
+		content: '';
+		position: absolute;
+		background: var(--color-teula);
+	}
+
+	.acciones {
+		display: flex;
+		align-items: center;
+		gap: var(--espacio-2);
+	}
+
+	.idioma {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: var(--zona-tactil);
+		min-height: var(--zona-tactil);
+		padding: 0 var(--espacio-2);
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		text-decoration: none;
+		border: 1px solid var(--color-linea);
+		border-radius: var(--radio-senal);
+		transition: background-color var(--transicion);
+	}
+
+	.idioma:hover {
+		background: var(--color-herba-clara);
+	}
+
+	.boton-reserva {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: var(--zona-tactil);
+		padding: 0 var(--espacio-6);
+		background: var(--color-teula);
+		color: var(--color-blanco);
+		font-weight: 600;
+		text-decoration: none;
+		border-radius: var(--radio-boton);
+		transition: background-color var(--transicion);
+	}
+
+	.boton-reserva:hover,
+	.boton-reserva:active {
+		background: var(--color-teula-fosca);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	.boton-menu {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		padding: 0 var(--espacio-3);
+		background: transparent;
+		color: var(--color-verd-bosc);
+		font: inherit;
+		font-weight: 600;
+		border: 1px solid var(--color-linea);
+		border-radius: var(--radio-senal);
+		cursor: pointer;
+		transition: background-color var(--transicion);
+	}
+
+	.boton-menu:hover,
+	.boton-menu[aria-expanded='true'] {
+		background: var(--color-herba-clara);
+	}
+
+	.boton-menu-icono {
+		display: inline-flex;
+	}
+
+	.boton-menu .boton-menu-icono-cerrar,
+	.boton-menu[aria-expanded='true'] .boton-menu-icono-abrir {
+		display: none;
+	}
+
+	.boton-menu[aria-expanded='true'] .boton-menu-icono-cerrar {
+		display: inline-flex;
+	}
+
+	/* Por debajo de 360 px no caben marca, idioma y "Menú": se queda solo el icono. */
+	@media (max-width: 22.49rem) {
+		.boton-menu-texto {
+			display: none;
+		}
+	}
+
+	/* Móvil: menú desplegable bajo la cabecera. */
+	.nav-escritorio,
+	.acciones > .boton-reserva {
+		display: none;
+	}
+
+	/* Ocupa desde la cabecera hasta la barra inferior y tapa la página de detrás.
+	   `--borde-inferior-cabecera` lo pone el script al abrir (la cabecera puede ocupar
+	   dos líneas con el texto ampliado). */
+	.menu-movil {
+		position: fixed;
+		top: var(--borde-inferior-cabecera, var(--alto-cabecera));
+		right: 0;
+		bottom: calc(var(--alto-barra-inferior) + env(safe-area-inset-bottom));
+		left: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		padding: var(--espacio-2) var(--margen-lateral) var(--espacio-6);
+		background: var(--color-boira);
+	}
+
+	/* Mientras el menú está abierto la página no se desplaza. */
+	:global(html.menu-abierto) {
+		overflow: hidden;
+	}
+
+	.menu-movil[hidden] {
+		display: none;
+	}
+
+	.menu-movil li + li {
+		border-top: 1px solid var(--color-linea);
+	}
+
+	.menu-movil .enlace-seccion {
+		min-height: 3.25rem;
+		padding-left: var(--espacio-6);
+		font-size: 1.125rem;
+	}
+
+	/* Marca de pintura: franja corta a la izquierda del texto. */
+	.menu-movil .enlace-seccion[aria-current='page']::after {
+		left: 0;
+		top: 50%;
+		width: 0.875rem;
+		height: 0.375rem;
+		transform: translateY(-50%);
+	}
+
+	.boton-reserva-menu {
+		width: 100%;
+		margin-top: var(--espacio-4);
+	}
+
+	/* Escritorio: menú horizontal, botón Reserva visible y sin desplegable. */
+	@media (min-width: 64rem) {
+		.nav-escritorio {
+			display: block;
+		}
+
+		.nav-escritorio ul {
+			display: flex;
+			gap: var(--espacio-6);
+		}
+
+		.nav-escritorio .enlace-seccion {
+			font-size: 0.9375rem;
+			white-space: nowrap;
+		}
+
+		/* Marca de pintura: franja corta bajo el texto. */
+		.nav-escritorio .enlace-seccion[aria-current='page']::after {
+			left: 0;
+			bottom: var(--espacio-1);
+			width: 1.25rem;
+			height: 0.3125rem;
+		}
+
+		.acciones {
+			gap: var(--espacio-3);
+		}
+
+		.acciones > .boton-reserva {
+			display: inline-flex;
+		}
+
+		.boton-menu,
+		.menu-movil {
+			display: none;
+		}
+	}
+</style>
