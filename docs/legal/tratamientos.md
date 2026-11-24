@@ -110,7 +110,7 @@ Las fechas de T2 a T7 son las del torneo de Navidad (última jornada: 03/01/2027
 
 | Campo            | Contenido |
 | ---------------- | --------- |
-| Finalidad        | Publicar fotos y vídeos del torneo en la web y en las redes de Montca solo de quien lo ha permitido, y que los encargados de redes sepan quién no puede salir. |
+| Finalidad        | Publicar fotos y vídeos del evento en la web y en los perfiles de Instagram y TikTok de Montca solo de quien lo ha permitido, sin nombrar ni etiquetar a nadie, y que los encargados de redes sepan quién no puede salir. |
 | Interesados      | Jugadores adultos y menores (en los menores, la casilla la marca el tutor). |
 | Datos            | Si ha marcado la casilla, fecha y versión del texto aceptado. Lista de quien **no** puede salir en fotos y vídeos: nombre y equipo. Las fotos y vídeos en los que aparezca. |
 | Base legal       | Art. 6.1.a RGPD: consentimiento libre, en una casilla separada, sin marcar y opcional (y LO 1/1982 de protección del derecho a la propia imagen). |
