@@ -84,8 +84,9 @@ Las versiones de Gemini desplazan algo el relieve: en `mapa-base-pueblo.jpg` el 
 
 | Archivo | Qué es |
 | --- | --- |
-| `src/assets/mapa/mapa-mariola.png` | La imagen que usa la web (1024 × 572 px). |
-| `fuentes/mapa-definitivo.png` | El original, igual que el anterior, guardado junto a las demás fuentes de Gemini. |
+| `src/assets/mapa/mapa-mariola.webp` | La imagen que usa la web (2560 × 1430 px, WebP). |
+| `fuentes/mapa-definitivo.webp` | La misma imagen, guardada junto a las demás fuentes. Es la que leen `colocar_picos_definitivo.py` y la vista previa. |
+| `fuentes/mapa-definitivo-1024.png` | El original de Gemini (1024 × 572 px), del que sale la versión ampliada. Ver [Alta resolución](#alta-resolución). |
 | `src/data/picos-mapa.json` | Un objeto por pico: `nombre`, `altura` (m), `x`, `y` (en % del ancho y del alto de la imagen, desde arriba a la izquierda) y `visible`. La lista de picos es provisional hasta que Montca dé los 5 cims (A-09). |
 
 **Cómo se recalculan los picos.** Gemini desplaza algo el relieve, así que las posiciones de `picos-3d.json` no caen exactas sobre esta imagen. Para recolocarlas:
@@ -97,21 +98,46 @@ cd scripts/mapa/salida && uv run python -m http.server 8765
 # y abrir http://127.0.0.1:8765/previa-definitiva.html (también funciona con doble clic)
 ```
 
-`colocar_picos_definitivo.py` lleva cada pico del render a la imagen con una transformación global (`Y_RENDER`, `Y_DEFINITIVA`, `ESCALA_Y`, medidas con el alto del bloque en las dos imágenes) y lo afina buscando dónde encajan mejor los bordes de los escalones del render sobre los de la imagen. Si un pico sale con un desplazamiento muy distinto al del resto (la coincidencia falla donde Gemini cambió más el dibujo), le aplica el desplazamiento mediano y lo avisa. En `previa-definitiva.html` cada botón se puede arrastrar si no cae en su cumbre; la página muestra el JSON final, que se copia a `src/data/picos-mapa.json`. La plantilla de la página es `previa-definitiva.plantilla.html`.
-
-**Falta.** La imagen es provisional en tamaño: hay que sustituirla por una versión en alta resolución (≥ 2400 px de ancho) con el mismo encuadre antes de publicar (tarea A-29). Al cambiarla, copia la nueva a los dos sitios de la tabla y vuelve a ejecutar `colocar_picos_definitivo.py`: si el encuadre es el mismo, las posiciones en % no deberían moverse; si cambia, hay que volver a medir la transformación global.
+`colocar_picos_definitivo.py` lleva cada pico del render a la imagen con una transformación global (`Y_RENDER`, `Y_DEFINITIVA`, `ESCALA_Y`, medidas con el alto del bloque en las dos imágenes) y lo afina buscando dónde encajan mejor los bordes de los escalones del render sobre los de la imagen. Trabaja siempre sobre la imagen reducida a 1024 px de ancho (`ANCHO_TRABAJO`), porque sus ventanas de búsqueda están medidas en px a ese tamaño. Si un pico sale con un desplazamiento muy distinto al del resto (la coincidencia falla donde Gemini cambió más el dibujo), le aplica el desplazamiento mediano y lo avisa. En `previa-definitiva.html` cada botón se puede arrastrar si no cae en su cumbre; la página muestra el JSON final, que se copia a `src/data/picos-mapa.json`. La plantilla de la página es `previa-definitiva.plantilla.html`.
 
 **Variantes con más relieve.** Las versiones con exageración vertical x3 y x4 (`VARIANTES_RELIEVE`, con los JSON de picos y de Cocentaina y su castillo) están en la rama `experimento/mapa-relieve-x3-x4`. No se usan de momento.
 
+### Alta resolución
+
+Gemini entregó el mapa a 1024 × 572 px. La versión de la web (2560 × 1430 px, ×2,5) se amplió con Real-ESRGAN y después se le devolvieron los colores del original, porque los colores de `DESIGN.md` están medidos sobre él (tarea A-29).
+
+1. **Ampliar ×4** con [realesrgan-ncnn-vulkan](https://github.com/xinntao/Real-ESRGAN/releases/tag/v0.2.5.0) (release oficial v0.2.5.0 de xinntao/Real-ESRGAN, archivo `realesrgan-ncnn-vulkan-20220424-ubuntu.zip`; hay versiones para Windows y macOS en la misma página). Usa la tarjeta gráfica por Vulkan; se probó con una gráfica integrada AMD. Se instala fuera del proyecto; en el ejemplo, en `~/herramientas/realesrgan/app/`:
+
+   ```sh
+   ~/herramientas/realesrgan/app/realesrgan-ncnn-vulkan \
+     -i scripts/mapa/fuentes/mapa-definitivo-1024.png \
+     -o /tmp/mapa-x4.png -n realesrgan-x4plus -s 4 -t 128
+   ```
+
+   - Modelo `realesrgan-x4plus` (el general). Se descartó `realesrgan-x4plus-anime`: es más nítido, pero pone contornos oscuros bajo los escalones y aplana los degradados.
+   - **`-t 128` es obligatorio en gráficas integradas AMD** (al menos en la que se usó). Sin esa opción (o con teselas de 160 px o más) la imagen sale **completamente negra sin dar ningún error**. Con 128 tarda unos 5 s. El script del paso 2 se para si recibe una imagen negra.
+
+2. **Reducir e igualar los colores:**
+
+   ```sh
+   uv run scripts/mapa/igualar_mapa_ampliado.py /tmp/mapa-x4.png
+   cp scripts/mapa/fuentes/mapa-definitivo.webp src/assets/mapa/mapa-mariola.webp
+   ```
+
+   `igualar_mapa_ampliado.py` reduce la ampliación (4096 × 2288) con Lanczos a 2560 × 1430 y le **iguala el histograma** con el original: en cada canal (R, G, B), cada valor pasa a tener el mismo percentil que tenía en el original. Así se corrige el desvío de tono de Real-ESRGAN (el cielo más claro y el conjunto algo más apagado) sin tocar el dibujo. Guarda en WebP de calidad 90 (unos 97 KB) y muestra la diferencia de color media con el original reducida a 1024 px. Con la imagen actual, 1,67/255; con el cuentagotas, los colores del cielo, los bancales, la teja y la piedra de la torre se quedan a 5/255 o menos de los del original (el que más cambia es el verde de las hojas, 4,5).
+
+3. **Comprobar los picos:** `colocar_picos_definitivo.py` (ver arriba). Con el mismo encuadre, las posiciones en % no deberían moverse más de 1 px a 1024 px de ancho. Si el encuadre cambia, hay que volver a medir la transformación global.
+
 ## Fuentes hechas con Gemini (`fuentes/`)
 
-Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del render y no se pueden regenerar, por eso son lo único de imágenes que se sube al repositorio. Las de Gemini por pasos están en JPG de calidad alta y ninguna pasa de 400 KB; `mapa-definitivo.png` va en PNG tal como salió (530 KB).
+Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del render y no se pueden regenerar, por eso son lo único de imágenes que se sube al repositorio (además de la versión ampliada del mapa definitivo). Las de Gemini por pasos están en JPG de calidad alta y ninguna pasa de 400 KB; `mapa-definitivo-1024.png` va en PNG tal como salió (530 KB) y `mapa-definitivo.webp`, en WebP de calidad 90 (97 KB).
 
 | Archivo | Qué es |
 | --- | --- |
 | `mapa-base-pueblo.jpg` | El diorama retocado con el pueblo de Cocentaina dibujado y un punto azul donde va el castillo (2752 × 1536 px). |
 | `castillo.jpg` | La torre del castillo suelta sobre fondo blanco (recortada con margen blanco; el script quita el fondo). |
-| `mapa-definitivo.png` | El mapa definitivo, retocado con Gemini a partir de `mapa-base-pueblo.jpg` (1024 × 572 px, PNG). Ver [Versión definitiva](#versión-definitiva). |
+| `mapa-definitivo-1024.png` | El mapa definitivo tal como salió de Gemini, retocado a partir de `mapa-base-pueblo.jpg` (1024 × 572 px, PNG, 530 KB). Ver [Versión definitiva](#versión-definitiva). |
+| `mapa-definitivo.webp` | El anterior ampliado con Real-ESRGAN y con los colores igualados (2560 × 1430 px, WebP de calidad 90, 97 KB). Es la imagen de la web. Ver [Alta resolución](#alta-resolución). |
 
 **`mapa-base-pueblo.jpg`.** Hecha con Gemini (Nano Banana Pro) en varias vueltas, partiendo de `mapa-3d.png` (render de `generar_mapa_3d.py`). Resumen de lo que se pidió en cada vuelta:
 
@@ -127,7 +153,8 @@ Estas imágenes no salen de ningún script: se hicieron con Gemini a partir del 
 2. `generar_mapa_3d.py`: usa los mismos datos y genera los renders 3D y los JSON con la posición de los picos. El render de la cámara `sur` es la base que se retocó con Gemini.
 3. (A mano, ya hecho) retoque con Gemini: el resultado está en `fuentes/`.
 4. `colocar_castillo.py`: solo necesita `fuentes/`; se puede ejecutar sin haber ejecutado los anteriores.
-5. `colocar_picos_definitivo.py`: necesita el render y `picos-3d.json` del paso 2 y `fuentes/mapa-definitivo.png`; escribe la vista previa para revisar las posiciones de los picos.
+5. (A mano, ya hecho) ampliación con Real-ESRGAN e `igualar_mapa_ampliado.py`: ver [Alta resolución](#alta-resolución).
+6. `colocar_picos_definitivo.py`: necesita el render y `picos-3d.json` del paso 2 y `fuentes/mapa-definitivo.webp`; escribe la vista previa para revisar las posiciones de los picos.
 
 Todo lo que generan los scripts va a `salida/`, que está en `.gitignore` igual que `datos/`.
 
