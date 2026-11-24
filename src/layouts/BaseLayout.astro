@@ -1,6 +1,7 @@
 ---
 import { Font } from 'astro:assets';
 import BarraInferior from '../components/BarraInferior.astro';
+import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import Cabecera from '../components/Cabecera.astro';
 import Pie from '../components/Pie.astro';
 import '../styles/global.css';
@@ -53,6 +54,7 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 		<div id="contenido" class="contenido" tabindex="-1">
 			<slot />
 		</div>
+		<BotonWhatsApp lang={lang} />
 		<Pie lang={lang} />
 		<BarraInferior lang={lang} />
 	</body>
