@@ -12,7 +12,7 @@ Datos de Montca que pueden aparecer en la web y que usan las specs y los textos 
 | NIF                           | G88904354                                             |
 | Responsable del tratamiento   | Associació Juvenil i Esportiva Montca Actiu           |
 | Correo de contacto público    | montcaadventure@gmail.com                             |
-| Teléfono de contacto público  | El de Iker, según Montca (en el documento de Drive)   |
+| Teléfono de contacto público  | 722 79 60 66 (el de Iker; también WhatsApp, el principal) y 657 39 47 01 (WhatsApp). Ver [decisiones.md](decisiones.md), 2026-11-24 |
 | Domicilio para el aviso legal | El de Iker, según Montca (en el documento de Drive). Se pone en el aviso legal al hacer B-08 |
 | Plazo de respuesta            | Menos de 24 horas                                     |
 
