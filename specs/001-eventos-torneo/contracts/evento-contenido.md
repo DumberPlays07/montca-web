@@ -28,8 +28,8 @@ inscripcion:
   modo: "canal-montca"
   url: ""                # pendiente: enlace del Google Forms de Montca
   nota:
-    ca: "T'apuntes amb el formulari de Montca. L'autorització del tutor dels menors es lliura en paper, a Softco."
-    es: "Te apuntas con el formulario de Montca. La autorización del tutor de los menores se entrega en papel, en Softco."
+    ca: "T'apuntes amb el formulari de Montca. L'autorització del tutor dels menors es lliura amb signatura digital o en paper a Softco."
+    es: "Te apuntas con el formulario de Montca. La autorización del tutor de los menores se entrega con firma digital o en papel en Softco."
 categorias:
   - id: "infantil-cadet"
     nombre: { ca: "Infantil/Cadet", es: "Infantil/Cadete" }

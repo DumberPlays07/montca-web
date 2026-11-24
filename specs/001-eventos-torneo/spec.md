@@ -13,7 +13,7 @@
 ## Contexto: cambio de Montca del 23/11 y del 24/11
 
 - **23/11 (llamada de Montca)**: Montca empieza las inscripciones del torneo el **25/11/2026** por su cuenta, fuera de la web, porque la web no llega a tiempo. Cuando la inscripción por la web (C-05) esté lista, se podrá usar también. Buena parte de los equipos (quizá casi todos) entrarán sin pasar por la web, y la web los tiene que mostrar igual.
-- **24/11**: Montca inscribe con un **Google Forms** que pide los mismos datos que el formulario de C-05 (adultos y menores, con tutor). Las respuestas quedan en una hoja de cálculo de Google de Montca. La autorización del tutor se entrega **en papel o por Softco** (según `docs/legal/tratamientos.md`, T4: en papel, que se deja en Softco).
+- **24/11**: Montca inscribe con un **Google Forms** que pide los mismos datos que el formulario de C-05 (adultos y menores, con tutor). Las respuestas quedan en una hoja de cálculo de Google de Montca. La autorización del tutor se entrega **en papel o por Softco**. *Nota: con "papel o Softco" Montca se refería a las dos formas que recoge `docs/legal/tratamientos.md` (T4): **firma digital** o **papel entregado en Softco**. Así se escribe en el resto de la spec (FR-018).*
 - Las inscripciones **cierran el 20/12/2026**. Es la prioridad del proyecto: lo primero que se publique tiene que ser la información del torneo y cómo apuntarse por el canal de Montca, sin esperar a la base de datos (A-14).
 
 ## Clarifications
@@ -35,7 +35,7 @@
 
 ### User Story 1 - Informarse del torneo y apuntarse por el canal de Montca (Priority: P1)
 
-Una persona joven, o el padre o la madre de un menor, llega desde un reel de Instagram en el móvil. Quiere saber qué es el torneo de Navidad de Montca Sports, cuándo y dónde es, qué cuesta, en qué categoría entra su equipo y cómo se apunta. En la página del torneo lo ve todo de un vistazo (fechas, lugar, deportes, precio, categorías con sus años de nacimiento y sus límites, normas, preguntas frecuentes), abre "Com arribar" si lo necesita y pulsa **Inscriure's**, que la lleva al formulario de inscripción de Montca. Junto al botón se explica en dos líneas cómo funciona ahora la inscripción (formulario de Montca; la autorización del tutor de los menores se entrega en papel, en Softco).
+Una persona joven, o el padre o la madre de un menor, llega desde un reel de Instagram en el móvil. Quiere saber qué es el torneo de Navidad de Montca Sports, cuándo y dónde es, qué cuesta, en qué categoría entra su equipo y cómo se apunta. En la página del torneo lo ve todo de un vistazo (fechas, lugar, deportes, precio, categorías con sus años de nacimiento y sus límites, normas, preguntas frecuentes), abre "Com arribar" si lo necesita y pulsa **Inscriure's**, que la lleva al formulario de inscripción de Montca. Junto al botón se explica en dos líneas cómo funciona ahora la inscripción (formulario de Montca; la autorización del tutor de los menores se entrega con firma digital o en papel en Softco).
 
 **Why this priority**: las inscripciones empiezan el 25/11 y cierran el 20/12. Sin esta página, la web no ayuda nada al torneo. Es lo único que se puede publicar ya, porque no depende de la base de datos (A-14) ni del i18n (B-07).
 
@@ -44,7 +44,7 @@ Una persona joven, o el padre o la madre de un menor, llega desde un reel de Ins
 **Acceptance Scenarios**:
 
 1. **Given** hoy está entre el 25/11/2026 y el 20/12/2026 y no se ha cerrado a mano, **When** abro la página del torneo, **Then** veo el estado "Inscripcions obertes", las fechas de las jornadas (27/12/2026 y 3/1/2027), el lugar, los tres deportes con la nota de que cada equipo juega los tres, el precio ("màxim 10 € per jugador", marcado como pendiente de confirmar), las dos categorías con sus años de nacimiento, el máximo de equipos y el mínimo y máximo de jugadores, y el botón "Inscriure's".
-2. **Given** el modo de inscripción del evento es "canal de Montca" y la dirección del formulario está configurada, **When** pulso "Inscriure's", **Then** se abre el formulario de Montca y la página explica, junto al botón, que la autorización del tutor de los menores se entrega en papel, en Softco.
+2. **Given** el modo de inscripción del evento es "canal de Montca" y la dirección del formulario está configurada, **When** pulso "Inscriure's", **Then** se abre el formulario de Montca y la página explica, junto al botón, que la autorización del tutor de los menores se entrega con firma digital o en papel en Softco.
 3. **Given** el modo de inscripción es "canal de Montca" pero la dirección del formulario aún no está configurada, **When** abro la página, **Then** en lugar de "Inscriure's" veo cómo contactar con Montca para apuntarse (WhatsApp si hay número; si no, correo), nunca un botón roto.
 4. **Given** la inscripción por la web (C-05) ya está lista, **When** Montca cambia el modo de inscripción del evento a "web", **Then** "Inscriure's" lleva a la página de inscripción de la web sin tocar el código de esta página.
 5. **Given** hoy es anterior a la fecha de apertura, **When** abro la página, **Then** veo "Inscripcions pròximament" con la fecha de apertura y no hay botón de inscribirse.
@@ -163,7 +163,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 
 - **FR-016**: Con el estado "obertes" o "completes", la página MUST mostrar el botón **Inscriure's** en la primera pantalla y otra vez debajo de "Equips inscrits" (o de las plazas, si la lista no se muestra; diseño en `diseno.md`). Con "completes", el botón lleva a la lista de espera por el mismo canal: mientras el modo sea "canal de Montca", al Google Forms, y la lista de espera la gestiona Montca (pendiente de confirmar con Montca, A-26). Con "pròximament" o "tancades", el botón MUST NOT mostrarse.
 - **FR-017**: Cada evento MUST tener un **modo de inscripción** configurable en sus datos: **canal de Montca** (el botón abre la dirección configurada, ahora el Google Forms de Montca) o **web** (el botón lleva a la página de inscripción de C-05). Cambiar de modo MUST NOT requerir cambiar código.
-- **FR-018**: En modo "canal de Montca", junto al botón MUST explicarse brevemente cómo funciona la inscripción: formulario de Montca y entrega de la autorización del tutor de los menores en papel, en Softco (`docs/legal/tratamientos.md`, T4).
+- **FR-018**: En modo "canal de Montca", junto al botón MUST explicarse brevemente cómo funciona la inscripción: formulario de Montca y entrega de la autorización del tutor de los menores **con firma digital o en papel en Softco** (`docs/legal/tratamientos.md`, T4). Texto: "amb signatura digital o en paper a Softco" / "con firma digital o en papel en Softco".
 - **FR-019**: Si el modo es "canal de Montca" y la dirección no está configurada, en lugar del botón MUST mostrarse cómo contactar con Montca para apuntarse (WhatsApp si hay número; si no, correo).
 
 **Equips inscrits**

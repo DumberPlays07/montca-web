@@ -26,7 +26,7 @@ El `id` es el nombre del archivo (`torneig-nadal-2026`) y forma la ruta. Todo te
 | `inscripcion.cerradaAMano` | boolean | sí (por defecto `false`) | FR-013 |
 | `inscripcion.modo` | `canal-montca` \| `web` | sí | FR-017 |
 | `inscripcion.url` | URL \| vacío | no | Dirección del Google Forms o de la página de C-05. Vacía: se muestra el contacto (FR-019) |
-| `inscripcion.nota` | Texto | sí si `modo = canal-montca` | Formulario de Montca + autorización en papel, en Softco (FR-018) |
+| `inscripcion.nota` | Texto | sí si `modo = canal-montca` | Formulario de Montca + autorización con firma digital o en papel en Softco (FR-018) |
 | `categorias` | lista de Categoría | sí, ≥ 1 | Ver abajo |
 | `normas` | lista de Texto | no | Si falta, el apartado no sale (constitución III) |
 | `preguntas` | lista de `{ pregunta: Texto, respuesta: Texto }` | no | Las seis de `docs/info-montca.md` |
