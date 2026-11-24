@@ -26,7 +26,7 @@ El `id` es el nombre del archivo (`torneig-nadal-2026`) y forma la ruta. Todo te
 | `inscripcion.cerradaAMano` | boolean | sí (por defecto `false`) | FR-013 |
 | `inscripcion.modo` | `canal-montca` \| `web` | sí | FR-017 |
 | `inscripcion.url` | URL \| vacío | no | Dirección del Google Forms o de la página de C-05. Vacía: se muestra el contacto (FR-019) |
-| `inscripcion.nota` | Texto | sí si `modo = canal-montca` | Formulario de Montca + autorización en papel o por Softco (FR-018) |
+| `inscripcion.nota` | Texto | sí si `modo = canal-montca` | Formulario de Montca + autorización en papel, en Softco (FR-018) |
 | `categorias` | lista de Categoría | sí, ≥ 1 | Ver abajo |
 | `normas` | lista de Texto | no | Si falta, el apartado no sale (constitución III) |
 | `preguntas` | lista de `{ pregunta: Texto, respuesta: Texto }` | no | Las seis de `docs/info-montca.md` |
@@ -61,7 +61,7 @@ en otro caso                                  → obertes
 
 ## 3. Supabase (Saúl, con A-14)
 
-Los nombres son orientativos y los fija Saúl. Lo que no se puede cambiar es lo que pide la spec: origen, forma de entrega de la autorización y estado.
+Los nombres son orientativos y los fija Saúl. Lo que no se puede cambiar es lo que pide la spec: origen, estado y la autorización del tutor en una tabla aparte con su propio plazo.
 
 ### `eventos`
 
@@ -97,13 +97,27 @@ Solo existe para que la vista sepa cuándo dejar de publicar (FR-040). Los datos
 | `dorsal` | entero, puede ser nulo | Del **1 al 99** y sin repetir dentro del equipo (único por `(equipo_id, dorsal)` cuando no es nulo). **Obligatorio si `origen = web`** (C-05, `docs/legal/tratamientos.md` T2/T3); **opcional si `origen = forms`** |
 | `es_capitan` | boolean | Como mucho uno por equipo |
 | `origen` | enum `forms` \| `web` | FR-031 |
-| `autorizacion_entrega` | enum `papel` \| `softco` \| `casilla_web`, puede ser nula | Solo menores (FR-032) |
-| `autorizacion_registrada` | boolean | Un menor sin ella no sale en la vista (FR-024) |
 | `clave_importacion` | text única, puede ser nula | Para los jugadores del Forms: una clave estable de la respuesta, para que la importación se pueda repetir (FR-033) |
 
 Los datos propios de C-05 (DNI, contacto, tutor, casillas de imagen e información) los añade C-05. Esta spec no los define.
 
-RLS activada en las dos tablas, sin políticas para `anon`.
+### `autorizaciones` (T4, FR-032)
+
+Aparte de `jugadores` porque se guarda más tiempo: hasta **un año después de la última jornada** (`eventos.ultima_jornada` + 1 año; 03/01/2028 en este torneo), mientras que los jugadores se borran a los tres meses (T2 y T3).
+
+| Columna | Tipo | Regla |
+|---|---|---|
+| `id` | uuid | clave |
+| `evento` | text → `eventos.id` | Para calcular el borrado |
+| `jugador_id` | uuid → `jugadores.id`, puede ser nulo | **`on delete set null`**: al borrar los jugadores, la autorización se queda |
+| `menor_nombre`, `menor_dni` | text | Qué menor (T4), para que la prueba siga valiendo sin la fila del jugador |
+| `tutor_nombre`, `tutor_dni` | text | Qué tutor (T4) |
+| `forma` | enum `casilla_web` \| `firma_digital` \| `papel` | `papel` = entregado en Softco (T4). No hay forma `softco` aparte |
+| `version_texto` | text | Versión del texto de autorización (`docs/legal/consentimientos.md`), también en papel |
+| `fecha_hora` | timestamptz | Cuándo autorizó (en papel, la fecha que figure en él) |
+| `recibida` | boolean | Montca confirma que la tiene (papel recogido de Softco). Por defecto `false`. Un menor sin una autorización `recibida` no sale en la vista (FR-024) |
+
+RLS activada en las cuatro tablas, sin políticas para `anon`. El borrado en sus fechas es de Montca (calendario de `tratamientos.md` §7), no de C-04.
 
 ### Vista `equipos_publicos` (contrato en [contracts/vista-publica.md](contracts/vista-publica.md))
 

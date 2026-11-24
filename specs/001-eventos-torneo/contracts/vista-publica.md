@@ -26,9 +26,9 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 3. Nombre público:
    - **menor** → primera palabra de `nombre`, después de quitar los espacios de los extremos;
    - **adulto** → primera palabra de `nombre` + espacio + **primer apellido**: la primera palabra de `apellidos`, junto con las partículas que la preceden (`de`, `del`, `dels`, `la`, `las`, `los`, `d'`). Sin apellidos, solo el nombre. Se respeta cómo lo escribió la persona (mayúsculas y tildes).
-4. Un menor con `autorizacion_registrada = false` no sale.
+4. Un menor sale solo si tiene una fila en `autorizaciones` con su `jugador_id` y `recibida = true`. Si no, no sale.
 5. Un equipo confirmado que se queda sin jugadores visibles sale igualmente, con la lista vacía: ocupa plaza.
-6. Permisos: `anon` tiene `select` sobre la vista y nada sobre `equipos` ni `jugadores`.
+6. Permisos: `anon` tiene `select` sobre la vista y nada sobre `eventos`, `equipos`, `jugadores` ni `autorizaciones`.
 
 ## Casos que tienen que dar lo mismo en SQL y en TS
 
@@ -48,7 +48,7 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 
 ## Comprobación (Saúl, con A-14)
 
-- Con la clave `anon`: `select * from equipos` y `select * from jugadores` fallan o no devuelven filas.
+- Con la clave `anon`: `select * from equipos`, `jugadores` y `autorizaciones` fallan o no devuelven filas.
 - Con la clave `anon`: `select * from equipos_publicos` devuelve solo confirmados y solo las columnas de arriba.
 - Con `ultima_jornada` puesta en una fecha de hace 7 días o más, la vista no devuelve el evento; con hace 6 días, sí.
 - Se cargan los once casos de la tabla y se compara la salida con la columna `nombre_publico`.
