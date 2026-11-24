@@ -75,6 +75,15 @@ components:
   button-primary-hover:
     backgroundColor: "{colors.teula-fosca}"
     textColor: "{colors.blanco}"
+  button-secundario:
+    backgroundColor: "{colors.verd-bosc}"
+    textColor: "{colors.boira}"
+    rounded: "{rounded.boton}"
+    padding: "0 24px"
+    height: "44px"
+  button-secundario-hover:
+    backgroundColor: "{colors.tinta}"
+    textColor: "{colors.boira}"
   button-senal:
     backgroundColor: "{colors.boira}"
     textColor: "{colors.verd-bosc}"
@@ -214,8 +223,15 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 - **Shape:** rectángulo con esquinas suaves: 6 px en los botones de acción y 4 px en los controles de señal.
 - **Primary (teja):** fondo Teula, texto blanco en peso 600, 44 px de alto y 24 px de relleno lateral. Es el botón Reserva de la cabecera y del menú móvil, y será Apunta't y Demana pressupost.
 - **Hover / Active:** fondo Teula fosca (#743d21) **y** texto subrayado de 2 px. Transición de color de 160 ms.
-- **Señal (secundario):** fondo transparente sobre Boira, texto Verd bosc en peso 600, borde de 1 px `linea` y 44 px de alto. Son el selector VAL / CAST y el botón Menú. En `hover` y con el menú abierto el fondo pasa a Herba clara.
+- **Secundario (verde):** fondo Verd bosc, texto Boira en peso 600 (7.5:1), 6 px de radio, 44 px de alto y 24 px de relleno lateral. Para acciones que importan pero no son la principal de la pantalla, así que nunca lleva teja. En `hover` y `active` el fondo pasa a Tinta (12.3:1) y el texto se subraya 2 px. Es el botón de WhatsApp.
+- **Señal:** fondo transparente sobre Boira, texto Verd bosc en peso 600, borde de 1 px `linea` y 44 px de alto. Son el selector VAL / CAST y el botón Menú. En `hover` y con el menú abierto el fondo pasa a Herba clara.
 - **Focus:** contorno de 3 px a 2 px de distancia, en Teula sobre fondos claros y en Teula clara sobre Verd bosc.
+
+### Botón de WhatsApp (escritorio)
+
+- **Qué es:** el botón secundario (verde) con el icono de WhatsApp y la etiqueta "WhatsApp", abajo a la derecha (`BotonWhatsApp.astro`). Abre `wa.me` con el mensaje ya escrito en otra pestaña, y su `aria-label` avisa de que se abre en una pestaña nueva.
+- **Cuándo sale:** solo desde 64rem y solo si hay número de WhatsApp. En móvil y tableta WhatsApp ya está en la barra inferior, así que no se repite.
+- **Posición:** `sticky` justo antes del pie, a 24 px del borde inferior. Mientras se baja se queda en la esquina, y al final de la página se para encima del pie en vez de taparlo. No lleva sombra.
 
 ### Navigation
 
