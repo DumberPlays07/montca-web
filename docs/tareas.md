@@ -59,6 +59,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad, capas de los formularios y cookies en [legal/](legal/), pendientes de la revisión legal de Montca; falta el aviso legal |
 | A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en [legal/consentimientos.md](legal/consentimientos.md), pendiente de la revisión legal de Montca |
 | A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
+| A-30 | Meter el Google Forms de Montca en el registro de tratamientos y en la privacidad (canal, encargado, plazo y borrado de la hoja de respuestas) y confirmar que el Forms informa de la privacidad (issue #70) | S + M | Bloquea publicar el botón al Forms (C-04) | ⬜ Pendiente |
 
 ### A4. Equipo (Saúl + Pablo)
 
