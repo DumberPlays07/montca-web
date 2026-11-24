@@ -236,10 +236,43 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 
 Trazo de 2 px, 24 × 24, extremos y uniones redondeados, en `currentColor` y decorativos (`aria-hidden`): siempre van con texto. Están en `Icono.astro`: menú, cerrar, agenda, actividades (dos picos de Mariola), WhatsApp, correo y volver.
 
+### Imágenes y fotos
+
+Toda imagen de contenido (fotos, el mapa, ilustraciones) se pone con **`Foto.astro`**; nunca con `<img>` a mano ni con una foto incrustada en el HTML (B-12).
+
+```astro
+import Foto from '../components/Foto.astro';
+import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
+
+<Foto src={foto} alt={{ ca: '…', es: '…' }} lang={lang} />
+```
+
+- **Texto alternativo obligatorio en VAL y CAST** (`alt={{ ca, es }}`). El build falla si falta uno de los dos o está vacío, aunque la página esté en un solo idioma. Describe lo que se ve, no "foto de…". No hay imágenes decorativas sin `alt`: lo decorativo se hace con CSS o con SVG en línea.
+- **Formatos**: AVIF y WebP, con el formato original como respaldo (JPG para las fotos).
+- **Tamaños**: se generan varios anchos (los puntos de corte de Astro: 640, 750, 828, 1080, 1280… hasta el doble del ancho mostrado, sin pasar del original). La foto ocupa el ancho de su contenedor sin pasar de su ancho propio ni de 72rem. Lleva `width` y `height`, así la página no salta mientras carga.
+- **`ancho`**: ancho máximo en pantalla, en px, si debe verse más estrecha que el contenido.
+- **`sizes`**: solo si en el móvil la foto ocupa menos que el ancho de la pantalla (una rejilla de tarjetas). Ejemplo: `sizes="(min-width: 48rem) 33vw, 100vw"`.
+- **Carga**: todas se cargan al acercarse a la pantalla, salvo la que lleve **`principal`**: la imagen grande de la primera pantalla, una por página como mucho.
+
+**Dónde se guardan**
+
+- En `src/assets/`: el mapa en `src/assets/mapa/` y las fotos en `src/assets/fotos/<sección>/` (`actividades/`, `sports/`, `equip/`…), con nombres en minúsculas, sin espacios ni tildes.
+- **Nunca en `public/`**: lo que va ahí se sirve tal cual, sin optimizar. `public/` es solo para el favicon y archivos que tengan que servirse sin cambios.
+- **El repositorio es público.** Antes de subir una foto:
+  - que tenga permiso de imagen de quien sale en ella; nunca nada de la carpeta "Fotos scape room salesianos" (decisión del 2026-11-18);
+  - quitarle los metadatos (EXIF, GPS): las versiones que genera la web salen sin ellos, pero el original que se sube al repo los conserva, y una foto de móvil puede llevar la ubicación;
+  - reducir el original a 2560 px de ancho como máximo.
+
+**Imagen para compartir**
+
+- `BaseLayout` exige `image` (importada de `src/assets`) e `imageAlt` (`{ ca, es }`). Genera un JPG con la proporción de las redes (1200 × 630, 1,91:1) **sin ampliar**: con una imagen más estrecha usa su ancho (el mapa actual da 1024 × 538).
+- Si la página no tiene una propia, usa `IMAGEN_COMPARTIR_POR_DEFECTO` (`src/components/imagen-compartir.ts`), que de momento es el mapa (hasta A-07 y B-14).
+
 ## Do's and Don'ts
 
 ### Do:
 
+- **Do** poner toda imagen con `Foto.astro`, con su texto alternativo en VAL y CAST, y guardarla en `src/assets/`.
 - **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.png`) y comprobar su contraste antes de usarlo.
 - **Do** reservar la teja (#9c5530) para la acción principal y la marca de "estás aquí".
 - **Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.
@@ -248,6 +281,7 @@ Trazo de 2 px, 24 × 24, extremos y uniones redondeados, en `currentColor` y dec
 
 ### Don't:
 
+- **Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.
 - **Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.
 - **Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).
 - **Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.
