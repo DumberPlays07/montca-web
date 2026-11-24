@@ -92,14 +92,14 @@ Solo existe para que la vista sepa cuándo dejar de publicar (FR-040). Los datos
 | `id` | uuid | clave |
 | `equipo_id` | uuid → `equipos.id` | |
 | `nombre`, `apellidos` | text | |
+| `dni` | text | Ya está en T2 y T3. Único por evento (con `eventos` a través del equipo): es lo que usa la importación para no duplicar jugadores (FR-033). Nunca sale en la vista |
 | `fecha_nacimiento` | date, puede ser nula | Nula ⇒ se trata como menor |
 | `fecha_inscripcion` | timestamptz | La "Marca temporal" del Forms o el momento del alta web. Decide si era menor (FR-023) |
 | `dorsal` | entero, puede ser nulo | Del **1 al 99** y sin repetir dentro del equipo (único por `(equipo_id, dorsal)` cuando no es nulo). **Obligatorio si `origen = web`** (C-05, `docs/legal/tratamientos.md` T2/T3); **opcional si `origen = forms`** |
 | `es_capitan` | boolean | Como mucho uno por equipo |
 | `origen` | enum `forms` \| `web` | FR-031 |
-| `clave_importacion` | text única, puede ser nula | Para los jugadores del Forms: una clave estable de la respuesta, para que la importación se pueda repetir (FR-033) |
 
-Los datos propios de C-05 (DNI, contacto, tutor, casillas de imagen e información) los añade C-05. Esta spec no los define.
+El resto de datos de C-05 (contacto, datos del tutor que no son de la autorización, casillas de imagen e información) los añade C-05. Esta spec no los define.
 
 ### `autorizaciones` (T4, FR-032)
 
