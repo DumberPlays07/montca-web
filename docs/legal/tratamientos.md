@@ -1,6 +1,6 @@
 # Registro de tratamientos de datos · Web Montca Actiu
 
-Actualizado: 2026-11-19 (A-19; plazos validados por Montca). Las decisiones de las que sale están en [decisiones.md](../decisiones.md), sección 3.
+Actualizado: 2026-11-19 (A-19; plazos validados por Montca; garantías de Supabase, Netlify y Google comprobadas en A-17). Las decisiones de las que sale están en [decisiones.md](../decisiones.md), sección 3.
 
 Para qué sirve este documento:
 
@@ -164,9 +164,9 @@ Las fechas de T2 a T7 son las del torneo de Navidad (última jornada: 03/01/2027
 
 | Servicio | Para qué | Dónde están los datos | Contrato de encargo (DPA) | Estado |
 | -------- | -------- | --------------------- | ------------------------- | ------ |
-| Supabase | Base de datos de inscripciones y login de la gestión | Región UE (se elige al crear el proyecto, A-14) | Aceptarlo desde la cuenta de Montca | ⬜ Pendiente |
-| Netlify | Alojamiento de la web y Netlify Functions | Web: red de servidores mundial. Functions: región por comprobar; que sepamos, por defecto en EE. UU. | Aceptarlo desde la cuenta de Montca y comprobar con qué mecanismo cubre la transferencia a EE. UU. | ⬜ Pendiente |
-| Google | Apps Script, Sheet-CRM y correo de la cuenta de Montca | No se puede elegir la región en una cuenta gratuita | Con una cuenta gratuita de Gmail no hay contrato de encargo que aceptar (por comprobar); con Google Workspace sí (A-25) | ⬜ Pendiente |
+| Supabase | Base de datos de inscripciones y login de la gestión | Región UE (se elige al crear el proyecto, A-14) | Su DPA, con cláusulas contractuales tipo, forma parte de los términos y se acepta al crear la cuenta | ✅ Comprobado (2026-11-19) |
+| Netlify | Alojamiento de la web y Netlify Functions | Web: red de servidores mundial. Functions: EE. UU. (Ohio) por defecto; cambiar a la UE exige plan de pago, así que se queda en EE. UU. | Su DPA forma parte de los términos. Está adherida al Marco de Privacidad de Datos UE-EE. UU., que cubre la transferencia | ✅ Comprobado (2026-11-19) |
+| Google | Apps Script, Sheet-CRM y correo de la cuenta de Montca | EE. UU.; no se puede elegir la región en una cuenta gratuita | Google LLC está adherida al Marco de Privacidad de Datos UE-EE. UU. Con una cuenta gratuita no hay contrato de encargo que aceptar; con Google Workspace sí (A-25) | 🟡 Transferencia cubierta; contrato al pasar a Workspace |
 | Proveedor de correo | Correos de inscripción y avisos (C-07) | Por decidir (A-15) | Elegir uno que lo ofrezca y, si puede ser, con datos en la UE | ⬜ Pendiente |
 | OVH | Dominio | No trata datos de quien usa la web | No hace falta | — |
 | Softco | Guarda las autorizaciones en papel hasta que las recoge Montca | En la tienda, poco tiempo | Comprobar en la revisión legal si basta con dejarlo por escrito de forma sencilla | ⬜ Pendiente |
@@ -212,6 +212,6 @@ Las fechas de T2 a T7 son las del torneo de Navidad (última jornada: 03/01/2027
 | --- | ----- | -------- |
 | Aseguradora: cuál es (o qué tipo de seguro), qué datos se le pasan y qué documento acepta para menores de 14 sin DNI | Montca (A-26) | T2, T3, privacidad |
 | Pago: si Montca apunta quién ha pagado, se añade a T2 | Montca (A-26) | T2 |
-| Netlify y Google: comprobar con qué garantía cubren los datos que salen de la UE (constitución, principio IV) | Saúl | Sección 4, privacidad |
+| Google: aceptar su contrato de encargo cuando la cuenta pase a Google Workspace | Montca + Saúl (A-25) | Sección 4 |
 | Compromiso de confidencialidad de Saúl y Pablo (una página) | Saúl | Sección 5 |
 | Consentimiento de imagen de menores de 14 a 17 años: comprobar en la revisión legal si lo acepta también el menor | A-18 | T5 |
