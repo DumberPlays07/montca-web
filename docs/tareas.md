@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-20 (A-05 y A-28 acabadas; nueva A-29, mapa en alta resolución). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-24 (B-09 acabada; B-10 en PR; borradores legales de A-17, A-18 y A-19 en PR; Montca inscribe por Google Forms mientras no esté la web). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -13,7 +13,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una tarea se cambia aquí mismo, en su fila.
 
-> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo abren el **23/11/2026** y cierran el **20/12/2026**, aunque la web no esté lista; cuanto antes esté la inscripción por la web, mejor. El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. Como la web no llega, Montca inscribe con un **Google Forms** propio (mismos datos que C-05; autorización del tutor en papel o por Softco); cuando esté la inscripción por la web, se podrá usar también. Los equipos del Forms se importan después a la base de datos: **nunca al repo**. El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
 
 
 
@@ -37,7 +37,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             | ✅ Acabada: el teléfono de contacto y el domicilio son los de Iker, según Montca (datos en el Drive) |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       | ✅ Acabada: las del torneo, en [info-montca.md](info-montca.md). Las de escuelas/AMPA se añaden cuando se haga B-11 |
 | A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       | ⬜ Pendiente |
-| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma | S         | C-05, C-06, B-08 | ⬜ Pendiente |
+| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma | S         | C-05, C-06, B-08 | 🟡 Empezada: hasta que esté la web se apuntan por Google Forms (mismos datos que C-05) y la autorización se entrega en papel o por Softco. Falta: precio final y pago, quién confirma equipos, si la casilla del tutor sustituye a la firma, cómo se agrupan los jugadores en equipos en el Forms |
 
 ### A2. Cuentas e infraestructura
 
@@ -56,9 +56,9 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 
 | ID   | Tarea                                                                                                                   | Quién | Notas                                      | Estado |
 | ---- | ----------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------ | ------ |
-| A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | ⬜ Pendiente |
-| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | ⬜ Pendiente |
-| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ⬜ Pendiente |
+| A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad (PR #56) y cookies (PR #59); falta el aviso legal y la revisión |
+| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en PR #58 |
+| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | 🟡 Empezada: registro de tratamientos en PR #54 |
 
 ### A4. Equipo (Saúl + Pablo)
 
@@ -84,8 +84,8 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | B-06 | `/impeccable init` → PRODUCT.md y DESIGN.md                                                                                                                                                                                                                                                                             | P                   | M     | Impeccable         | A-07                   | ✅ Acabada (#3) |
 | B-07 | i18n VAL/CAST: rutas, diccionarios en `src/i18n`, selector de idioma                                                                                                                                                                                                                                                    | S                   | M     | Astro i18n         | B-01                   | ⬜ Pendiente |
 | B-08 | Páginas legales (aviso legal, privacidad, cookies) y enlaces en el pie. **Aviso:** el aviso legal tiene que llevar el domicilio (art. 10 LSSI); está en el documento de Drive y se mete al hacer esta tarea                                                                                                                                                                                                                                                  | S                   | S     | Astro              | A-17                   | ⬜ Pendiente |
-| B-09 | Menú fijo, pie y barra inferior en móvil (Agenda · Activitats · WhatsApp); enlace "← tornar" en fichas y eventos (sin migas de pan). Con esta primera pieza visual sale también `DESIGN.md` (no lo crea `/impeccable init`)                                                                                         | P                   | M     | Astro + Impeccable | B-06                   | ⬜ Pendiente |
-| B-10 | Botón de WhatsApp siempre visible (`wa.me` con mensaje escrito)                                                                                                                                                                                                                                                         | P                   | S     | Astro              | B-09                   | ⬜ Pendiente |
+| B-09 | Menú fijo, pie y barra inferior en móvil (Agenda · Activitats · WhatsApp); enlace "← tornar" en fichas y eventos (sin migas de pan). Con esta primera pieza visual sale también `DESIGN.md` (no lo crea `/impeccable init`)                                                                                         | P                   | M     | Astro + Impeccable | B-06                   | ✅ Acabada (#66) |
+| B-10 | Botón de WhatsApp siempre visible (`wa.me` con mensaje escrito)                                                                                                                                                                                                                                                         | P                   | S     | Astro              | B-09                   | 🟡 Empezada: PR #67; falta el número de WhatsApp (A-24) |
 | B-11 | Páginas informativas: Qui som (con foto de equipo), Contacte, Escoles i AMPA (parte informativa y preguntas frecuentes)                                                                                                                                                                                                 | P (UI) + S (textos) | M     | Astro              | B-07, B-09, A-07, A-23 | ⬜ Pendiente |
 | B-12 | Imágenes optimizadas con `<Image>` de Astro; nada de fotos incrustadas en el HTML                                                                                                                                                                                                                                       | P                   | S     | Astro              | A-07                   | ⬜ Pendiente |
 | B-13 | Cuenta atrás de Montca Sports / próximo evento ("Properament" si no hay fecha)                                                                                                                                                                                                                                          | P                   | S     | Astro              | C-04                   | ⬜ Pendiente |

@@ -22,7 +22,7 @@ Datos de Montca que pueden aparecer en la web y que usan las specs y los textos 
 | -------------- | ----------------------------------------------------------------------------- |
 | Jornadas       | Domingo 27/12/2026 y domingo 3/1/2027                                         |
 | Lugar          | Poliesportiu Municipal de Cocentaina                                          |
-| Inscripciones  | Del 23/11/2026 al 20/12/2026, o antes si se llenan las plazas                 |
+| Inscripciones  | Del 25/11/2026 al 20/12/2026, o antes si se llenan las plazas. Hasta que esté la web, por el Google Forms de Montca |
 | Deportes       | Fútbol sala, básquet y pádel. Cada equipo juega las tres modalidades          |
 | Precio         | Máximo 10 € por jugador (cifra final pendiente)                               |
 
