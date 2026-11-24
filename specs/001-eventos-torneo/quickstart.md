@@ -78,4 +78,5 @@ PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 1. Comprobaciones de [contracts/vista-publica.md](contracts/vista-publica.md) (permisos y once casos).
 2. `node scripts/importar-forms/importar.ts --evento torneig-nadal-2026 --csv <fuera del repo> --simular` → informe sin errores; después, sin `--simular`; después, otra vez → 0 filas nuevas.
 3. Confirmar un equipo en Supabase → aparece en la página en menos de 1 hora (en la práctica, al recargar).
-4. Antes de pasar `PUBLIC_FUENTE_EQUIPOS=supabase` a producción: privacidad y registro de tratamientos actualizados (FR-039).
+4. Antes de pasar `PUBLIC_FUENTE_EQUIPOS=supabase` a producción: A-30 (issue #70) hecha y la lista igual a `docs/legal/tratamientos.md` T7 (FR-039).
+5. `eventos.ultima_jornada` en Supabase = última jornada del YAML (FR-040).

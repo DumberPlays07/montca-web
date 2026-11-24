@@ -197,7 +197,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
   La regla de agrupación es provisional hasta que Montca confirme cómo está hecho su Forms (A-26).
 - **FR-034**: Los datos reales de inscripción (incluidas las respuestas del formulario de Montca y cualquier archivo exportado de su hoja) MUST NOT guardarse nunca en el repositorio, que es público y contendría DNI de menores.
 - **FR-035**: Para hacer y probar la interfaz MUST usarse datos de prueba inventados, marcados como tales, que nunca se publiquen en producción: por categoría, un equipo confirmado y uno pendiente; entre ellos, al menos uno de cada origen.
-- **FR-039**: Publicar los nombres de los jugadores (primer nombre de los menores; nombre y primer apellido de los adultos), el dorsal y el capitán MUST figurar en la política de privacidad (A-17, PR #56) y en el registro de tratamientos (A-19, PR #54) antes de que se publique "Equips inscrits" con datos reales.
+- **FR-039**: La lista pública MUST coincidir con lo que ya dicen `docs/legal/tratamientos.md` (T7) y `docs/legal/privacidad.md` (2.7): equipos confirmados; nombre del equipo; capitán; de cada jugador, el dorsal junto al nombre y primer apellido (adultos) o solo el primer nombre (menores); retirada una semana después de la última jornada (FR-040). Si C-04 necesita publicar algo distinto, primero se cambia `tratamientos.md` (constitución IV). Antes de activar "Equips inscrits" con datos reales, **A-30 (issue #70)** tiene que estar hecha, porque es la que mete el Google Forms (canal, encargado, plazo y borrado de la hoja) en el registro y en la privacidad.
 
 **Reutilización e idiomas**
 
@@ -245,14 +245,14 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **Fechas** (decisión de Montca del 23/11; la cambia en `docs/info-montca.md` el PR de Saúl `docs/estado-tareas-24-11`): inscripciones del 25/11/2026 al 20/12/2026, o antes si se llenan las plazas.
 - **Plazas**: solo los equipos confirmados ocupan plaza (`docs/tareas.md`, C-05). Los dos orígenes cuentan igual.
 - **Dirección del Google Forms**: Montca aún no la ha pasado; es un dato configurable del evento. No es un secreto (es pública), así que puede ir en los datos del evento del repositorio.
-- **Textos legales del Google Forms**: son responsabilidad de Montca. La web solo enlaza; el formulario propio de la web (C-05) sí necesita los textos legales antes de publicarse (constitución IV, A-17). **Antes de publicar el botón**, Saúl confirma con Montca que su Forms informa de la privacidad (responsable, finalidad, derechos) y que la autorización del tutor llega en papel o por Softco; si no, el botón no se publica y en su lugar sale el contacto (FR-019). Las respuestas del Forms se guardan en Google, sin garantía de servidores en la UE: es un riesgo del proceso de Montca, no de la web, y se anota en el PR.
+- **Textos legales del Google Forms**: son responsabilidad de Montca. La web solo enlaza; el formulario propio de la web (C-05) sí necesita los textos legales antes de publicarse (constitución IV, A-17). **El botón al Google Forms no se publica hasta que esté hecha A-30 (issue #70)**, que mete el Forms en `docs/legal/tratamientos.md` y `docs/legal/privacidad.md` (canal, encargado, plazo y borrado de la hoja de respuestas) y confirma que el Forms informa de la privacidad y avisa de la lista pública. Mientras tanto, la `url` del evento queda vacía y en su lugar sale el contacto (FR-019). Las respuestas del Forms se guardan en Google, en EE. UU.: la constitución v2.0.0 (IV) lo admite si la transferencia tiene una garantía válida (Google está en el Marco de Privacidad de Datos UE-EE. UU., `tratamientos.md` §4) y consta en la privacidad, que es justo lo que hace A-30.
 - **Teléfono en la pregunta frecuente de contacto**: el teléfono de Iker está en el documento de Drive, no en el repositorio. Mientras no haya un teléfono público acordado (A-24), la respuesta usa el correo público, las redes y WhatsApp si hay número.
 - **Normas del torneo**: Montca aún no las ha pasado. Se piden en A-26.
 - **Textos nuevos** (explicación junto al botón, estados, avisos): se redactan en valenciano y los revisa Montca antes de publicar.
 - **Datos de prueba**: inventados, sin parecido con personas reales, marcados como prueba y fuera de producción.
 - **Frescura de 1 hora** (FR-027): suficiente para un torneo con inscripción de días; si Montca necesita que sea inmediato, se revisa en el plan.
 - **Pendiente de confirmar con Montca (A-26)**: que con una categoría o el torneo completos el botón siga llevando al Google Forms y que Montca gestione la lista de espera; cómo está hecho su Forms (una respuesta por jugador, si pregunta el capitán y el dorsal).
-- **Privacidad**: publicar nombres de jugadores tiene que estar en la política de privacidad (A-17, PR #56) y en el registro de tratamientos (A-19, PR #54). Lo lleva Saúl.
+- **Privacidad**: la lista pública ya está en `docs/legal/tratamientos.md` (T7) y `docs/legal/privacidad.md` (2.7), en `main`. Falta el Google Forms: A-30 (issue #70), de Saúl y Montca.
 - **`docs/tareas.md` y `docs/info-montca.md`** ya están actualizados en el PR #68; esta spec no los toca.
 
 ## Dependencies
@@ -261,6 +261,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **A-14** (proyecto Supabase en la UE, Saúl): necesaria para "Equips inscrits", plazas y la importación. **No bloquea P1.**
 - **A-26** (Montca: precio final, quién confirma equipos, agrupación en el Forms, normas): en curso.
 - **A-24** (número de WhatsApp): pendiente; mientras tanto, correo.
+- **A-30** (issue #70, Saúl + Montca): el Google Forms en el registro de tratamientos y en la privacidad. **Bloquea publicar el botón al Forms** y activar los equipos reales.
 - **B-07** (i18n VAL/CAST, Saúl): pendiente. Mientras tanto, los textos van en VAL y CAST en un diccionario provisional, como en B-09, y B-07 los mueve a `src/i18n`.
 - **B-02** (Netlify): pendiente; necesario para publicar.
 - **B-09** (Cabecera, Pie, BarraInferior, EnlaceVolver): hecha; se reutiliza.

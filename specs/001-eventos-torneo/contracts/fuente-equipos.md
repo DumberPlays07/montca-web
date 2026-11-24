@@ -48,4 +48,4 @@ Reglas:
 | Importación del Forms | — | Primera ejecución ([importacion-forms.md](importacion-forms.md)) | Saúl |
 | Variables de Netlify | `PUBLIC_FUENTE_EQUIPOS=ninguna` | `supabase` + URL + clave pública | Saúl |
 | UI | Ya hecha con datos de prueba | **Nada** | — |
-| Textos legales | — | La publicación de nombres en la privacidad (A-17) y en el registro (A-19), **antes** de pasar a `supabase` en producción (FR-039) | Saúl |
+| Textos legales | La lista pública ya está en `docs/legal/tratamientos.md` (T7) y `privacidad.md` (2.7) | A-30 (issue #70) hecha **antes** de pasar a `supabase` en producción (FR-039) | Saúl |

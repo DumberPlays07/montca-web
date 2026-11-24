@@ -62,9 +62,9 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - [ ] T021 [P] [US1] (Pablo) Crear una versión mínima de `src/components/eventos/PaginaEventos.astro` (título "Esdeveniments" y un enlace por evento) y sus envoltorios `src/pages/esdeveniments/index.astro` y `src/pages/es/esdeveniments/index.astro` (avisa a Saúl), para que "← Tornar" y el menú no lleven a un 404 (se completa en US4)
 - [ ] T022 [US1] (Pablo) Crear `src/scripts/eventos-cliente.ts`, solo la parte del estado: lee las fechas de la página (`data-*`), llama a `calcularEstado` con la hora actual y actualiza `EstatInscripcio` y la visibilidad de `BotoInscripcio` sin recargar (FR-012). Cargarlo desde `PaginaEvento` (depende de T005 y T019)
 - [ ] T023 [US1] (Pablo) Comprobar [quickstart.md](quickstart.md) §2, puntos 1–12, a 375 px y en escritorio, con la consola sin errores, y anotar el resultado en el PR
-- [ ] T024 [US1] (Saúl) Confirmar con Montca, antes de publicar la entrega 1, que su Google Forms informa de la privacidad (responsable, finalidad, derechos) y anotar su URL en `src/content/eventos/torneig-nadal-2026.yaml`. Si no la tiene, se deja `url` vacía y sale el contacto (FR-019). Anotar en el PR el riesgo de que las respuestas se guarden en Google (constitución IV)
+- [ ] T024 [US1] (Saúl) Cuando esté hecha **A-30 (issue #70)** (el Google Forms en `docs/legal/tratamientos.md` y `docs/legal/privacidad.md`, y el Forms informando de la privacidad y de la lista pública), anotar la URL del Forms en `src/content/eventos/torneig-nadal-2026.yaml`. **Hasta entonces, `url` queda vacía** y la página sale con el contacto en lugar del botón (FR-019)
 
-**Checkpoint**: la entrega 1 se puede publicar en cuanto estén B-02 y T024 y Montca haya revisado el castellano.
+**Checkpoint**: la entrega 1 se puede publicar en cuanto estén B-02 y Montca haya revisado el castellano; sin T024 (A-30) sale con el contacto en lugar del botón al Forms.
 
 ---
 
@@ -91,7 +91,7 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - [ ] T034 [US2] (Saúl) Crear la vista `equipos_publicos`, que deja de devolver un evento desde última jornada + 7 días en hora de Madrid (FR-040), y dar `select` solo sobre ella a `anon`, según [contracts/vista-publica.md](contracts/vista-publica.md). Pasar sus comprobaciones y los once casos (depende de T033)
 - [ ] T035 [US2] (Saúl) Implementar `src/lib/eventos/fuente-supabase.ts`: `fetch` a `{PUBLIC_SUPABASE_URL}/rest/v1/equipos_publicos?evento=eq.<id>` con `apikey` y `Authorization`, tiempo máximo de 8 s, conversión a `EquipoPublico` y `{ tipo: 'error' }` ante cualquier fallo. Sin `supabase-js` (depende de T028 y T034)
 - [ ] T036 [US2] (Saúl) Crear `scripts/importar-forms/importar.ts` según [contracts/importacion-forms.md](contracts/importacion-forms.md): se niega a leer un CSV dentro del repo; `--simular`; un jugador por fila; agrupa por nombre normalizado y categoría; capitán marcado o primera respuesta; `clave_importacion` con *hash*; repetible; nunca cambia `estado`; dorsal opcional (1–99, sin repetir; si no, vacío y al informe); informe sin datos personales completos. Las columnas se leen por un mapa de nombres al principio del archivo. Si hace falta una librería de CSV, justificarla en el PR (depende de T033)
-- [ ] T037 [US2] (Saúl) Añadir a la política de privacidad (A-17, PR #56) y al registro de tratamientos (A-19, PR #54) la publicación de nombres (primer nombre de los menores; nombre y primer apellido de los adultos), del dorsal y del capitán (FR-039)
+- [ ] T037 [US2] (Saúl) Comprobar que lo que muestra la vista coincide con `docs/legal/tratamientos.md` (T7) y `docs/legal/privacidad.md` (2.7), ya en `main`, y que A-30 (issue #70) está hecha antes de activar los equipos reales (FR-039)
 - [ ] T038 [US2] (Saúl) Primera importación real (`--simular` y después en serio), borrar el CSV, configurar en Netlify `PUBLIC_FUENTE_EQUIPOS=supabase`, `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`, y comprobar [quickstart.md](quickstart.md) §6 (depende de T035, T036 y T037)
 
 **Checkpoint**: con `prueba`, toda la UI funciona; en producción no cambia nada hasta T038.
