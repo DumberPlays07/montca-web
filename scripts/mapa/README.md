@@ -94,8 +94,13 @@ Las versiones de Gemini desplazan algo el relieve: en `mapa-base-pueblo.jpg` el 
 ```sh
 uv run scripts/mapa/generar_mapa_3d.py        # si no existe salida/ (render y picos-3d.json)
 uv run scripts/mapa/colocar_picos_definitivo.py
-cd scripts/mapa/salida && uv run python -m http.server 8765
-# y abrir http://127.0.0.1:8765/previa-definitiva.html (también funciona con doble clic)
+```
+
+Para ver la vista previa, abre `salida/previa-definitiva.html` con doble clic o sírvela desde `scripts/mapa/`, no desde `salida/`: la página carga la imagen de `../fuentes/`, que tiene que quedar dentro del servidor.
+
+```sh
+cd scripts/mapa && uv run python -m http.server 8765
+# y abrir http://127.0.0.1:8765/salida/previa-definitiva.html
 ```
 
 `colocar_picos_definitivo.py` lleva cada pico del render a la imagen con una transformación global (`Y_RENDER`, `Y_DEFINITIVA`, `ESCALA_Y`, medidas con el alto del bloque en las dos imágenes) y lo afina buscando dónde encajan mejor los bordes de los escalones del render sobre los de la imagen. Trabaja siempre sobre la imagen reducida a 1024 px de ancho (`ANCHO_TRABAJO`), porque sus ventanas de búsqueda están medidas en px a ese tamaño. Si un pico sale con un desplazamiento muy distinto al del resto (la coincidencia falla donde Gemini cambió más el dibujo), le aplica el desplazamiento mediano y lo avisa. En `previa-definitiva.html` cada botón se puede arrastrar si no cae en su cumbre; la página muestra el JSON final, que se copia a `src/data/picos-mapa.json`. La plantilla de la página es `previa-definitiva.plantilla.html`.
