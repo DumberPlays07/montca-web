@@ -31,8 +31,8 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 **Purpose**: lógica y textos que usan todas las páginas. **Ninguna historia empieza sin esto.**
 
-- [ ] T004 [P] (Pablo) Escribir las pruebas de `calcularEstado` en `src/lib/eventos/estado.test.ts` con los casos de [quickstart.md](quickstart.md) §1: un minuto antes de la apertura, justo en la apertura, 23:59:59 del 20/12 y un segundo después, `cerradaAMano`, las dos categorías llenas, una sola llena, sin recuento; y `placesLliures` nunca negativo y evento pasado. Comprobar que fallan
-- [ ] T005 (Pablo) Implementar en `src/lib/eventos/estado.ts` `calcularEstado(evento, ahora, confirmadosPorCategoria?)` (devuelve `proximament` | `obertes` | `completes` | `tancades`), `plazasCategoria(categoria, confirmados)` y `esEventoPasado(evento, ahora)`, según el orden de [data-model.md](data-model.md) §2, hasta que pase T004
+- [ ] T004 [P] (Pablo) Escribir las pruebas de `calcularEstado` en `src/lib/eventos/estado.test.ts` con los casos de [quickstart.md](quickstart.md) §1: un minuto antes de la apertura, justo en la apertura, 23:59:59 del 20/12 y un segundo después, `cerradaAMano`, las dos categorías llenas, una sola llena, sin recuento; y `placesLliures` nunca negativo, evento pasado y `listaRetirada` (casos de [quickstart.md](quickstart.md) §1, incluido el de verano). Comprobar que fallan
+- [ ] T005 (Pablo) Implementar en `src/lib/eventos/estado.ts` `calcularEstado(evento, ahora, confirmadosPorCategoria?)` (devuelve `proximament` | `obertes` | `completes` | `tancades`), `plazasCategoria(categoria, confirmados)`, `esEventoPasado(evento, ahora)` y `listaRetirada(evento, ahora)` ("igual o posterior a última jornada + 7 días", con la fecha de hoy en Madrid; FR-040), según el orden de [data-model.md](data-model.md) §2, hasta que pase T004
 - [ ] T006 [P] (Pablo) Crear `src/components/textos-eventos.ts` con la forma `{ ca: {...}, es: {...} }` y la función `t(lang, clave)` de `textos-navegacion.ts`, con todos los textos de interfaz de [diseno.md](diseno.md): estados, "Inscriure's", "Com arribar", "Què cal saber", "Preguntes freqüents", "Places i equips", "N de M places lliures", "Completa", "Pots apuntar-te a la llista d'espera", "Encara no hi ha cap equip confirmat. Sigues el primer!", "capità", aviso de error de carga, "preu final pendent", "Escriu-nos per a apuntar-te", sin eventos próximos, "s'obri en una pestanya nova"
 - [ ] T007 [P] (Pablo) Añadir la clave `eventos` ("Esdeveniments" / "Eventos") y la ruta `/esdeveniments/` en `src/components/textos-navegacion.ts`, sin mover nada a `src/i18n`
 - [ ] T008 (Pablo) En `src/components/Cabecera.astro`, poner `eventos` en el lugar de `sports` en el menú de escritorio y añadir `eventos` al menú móvil; en `src/components/Pie.astro`, añadirlo a las secciones. La barra inferior no cambia (depende de T007)
@@ -82,18 +82,19 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - [ ] T028 [US2] (Pablo) Implementar `src/lib/eventos/fuente-equipos.ts` según [contracts/fuente-equipos.md](contracts/fuente-equipos.md): interfaz `FuenteEquipos`, tipos `EquipoPublico` y `ResultadoEquipos`, `fuenteNinguna`, `fuenteIncrustada` (lee un `<script type="application/json">` de la página), elección con `PUBLIC_FUENTE_EQUIPOS` (por defecto `ninguna`), y error de build si vale `prueba` con `CONTEXT=production` o `supabase` sin URL o sin clave. Dejar `src/lib/eventos/fuente-supabase.ts` como implementación provisional que devuelve `{ tipo: 'sin-fuente' }`, para Saúl (depende de T026 y T027)
 - [ ] T029 [US2] (Pablo) Crear `src/components/eventos/PlacesIEquips.astro`: un bloque Herba clara por categoría con nombre, nacidos, "N de M places lliures" o "Completa" + "Pots apuntar-te a la llista d'espera", y la lista de equipos como `<details>` (nombre y número de jugadores; dentro, "nombre · dorsal" si lo tiene y "capità" en texto). Estados: sin equipos confirmados → plazas + "Sigues el primer!"; `sin-fuente` → no se renderiza nada; error → una línea de aviso. Con fuente `prueba`, incrustar al construir **solo** el JSON público. Colocarlo en `PaginaEvento.astro` entre `CartellEvento` y el segundo `BotoInscripcio` (depende de T028)
 - [ ] T030 [US2] (Pablo) Completar `src/scripts/eventos-cliente.ts`: pide los equipos con la fuente elegida, rellena `PlacesIEquips` con plantillas `<template>` (textos desde el HTML, no escritos en el script), pasa a `calcularEstado` el recuento de confirmados por categoría (para `completes`) y deja la página intacta si hay error (FR-027, FR-028) (depende de T029)
-- [ ] T031 [US2] (Pablo) Comprobar [quickstart.md](quickstart.md) §3, puntos 1–7, incluida la búsqueda de apellidos y equipos pendientes en el código fuente y en la pestaña Red (SC-003), y anotarlo en el PR
+- [ ] T031 [US2] (Pablo) Retirada de la lista (FR-040): con `listaRetirada` verdadero, `PlacesIEquips.astro` no renderiza nada al construir y `eventos-cliente.ts` ni pide equipos ni muestra la lista ni las plazas, también si la página se construyó antes de la fecha. La información del evento sigue (depende de T005 y T030)
+- [ ] T032 [US2] (Pablo) Comprobar [quickstart.md](quickstart.md) §3, puntos 1–8, incluida la búsqueda de apellidos y equipos pendientes en el código fuente y en la pestaña Red (SC-003), y anotarlo en el PR
 
 ### Capa de datos (Saúl, cuando esté A-14)
 
-- [ ] T032 [US2] (Saúl) Crear en Supabase (UE) las tablas `equipos` y `jugadores` de [data-model.md](data-model.md) §3, incluidos `estado` `pendiente` | `confirmado` | `espera` (por defecto `pendiente`), `origen` `forms` | `web`, `autorizacion_entrega` `papel` | `softco` | `casilla_web`, `dorsal` que puede ser nulo y la unicidad de `(evento, categoria, nombre_normalizado)`, con RLS activada y sin políticas para `anon`. Guardar el SQL (sin datos) en el repo, en la carpeta que decida Saúl
-- [ ] T033 [US2] (Saúl) Crear la vista `equipos_publicos` y dar `select` solo sobre ella a `anon`, según [contracts/vista-publica.md](contracts/vista-publica.md). Pasar sus comprobaciones y los once casos (depende de T032)
-- [ ] T034 [US2] (Saúl) Implementar `src/lib/eventos/fuente-supabase.ts`: `fetch` a `{PUBLIC_SUPABASE_URL}/rest/v1/equipos_publicos?evento=eq.<id>` con `apikey` y `Authorization`, tiempo máximo de 8 s, conversión a `EquipoPublico` y `{ tipo: 'error' }` ante cualquier fallo. Sin `supabase-js` (depende de T028 y T033)
-- [ ] T035 [US2] (Saúl) Crear `scripts/importar-forms/importar.ts` según [contracts/importacion-forms.md](contracts/importacion-forms.md): se niega a leer un CSV dentro del repo; `--simular`; un jugador por fila; agrupa por nombre normalizado y categoría; capitán marcado o primera respuesta; `clave_importacion` con *hash*; repetible; nunca cambia `estado`; informe sin datos personales completos. Las columnas se leen por un mapa de nombres al principio del archivo. Si hace falta una librería de CSV, justificarla en el PR (depende de T032)
-- [ ] T036 [US2] (Saúl) Añadir a la política de privacidad (A-17, PR #56) y al registro de tratamientos (A-19, PR #54) la publicación de nombres (primer nombre de los menores; nombre y primer apellido de los adultos), del dorsal y del capitán (FR-039)
-- [ ] T037 [US2] (Saúl) Primera importación real (`--simular` y después en serio), borrar el CSV, configurar en Netlify `PUBLIC_FUENTE_EQUIPOS=supabase`, `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`, y comprobar [quickstart.md](quickstart.md) §6 (depende de T034, T035 y T036)
+- [ ] T033 [US2] (Saúl) Crear en Supabase (UE) las tablas `eventos` (con `ultima_jornada` = la última jornada del YAML), `equipos` y `jugadores` de [data-model.md](data-model.md) §3, incluidos `estado` `pendiente` | `confirmado` | `espera` (por defecto `pendiente`), `origen` `forms` | `web`, `autorizacion_entrega` `papel` | `softco` | `casilla_web`, `dorsal` que puede ser nulo y la unicidad de `(evento, categoria, nombre_normalizado)`, con RLS activada y sin políticas para `anon`. Guardar el SQL (sin datos) en el repo, en la carpeta que decida Saúl
+- [ ] T034 [US2] (Saúl) Crear la vista `equipos_publicos`, que deja de devolver un evento desde última jornada + 7 días en hora de Madrid (FR-040), y dar `select` solo sobre ella a `anon`, según [contracts/vista-publica.md](contracts/vista-publica.md). Pasar sus comprobaciones y los once casos (depende de T033)
+- [ ] T035 [US2] (Saúl) Implementar `src/lib/eventos/fuente-supabase.ts`: `fetch` a `{PUBLIC_SUPABASE_URL}/rest/v1/equipos_publicos?evento=eq.<id>` con `apikey` y `Authorization`, tiempo máximo de 8 s, conversión a `EquipoPublico` y `{ tipo: 'error' }` ante cualquier fallo. Sin `supabase-js` (depende de T028 y T034)
+- [ ] T036 [US2] (Saúl) Crear `scripts/importar-forms/importar.ts` según [contracts/importacion-forms.md](contracts/importacion-forms.md): se niega a leer un CSV dentro del repo; `--simular`; un jugador por fila; agrupa por nombre normalizado y categoría; capitán marcado o primera respuesta; `clave_importacion` con *hash*; repetible; nunca cambia `estado`; informe sin datos personales completos. Las columnas se leen por un mapa de nombres al principio del archivo. Si hace falta una librería de CSV, justificarla en el PR (depende de T033)
+- [ ] T037 [US2] (Saúl) Añadir a la política de privacidad (A-17, PR #56) y al registro de tratamientos (A-19, PR #54) la publicación de nombres (primer nombre de los menores; nombre y primer apellido de los adultos), del dorsal y del capitán (FR-039)
+- [ ] T038 [US2] (Saúl) Primera importación real (`--simular` y después en serio), borrar el CSV, configurar en Netlify `PUBLIC_FUENTE_EQUIPOS=supabase`, `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`, y comprobar [quickstart.md](quickstart.md) §6 (depende de T035, T036 y T037)
 
-**Checkpoint**: con `prueba`, toda la UI funciona; en producción no cambia nada hasta T037.
+**Checkpoint**: con `prueba`, toda la UI funciona; en producción no cambia nada hasta T038.
 
 ---
 
@@ -103,8 +104,8 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 **Independent Test**: [quickstart.md](quickstart.md) §4.
 
-- [ ] T038 [US3] (Pablo) Crear `src/components/eventos/FranjaEsdeveniment.astro`: banda Verd bosc a todo el ancho, texto Boira, flecha y foco en Teula clara, toda la banda es un enlace de al menos 44 px, no fija. Elige el evento abierto que cierra antes (FR-030). Al construir solo se renderiza si el estado es `obertes`; en el navegador, `eventos-cliente.ts` la oculta o la muestra según el estado actual
-- [ ] T039 [US3] (Pablo, avisa a Saúl) Colocar `FranjaEsdeveniment` al principio del contenido de `src/pages/index.astro` y comprobar a 375 × 667 que se ve entera sin scroll (depende de T038)
+- [ ] T039 [US3] (Pablo) Crear `src/components/eventos/FranjaEsdeveniment.astro`: banda Verd bosc a todo el ancho, texto Boira, flecha y foco en Teula clara, toda la banda es un enlace de al menos 44 px, no fija. Elige el evento abierto que cierra antes (FR-030). Al construir solo se renderiza si el estado es `obertes`; en el navegador, `eventos-cliente.ts` la oculta o la muestra según el estado actual
+- [ ] T040 [US3] (Pablo, avisa a Saúl) Colocar `FranjaEsdeveniment` al principio del contenido de `src/pages/index.astro` y comprobar a 375 × 667 que se ve entera sin scroll (depende de T039)
 
 ---
 
@@ -114,18 +115,18 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 **Independent Test**: [quickstart.md](quickstart.md) §5.
 
-- [ ] T040 [P] [US4] (Pablo) Crear `src/components/eventos/TargetaEsdeveniment.astro`: nombre, jornadas, lugar y `EstatInscripcio`; toda la tarjeta es un enlace de al menos 44 px; plano Pedra si el evento está `obertes` y Herba clara si no
-- [ ] T041 [US4] (Pablo) Completar `src/components/eventos/PaginaEventos.astro`: tarjetas de los eventos no pasados (`esEventoPasado`), ordenadas por primera jornada, y mensaje sin eventos con contacto (FR-003, FR-004) (depende de T040)
-- [ ] T042 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
+- [ ] T041 [P] [US4] (Pablo) Crear `src/components/eventos/TargetaEsdeveniment.astro`: nombre, jornadas, lugar y `EstatInscripcio`; toda la tarjeta es un enlace de al menos 44 px; plano Pedra si el evento está `obertes` y Herba clara si no
+- [ ] T042 [US4] (Pablo) Completar `src/components/eventos/PaginaEventos.astro`: tarjetas de los eventos no pasados (`esEventoPasado`), ordenadas por primera jornada, y mensaje sin eventos con contacto (FR-003, FR-004) (depende de T041)
+- [ ] T043 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
 
 ---
 
 ## Phase 7: Polish & Cross-Cutting
 
-- [ ] T043 (Pablo) `/impeccable audit` de la página del torneo, la lista y la franja (375 px y escritorio, teclado, contraste, 44 px) y corregir lo que salga
-- [ ] T044 (Pablo) `/impeccable document` para actualizar `DESIGN.md` y su anexo con el tamaño Display y los componentes nuevos
-- [ ] T045 [P] (Pablo) Pasar la página construida por la prueba de resultados enriquecidos de Google (SC-005) y anotarlo en el PR
-- [ ] T046 (Saúl, al fusionar el PR de la spec) Anotar en `docs/decisiones.md` "Esdeveniments" en el lugar de "Montca Sports" en el menú
+- [ ] T044 (Pablo) `/impeccable audit` de la página del torneo, la lista y la franja (375 px y escritorio, teclado, contraste, 44 px) y corregir lo que salga
+- [ ] T045 (Pablo) `/impeccable document` para actualizar `DESIGN.md` y su anexo con el tamaño Display y los componentes nuevos
+- [ ] T046 [P] (Pablo) Pasar la página construida por la prueba de resultados enriquecidos de Google (SC-005) y anotarlo en el PR
+- [ ] T047 (Saúl, al fusionar el PR de la spec) Anotar en `docs/decisiones.md` "Esdeveniments" en el lugar de "Montca Sports" en el menú
 
 ---
 
@@ -134,11 +135,11 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - **Setup (T001–T003)**: T003 depende de T002. T001 y T002 en paralelo. T002 y T003 están en el camino crítico de la entrega 1: si Saúl no puede hacerlos a tiempo, los hace Pablo **con su acuerdo** y Saúl los revisa en el PR.
 - **Foundational (T004–T010)**: T005 después de T004; T008 después de T007. El resto, en paralelo. **Bloquea todas las historias.**
 - **US1 (T011–T024)**: depende de Setup y Foundational. Es la **entrega 1**.
-- **US2 UI (T025–T031)**: depende de Foundational y de que exista `PaginaEvento` (T019). Se puede empezar en cuanto esté T019.
-- **US2 datos (T032–T037)**: depende de A-14 y de la interfaz T028. Va en paralelo con todo lo de Pablo.
-- **US3 (T038–T039)**: depende de Foundational y de la parte de estado de `eventos-cliente.ts` (T022).
-- **US4 (T040–T042)**: depende de T021.
-- **Polish**: al final de cada entrega que se publique (T043), o al terminar todo.
+- **US2 UI (T025–T032)**: depende de Foundational y de que exista `PaginaEvento` (T019). Se puede empezar en cuanto esté T019.
+- **US2 datos (T033–T038)**: depende de A-14 y de la interfaz T028. Va en paralelo con todo lo de Pablo.
+- **US3 (T039–T040)**: depende de Foundational y de la parte de estado de `eventos-cliente.ts` (T022).
+- **US4 (T041–T043)**: depende de T021.
+- **Polish**: al final de cada entrega que se publique (T044), o al terminar todo.
 
 ### Orden de las historias
 
@@ -160,9 +161,9 @@ T011 enlaces.ts · T012 json-ld.ts · T013 EstatInscripcio · T014 BotoInscripci
 
 1. **MVP = US1** (T001–T024): página informativa + Forms. Se publica con B-02, sin esperar a A-14 ni a B-07. **Es lo que corre prisa antes del 20/12.**
 2. **US2 UI** con datos de prueba: se fusiona sin cambiar nada en producción (fuente `ninguna`).
-3. **US2 datos** (Saúl) en cuanto esté A-14; la activación es T037.
+3. **US2 datos** (Saúl) en cuanto esté A-14; la activación es T038.
 4. **US3** y **US4**, y el acabado.
 
 **Issues por zona** (después del PR de la spec):
 - **Pablo**: Foundational + US1; US2 UI; US3; US4 + acabado.
-- **Saúl**: T002–T003 y T024; US2 datos (T032–T037); T046.
+- **Saúl**: T002–T003 y T024; US2 datos (T033–T038); T047.

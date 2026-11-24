@@ -21,6 +21,7 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 ## Reglas
 
 1. Solo equipos con `estado = 'confirmado'`.
+1b. Solo eventos cuya lista no se ha retirado: `(now() at time zone 'Europe/Madrid')::date < eventos.ultima_jornada + 7` (FR-040). Desde el 10/01/2027, la vista no devuelve nada del torneo.
 2. **Menor**: `fecha_nacimiento` nula, o menos de 18 años cumplidos en `fecha_inscripcion`.
 3. Nombre público:
    - **menor** → primera palabra de `nombre`, después de quitar los espacios de los extremos;
@@ -49,4 +50,5 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 
 - Con la clave `anon`: `select * from equipos` y `select * from jugadores` fallan o no devuelven filas.
 - Con la clave `anon`: `select * from equipos_publicos` devuelve solo confirmados y solo las columnas de arriba.
+- Con `ultima_jornada` puesta en una fecha de hace 7 días o más, la vista no devuelve el evento; con hace 6 días, sí.
 - Se cargan los once casos de la tabla y se compara la salida con la columna `nombre_publico`.

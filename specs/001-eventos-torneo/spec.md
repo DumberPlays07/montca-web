@@ -124,6 +124,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **Cambio de estado a medianoche**: la apertura y el cierre se calculan en la hora de Madrid; el estado cambia en la fecha sin que nadie tenga que volver a publicar la web.
 - **Importación repetida**: al volver a ejecutar el script con la hoja actualizada, los equipos y jugadores ya importados no se duplican y los nuevos se añaden como pendientes.
 - **Jugador del Forms en una categoría que no le toca por año de nacimiento, o el mismo jugador dos veces**: el script lo señala en su informe y no lo resuelve solo; decide Montca.
+- **Retirada de la lista** (FR-040): el 09/01/2027 a las 23:59 la lista se ve; el 10/01/2027 a las 00:00 ya no se ve en la página ni la devuelve la fuente pública, sin que nadie publique la web. La página del evento sigue accesible con su información.
 - **Datos de prueba en producción**: nunca salen en la web publicada; solo en local y en las vistas previas, marcados de forma visible como prueba.
 - **Precio final pendiente**: se muestra "màxim 10 € per jugador" con la nota de que el precio final está pendiente; no se inventa una cifra.
 - **Normas del torneo aún no entregadas por Montca**: el apartado no sale (o sale con un texto de prueba marcado como tal en las vistas previas); no se inventan normas.
@@ -175,6 +176,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **FR-026**: La parte pública MUST NOT recibir ni contener ningún dato que no se muestre: ni apellidos de menores, ni DNI, fecha de nacimiento, teléfono, correo, origen, autorización ni estado de los equipos no confirmados. Esto se comprueba también en el código fuente de la página y en las respuestas que reciba el navegador, no solo en lo que se ve.
 - **FR-027**: Un equipo confirmado en los datos MUST aparecer en la página en 1 hora como máximo, sin cambiar código.
 - **FR-028**: Si la fuente de equipos no responde, la página MUST seguir mostrando la información del evento y el botón, con un aviso breve en lugar de la lista.
+- **FR-040**: "Equips inscrits" MUST retirarse de la web **una semana después de la última jornada** del evento (`docs/legal/tratamientos.md`, T7, y `privacidad.md`, 2.7): desde las 00:00 (hora de Madrid) del día que cae 7 días después de la última jornada. En este torneo, desde el **10/01/2027**. La fecha MUST calcularse a partir de las jornadas del evento, no escribirse a mano, para que sirva para el siguiente evento. Desde esa fecha, ni la página muestra ni pide la lista ni las plazas, **y la fuente pública de datos deja de devolver los equipos del evento**, porque ocultarlos solo en la página no basta: la clave pública permite pedirlos directamente. Los datos siguen en la base de datos hasta su borrado (T2 y T3, 03/04/2027), que no es parte de C-04.
 
 **Franja en la portada**
 

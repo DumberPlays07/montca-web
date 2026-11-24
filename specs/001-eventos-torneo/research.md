@@ -68,11 +68,13 @@ Decisiones técnicas tomadas para el plan. Cada una dice qué se elige, por qué
   - Si el CSV se lee con un analizador hecho a mano o con una librería. Las respuestas del Forms pueden llevar comas y comillas; si se usa una librería, se justifica en el PR (constitución VI).
   - Las columnas exactas del Forms (A-26): si pregunta el capitán y el dorsal, y cómo viene la autorización.
 
-## R6. Zona horaria y fechas (FR-012)
+## R6. Zona horaria y fechas (FR-012, FR-040)
 
 - **Decision**: las fechas del evento se guardan en ISO 8601 **con la diferencia horaria de Madrid escrita**. Por ejemplo, la apertura es `2026-11-25T00:00:00+01:00` y el cierre `2026-12-20T23:59:59+01:00`. El estado se calcula comparando instantes, sin librerías de fechas.
 - **Rationale**: en invierno Madrid va a +01:00 y todas las fechas del torneo caen en invierno. Comparar instantes funciona igual en el servidor y en cualquier navegador.
 - **Alternatives considered**: guardar fechas sin hora y convertir a Madrid con `Intl`, que es más código y más fácil de equivocar. El siguiente evento, si cae en verano, escribe `+02:00`. El esquema exige la diferencia horaria en las fechas.
+
+- **Retirada de la lista (FR-040)**: se calcula a partir de la fecha de la última jornada (`AAAA-MM-DD`) + 7 días, comparando con la fecha de hoy en Madrid obtenida con `Intl.DateTimeFormat` y `timeZone: 'Europe/Madrid'`. Funciona igual en verano y en invierno, sin librerías. En Supabase, lo mismo con `now() at time zone 'Europe/Madrid'`.
 
 ## R7. Pruebas automáticas sin librería nueva
 

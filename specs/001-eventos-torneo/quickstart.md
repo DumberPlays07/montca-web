@@ -23,6 +23,7 @@ Tiene que pasar:
   - `cerradaAMano` → `tancades`;
   - las dos categorías llenas → `completes`; una sola llena → `obertes`;
   - sin recuento nunca da `completes`.
+- `listaRetirada`: con la hora de Madrid, el 09/01/2027 a las 23:59 → `false`; el 10/01/2027 a las 00:00 → `true`; un evento de verano (+02:00) con la última jornada el 05/07 → `true` desde el 12/07 a las 00:00.
 - Vista pública: los once casos de [contracts/vista-publica.md](contracts/vista-publica.md).
 - Datos de prueba: con las filas de [data-model.md](data-model.md) §5 solo salen los dos equipos confirmados, y las plazas libres son 7/8 y 5/6.
 
@@ -58,7 +59,8 @@ PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 4. **Privacidad (SC-003)**: en el HTML servido (Ver código fuente) y en la pestaña Red, buscar los apellidos de las filas de prueba y "Les Cabretes" → 0 resultados.
 5. Ver una categoría llena (cambiar `maxEquipos` a 1 en local) → "Completa" y el texto de la lista de espera, con el botón visible. Las dos llenas → estado "completes".
 6. Ver el error: `PUBLIC_FUENTE_EQUIPOS=supabase` con una URL falsa → aviso de una línea y el resto de la página intacto.
-7. Build de producción con datos de prueba: `CONTEXT=production PUBLIC_FUENTE_EQUIPOS=prueba npm run build` **tiene que fallar**.
+7. Lista retirada: con la última jornada del YAML puesta (en local) en una fecha de hace 7 días, no salen ni la lista ni las plazas, y la pestaña Red no muestra ninguna petición de equipos.
+8. Build de producción con datos de prueba: `CONTEXT=production PUBLIC_FUENTE_EQUIPOS=prueba npm run build` **tiene que fallar**.
 
 ## 4. Franja de la portada (US3)
 

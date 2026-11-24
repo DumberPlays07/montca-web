@@ -57,17 +57,27 @@ en otro caso                                  → obertes
 - Sin recuento (fuente `ninguna`): solo cuentan las fechas y el cierre a mano. Nunca da `completes`.
 - Por categoría: `placesLliures = maxEquipos − confirmados` (nunca negativo); `completa = placesLliures === 0`.
 - Evento pasado (para la lista de Eventos): `ahora` posterior al final del día de la última jornada.
+- **Lista retirada** (FR-040): `listaRetirada(evento, ahora)` es verdadero cuando la fecha de hoy **en Madrid** (`Intl` con `timeZone: 'Europe/Madrid'`, sin librerías) es igual o posterior a última jornada + 7 días. Torneo: desde el `2027-01-10`. Con la lista retirada no se muestran ni la lista ni las plazas, y no se piden los equipos.
 
 ## 3. Supabase (Saúl, con A-14)
 
 Los nombres son orientativos y los fija Saúl. Lo que no se puede cambiar es lo que pide la spec: origen, forma de entrega de la autorización y estado.
+
+### `eventos`
+
+| Columna | Tipo | Regla |
+|---|---|---|
+| `id` | text, clave | = `id` del YAML (`torneig-nadal-2026`) |
+| `ultima_jornada` | date | = la última `jornadas[].fecha` del YAML. Saúl la copia al dar de alta el evento; la comprobación del quickstart §6 mira que coincidan |
+
+Solo existe para que la vista sepa cuándo dejar de publicar (FR-040). Los datos públicos del evento siguen en el YAML.
 
 ### `equipos`
 
 | Columna | Tipo | Regla |
 |---|---|---|
 | `id` | uuid | clave |
-| `evento` | text | = `id` del YAML (`torneig-nadal-2026`) |
+| `evento` | text → `eventos.id` | = `id` del YAML (`torneig-nadal-2026`) |
 | `categoria` | text | = `categorias[].id` del YAML |
 | `nombre` | text | Tal como se muestra |
 | `nombre_normalizado` | text | Minúsculas, sin tildes y con los espacios unificados. Único por `(evento, categoria, nombre_normalizado)` |
@@ -97,7 +107,7 @@ RLS activada en las dos tablas, sin políticas para `anon`.
 
 ### Vista `equipos_publicos` (contrato en [contracts/vista-publica.md](contracts/vista-publica.md))
 
-Una fila por equipo **confirmado**: `evento`, `categoria`, `nombre`, `jugadores` (lista JSON de `{ nombre_publico, dorsal, es_capitan }`). `anon` solo tiene `select` sobre esta vista.
+Una fila por equipo **confirmado** de un evento cuya lista no se ha retirado (hoy en Madrid < `ultima_jornada` + 7 días): `evento`, `categoria`, `nombre`, `jugadores` (lista JSON de `{ nombre_publico, dorsal, es_capitan }`). `anon` solo tiene `select` sobre esta vista.
 
 ## 4. Tipos del navegador (Pablo, ya)
 
