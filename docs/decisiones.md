@@ -93,14 +93,14 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-19 | Dorsal obligatorio, del **1 al 99**, sin repetirse dentro del mismo equipo | Definido por Saúl | Acordada |
 | 2026-11-19 | Las autorizaciones en papel se dejan en **Softco** (servicio de paquetería), que las guarda hasta que las recoge alguien de Montca | Buena relación de Montca con el dueño | Acordada |
 | 2026-11-19 | Saúl y Pablo acceden a Supabase como miembros del proyecto de Montca, con un compromiso de confidencialidad | Hace falta acceso para desarrollar y mantener; los datos son de Montca | Acordada |
-| 2026-11-19 | Constitución **v2.0.0**, principio IV: el tutor autoriza la participación y la imagen es opcional; se prefieren servidores de la UE, pero se admiten fuera si la transferencia tiene una garantía válida y consta en la privacidad | Alinear la constitución con las decisiones del 2026-11-18 y con Google y Netlify | Por confirmar (Pablo, en el PR) |
+| 2026-11-19 | Constitución **v2.0.0**, principio IV: el tutor autoriza la participación y la imagen es opcional; se prefieren servidores de la UE, pero se admiten fuera si la transferencia tiene una garantía válida y consta en la privacidad | Alinear la constitución con las decisiones del 2026-11-18 y con Google y Netlify | Acordada (Pablo la aprueba en el PR #54) |
 | 2026-11-19 | El permiso de imagen cubre solo fotos y vídeos **del evento** en el que se inscribe, publicados en la web, Instagram y TikTok. **No se nombra ni etiqueta a nadie** | Definido por Saúl | Acordada |
 | 2026-11-19 | La autorización del tutor no incluye declaración de salud ni autorización para decisiones médicas urgentes, salvo que Montca lo pida | Serían datos de salud, que no se tratan; es decisión de Montca | Acordada |
 | 2026-11-19 | La autorización del tutor tiene también versión en papel, con los mismos textos que la web | Las inscripciones abren antes de que esté la web | Acordada |
 | 2026-11-19 | **Sin cookies que necesiten consentimiento y sin banner de cookies**: la web no usa analítica, publicidad ni contenido de terceros; solo la sesión de la gestión, que es técnica | La ley no exige consentimiento para lo técnico; un banner sin motivo molesta | Acordada |
 | 2026-11-19 | Antes de añadir **cualquier cosa de terceros** (analítica, vídeos o publicaciones incrustadas, mapas incrustados, fuentes externas) se revisa la política de cookies y, si hace falta, se pone el banner (B-15) | Que la política siga siendo cierta | Acordada |
 | 2026-11-19 | El idioma va **solo en la dirección de la página** (`/es/...`); no se guarda la preferencia en el navegador | B-07 ya usa rutas por idioma y así no se guarda nada en el dispositivo | Acordada |
-| 2026-11-19 | Las **fuentes tipográficas se alojan en la propia web**, nunca desde Google Fonts u otro servidor externo | Cargarlas de fuera envía la IP de cada visita a un tercero | Por confirmar (Pablo, en el PR) |
+| 2026-11-19 | Las **fuentes tipográficas se alojan en la propia web**, nunca desde Google Fonts u otro servidor externo | Cargarlas de fuera envía la IP de cada visita a un tercero | Acordada (Pablo la aprueba en el PR #59; ya funciona así con Fontsource) |
 
 ## 4. Forma de trabajar
 
