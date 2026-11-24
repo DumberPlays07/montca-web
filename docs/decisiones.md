@@ -120,6 +120,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-15 | Limpieza del repo por consenso: lo que no se use se elimina                                                                                                                                                                | No acumular basura                                        | Acordada                                       |
 | 2026-11-17 | Constitución v1.0.0 en `.specify/memory/constitution.md`                                                                                                                                                                   | Reglas comunes para los dos Claudes; incluye los cambios de la revisión de Saúl | Acordada                                       |
 | 2026-11-16 | Los PR #4, #5 y #6 se fusionaron sin revisión como excepción; a partir de ahora, siempre con revisión                                                                                                                      | Saúl no podía revisar y eran cambios de configuración y del repaso común; Saúl los revisó después | Acordada                                       |
+| 2026-11-24 | Los PR #67, #69, #71 y #72 los revisa y fusiona Pablo sin esperar a Saúl, como excepción; Saúl los revisa después y lo que vea se arregla en PR nuevos | Saúl está enfermo y el torneo corre prisa (Montca inscribe desde el 25/11) | Acordada (Saúl, por WhatsApp) |
 
 ## 5. Pendiente de decidir
 
