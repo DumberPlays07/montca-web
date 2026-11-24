@@ -86,10 +86,12 @@ const { precio } = evento;
 		gap: var(--espacio-4);
 	}
 
+	/* Con el texto ampliado, la segunda parte baja entera en vez de partir "Montca Sports". */
 	.kicker {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.4em;
+		gap: 0 0.4em;
 		margin: 0;
 		color: var(--color-verd-fulla);
 		font-size: 0.875rem;
@@ -140,7 +142,6 @@ const { precio } = evento;
 		height: 0.14em;
 		margin: 0 0.12em;
 		background: currentColor;
-		border-radius: 1px;
 	}
 
 	.dia {
