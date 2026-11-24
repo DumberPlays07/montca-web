@@ -85,6 +85,7 @@ const imageUrl = new URL(imagenCompartir.src, Astro.site ?? Astro.url).href;
 		<meta property="og:image:height" content={String(altoCompartir)} />
 		<meta property="og:image:alt" content={imageAlt[lang]} />
 		<title>{title}</title>
+		<slot name="head" />
 	</head>
 	<body>
 		<Cabecera lang={lang} />
