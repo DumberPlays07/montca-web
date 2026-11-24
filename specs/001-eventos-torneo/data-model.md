@@ -94,7 +94,7 @@ Solo existe para que la vista sepa cuándo dejar de publicar (FR-040). Los datos
 | `nombre`, `apellidos` | text | |
 | `fecha_nacimiento` | date, puede ser nula | Nula ⇒ se trata como menor |
 | `fecha_inscripcion` | timestamptz | La "Marca temporal" del Forms o el momento del alta web. Decide si era menor (FR-023) |
-| `dorsal` | entero, puede ser nulo | Opcional (clarify) |
+| `dorsal` | entero, puede ser nulo | Del **1 al 99** y sin repetir dentro del equipo (único por `(equipo_id, dorsal)` cuando no es nulo). **Obligatorio si `origen = web`** (C-05, `docs/legal/tratamientos.md` T2/T3); **opcional si `origen = forms`** |
 | `es_capitan` | boolean | Como mucho uno por equipo |
 | `origen` | enum `forms` \| `web` | FR-031 |
 | `autorizacion_entrega` | enum `papel` \| `softco` \| `casilla_web`, puede ser nula | Solo menores (FR-032) |
