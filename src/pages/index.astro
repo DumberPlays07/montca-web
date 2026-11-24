@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-// TODO: sustituir por la imagen para compartir definitiva cuando llegue el logo (A-07, B-14).
-const SHARE_IMAGE = '/favicon.svg';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../components/imagen-compartir';
 ---
 
 <BaseLayout
 	title="Montca Actiu"
 	description="Associació juvenil i esportiva de Cocentaina: activitats a la Serra de Mariola."
-	image={SHARE_IMAGE}
+	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
+	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
 >
 	<main>
 		<h1>Montca Actiu</h1>

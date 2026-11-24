@@ -47,6 +47,7 @@ const textos = {
 		privacidad: 'Privacitat',
 		cookies: 'Cookies',
 		volver: 'Tornar',
+		altImagenCompartir: 'Mapa il·lustrat de la Serra de Mariola, amb Cocentaina al peu de la serra.',
 	},
 	es: {
 		saltarAlContenido: 'Saltar al contenido',
@@ -78,6 +79,7 @@ const textos = {
 		privacidad: 'Privacidad',
 		cookies: 'Cookies',
 		volver: 'Volver',
+		altImagenCompartir: 'Mapa ilustrado de la Serra de Mariola, con Cocentaina al pie de la sierra.',
 	},
 } as const;
 
@@ -86,6 +88,11 @@ export type ClaveTexto = keyof (typeof textos)['ca'];
 /** Devuelve el texto de `clave` en el idioma pedido. */
 export function t(lang: Idioma, clave: ClaveTexto): string {
 	return textos[lang][clave];
+}
+
+/** Devuelve el texto de `clave` en los dos idiomas (por ejemplo, para un texto alternativo). */
+export function textoEnLosDosIdiomas(clave: ClaveTexto): Record<Idioma, string> {
+	return { ca: textos.ca[clave], es: textos.es[clave] };
 }
 
 /** Rutas en valenciano, que es el idioma por defecto (sin prefijo). */
