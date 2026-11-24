@@ -1,0 +1,117 @@
+---
+/**
+ * Botón "Inscriure's" de un evento (C-04, FR-016 a FR-019).
+ *
+ * - Con dirección de inscripción: botón teja que la abre y, en modo "canal de Montca",
+ *   la nota de cómo funciona la inscripción (FR-018).
+ * - Sin dirección: en su lugar, cómo escribir a Montca para apuntarse (WhatsApp o, sin
+ *   número, correo). Nunca un botón roto (FR-019).
+ *
+ * Con "pròximament" o "tancades" no se muestra: sale con `hidden` y `eventos-cliente.ts`
+ * lo muestra u oculta según el estado del momento.
+ */
+import Icono from '../Icono.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from '../contacto';
+import { type EstadoInscripcion } from '../../lib/eventos/estado';
+import { destinoInscripcion } from '../../lib/eventos/enlaces';
+import type { Idioma } from '../textos-navegacion';
+import { rellenar, t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	estado: EstadoInscripcion;
+	nombreEvento: string;
+	inscripcion: {
+		modo: 'canal-montca' | 'web';
+		url: string;
+		nota?: { ca: string; es: string };
+	};
+}
+
+const { lang, estado, nombreEvento, inscripcion } = Astro.props;
+
+const ESTADOS_CON_BOTON: EstadoInscripcion[] = ['obertes', 'completes'];
+const destino = destinoInscripcion({ inscripcion });
+const esExterno = destino !== null && /^https?:\/\//.test(destino);
+const nota = inscripcion.modo === 'canal-montca' ? inscripcion.nota?.[lang] : undefined;
+
+const enlaceWhatsapp = urlWhatsapp(
+	lang,
+	undefined,
+	rellenar(t(lang, 'mensajeWhatsappEvento'), { evento: nombreEvento }),
+);
+const asuntoCorreo = rellenar(t(lang, 'asuntoCorreoEvento'), { evento: nombreEvento });
+const enlaceCorreo = `mailto:${CORREO_CONTACTO}?subject=${encodeURIComponent(asuntoCorreo)}`;
+---
+
+<div class="inscripcio" data-boto-inscripcio hidden={!ESTADOS_CON_BOTON.includes(estado)}>
+	{
+		destino !== null ? (
+			<>
+				<a
+					class="boton-inscripcion"
+					href={destino}
+					target={esExterno ? '_blank' : undefined}
+					rel={esExterno ? 'noopener' : undefined}
+				>
+					{t(lang, 'inscriure')}
+					{esExterno && <span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>}
+				</a>
+				{nota && <p class="nota">{nota}</p>}
+			</>
+		) : (
+			<>
+				<a
+					class="boton-inscripcion"
+					href={enlaceWhatsapp ?? enlaceCorreo}
+					target={enlaceWhatsapp !== null ? '_blank' : undefined}
+					rel={enlaceWhatsapp !== null ? 'noopener' : undefined}
+				>
+					<Icono nombre={enlaceWhatsapp !== null ? 'whatsapp' : 'correo'} />
+					{t(lang, 'escribenosParaApuntarte')}
+					{enlaceWhatsapp !== null && <span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>}
+				</a>
+				<p class="nota">{t(lang, 'respuestaEnMenosDe24h')}</p>
+			</>
+		)
+	}
+</div>
+
+<style>
+	.inscripcio[hidden] {
+		display: none;
+	}
+
+	/* Botón primario de DESIGN.md a todo el ancho: la acción de la página. */
+	.boton-inscripcion {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--espacio-2);
+		width: 100%;
+		min-height: 3rem;
+		padding: var(--espacio-2) var(--espacio-6);
+		background: var(--color-teula);
+		color: var(--color-blanco);
+		font-size: 1.0625rem;
+		font-weight: 600;
+		text-align: center;
+		text-decoration: none;
+		border-radius: var(--radio-boton);
+		transition: background-color var(--transicion);
+	}
+
+	.boton-inscripcion:hover,
+	.boton-inscripcion:active {
+		background: var(--color-teula-fosca);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	.nota {
+		max-width: 60ch;
+		margin: var(--espacio-2) 0 0;
+		font-size: 1rem;
+		line-height: 1.45;
+	}
+</style>

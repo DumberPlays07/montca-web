@@ -1,0 +1,72 @@
+---
+/**
+ * Lugar de un evento con el enlace "Com arribar" a Google Maps (C-04, FR-007).
+ * Sin mapa incrustado: no se carga nada de Google hasta que se pulsa (decisión del 15/11).
+ */
+import Icono from '../Icono.astro';
+import { type LugarEvento, urlComArribar } from '../../lib/eventos/enlaces';
+import type { Idioma } from '../textos-navegacion';
+import { t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	lugar: LugarEvento;
+}
+
+const { lang, lugar } = Astro.props;
+---
+
+<div class="lloc">
+	<p class="nombre-lugar">
+		<Icono nombre="lugar" clase="icono-lugar" />
+		<span><span class="solo-lector">{t(lang, 'lloc')}: </span>{lugar.nombre}</span>
+	</p>
+	<a class="com-arribar" href={urlComArribar(lugar)} target="_blank" rel="noopener">
+		<span>{t(lang, 'comArribar')}</span>
+		<Icono nombre="externo" />
+		<span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>
+	</a>
+</div>
+
+<style>
+	.lloc {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0 var(--espacio-4);
+	}
+
+	.nombre-lugar {
+		display: flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		margin: 0;
+		font-weight: 600;
+	}
+
+	.nombre-lugar :global(.icono-lugar) {
+		color: var(--color-verd-fulla);
+	}
+
+	/* Verd bosc y no teja: en la primera pantalla la teja ya está en el estado y en
+	   Inscriure's, y la regla "Paint Mark" de DESIGN.md admite dos como mucho. */
+	.com-arribar {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-1);
+		min-height: var(--zona-tactil);
+		color: var(--color-verd-bosc);
+		font-weight: 600;
+		text-decoration: underline;
+	}
+
+	.com-arribar :global(.icono) {
+		width: 1.125rem;
+		height: 1.125rem;
+	}
+
+	.com-arribar:hover {
+		text-decoration-thickness: 2px;
+	}
+</style>
