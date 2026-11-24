@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-24 (B-09 acabada; B-10 en PR; borradores legales de A-17, A-18 y A-19 en PR; Montca inscribe por Google Forms mientras no esté la web). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-24 (B-09 acabada; B-10 en PR; Montca inscribe por Google Forms desde el 25/11 mientras no esté la web; registro de tratamientos (A-19) y borradores legales de A-17 y A-18 fusionados). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -11,7 +11,7 @@ Cada tarea está clasificada por **cómo se hace**:
 
 Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medio día) · L (un día o más).
 
-Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una tarea se cambia aquí mismo, en su fila.
+Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No aplica. Al acabar una tarea se cambia aquí mismo, en su fila.
 
 > **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. Como la web no llega, Montca inscribe con un **Google Forms** propio (mismos datos que C-05; autorización del tutor en papel o por Softco); cuando esté la inscripción por la web, se podrá usar también. Los equipos del Forms se importan después a la base de datos: **nunca al repo**. El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
 
@@ -37,7 +37,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             | ✅ Acabada: el teléfono de contacto y el domicilio son los de Iker, según Montca (datos en el Drive) |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       | ✅ Acabada: las del torneo, en [info-montca.md](info-montca.md). Las de escuelas/AMPA se añaden cuando se haga B-11 |
 | A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       | ⬜ Pendiente |
-| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma | S         | C-05, C-06, B-08 | 🟡 Empezada: hasta que esté la web se apuntan por Google Forms (mismos datos que C-05) y la autorización se entrega en papel o por Softco. Falta: precio final y pago, quién confirma equipos, si la casilla del tutor sustituye a la firma, cómo se agrupan los jugadores en equipos en el Forms |
+| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | 🟡 Empezada: hasta que esté la web se apuntan por Google Forms (mismos datos que C-05) y la autorización se entrega en papel o por Softco. Falta: precio final y pago, quién confirma equipos, si la casilla del tutor sustituye a la firma, cómo se agrupan los jugadores en equipos en el Forms, y lo del seguro (aseguradora, datos que se le pasan, menores de 14 sin DNI) |
 
 ### A2. Cuentas e infraestructura
 
@@ -56,9 +56,9 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 
 | ID   | Tarea                                                                                                                   | Quién | Notas                                      | Estado |
 | ---- | ----------------------------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------ | ------ |
-| A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad (PR #56) y cookies (PR #59); falta el aviso legal y la revisión |
-| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en PR #58 |
-| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | 🟡 Empezada: registro de tratamientos en PR #54 |
+| A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad, capas de los formularios y cookies en [legal/](legal/), pendientes de la revisión legal de Montca; falta el aviso legal |
+| A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en [legal/consentimientos.md](legal/consentimientos.md), pendiente de la revisión legal de Montca |
+| A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
 
 ### A4. Equipo (Saúl + Pablo)
 
@@ -82,17 +82,17 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 | B-04 | Escribir la constitución (`/speckit-constitution`) y actualizar `CLAUDE.md` con el flujo nuevo                                                                                                                                                                                                                          | S + P               | M     | Spec Kit           | B-03                   | ✅ Acabada (#7) |
 | B-05 | Mover los hooks de Impeccable de `settings.local.json` a `.claude/settings.json` para que los tengamos los dos                                                                                                                                                                                                          | P                   | S     | Claude Code        | —                      | ✅ Acabada (#4) |
 | B-06 | `/impeccable init` → PRODUCT.md y DESIGN.md                                                                                                                                                                                                                                                                             | P                   | M     | Impeccable         | A-07                   | ✅ Acabada (#3) |
-| B-07 | i18n VAL/CAST: rutas, diccionarios en `src/i18n`, selector de idioma                                                                                                                                                                                                                                                    | S                   | M     | Astro i18n         | B-01                   | ⬜ Pendiente |
-| B-08 | Páginas legales (aviso legal, privacidad, cookies) y enlaces en el pie. **Aviso:** el aviso legal tiene que llevar el domicilio (art. 10 LSSI); está en el documento de Drive y se mete al hacer esta tarea                                                                                                                                                                                                                                                  | S                   | S     | Astro              | A-17                   | ⬜ Pendiente |
+| B-07 | i18n VAL/CAST: rutas, diccionarios en `src/i18n`, selector de idioma. El idioma va solo en la ruta; no se guarda en el navegador                                                                                                                                                                                                                                                    | S                   | M     | Astro i18n         | B-01                   | ⬜ Pendiente |
+| B-08 | Páginas legales (aviso legal, privacidad, cookies) y enlaces en el pie. **Aviso:** el aviso legal tiene que llevar el domicilio (art. 10 LSSI); está en el documento de Drive y se mete al hacer esta tarea; ajustar los enlaces internos de los textos legales (/privacidad, /aviso-legal) a las rutas por idioma de B-07                                                                                                                                                                                                                                                  | S                   | S     | Astro              | A-17                   | ⬜ Pendiente |
 | B-09 | Menú fijo, pie y barra inferior en móvil (Agenda · Activitats · WhatsApp); enlace "← tornar" en fichas y eventos (sin migas de pan). Con esta primera pieza visual sale también `DESIGN.md` (no lo crea `/impeccable init`)                                                                                         | P                   | M     | Astro + Impeccable | B-06                   | ✅ Acabada (#66) |
 | B-10 | Botón de WhatsApp siempre visible (`wa.me` con mensaje escrito)                                                                                                                                                                                                                                                         | P                   | S     | Astro              | B-09                   | 🟡 Empezada: PR #67; falta el número de WhatsApp (A-24) |
 | B-11 | Páginas informativas: Qui som (con foto de equipo), Contacte, Escoles i AMPA (parte informativa y preguntas frecuentes)                                                                                                                                                                                                 | P (UI) + S (textos) | M     | Astro              | B-07, B-09, A-07, A-23 | ⬜ Pendiente |
 | B-12 | Imágenes optimizadas con `<Image>` de Astro; nada de fotos incrustadas en el HTML                                                                                                                                                                                                                                       | P                   | S     | Astro              | A-07                   | ⬜ Pendiente |
 | B-13 | Cuenta atrás de Montca Sports / próximo evento ("Properament" si no hay fecha)                                                                                                                                                                                                                                          | P                   | S     | Astro              | C-04                   | ⬜ Pendiente |
 | B-14 | SEO técnico: sitemap, `hreflang`, robots (`noindex` en la gestión de Montca y en los enlaces de equipo), schema `SportsOrganization` (o `LocalBusiness` si hay local abierto al público) y `Event` para el torneo, imagen para compartir por defecto y la del torneo. Título y descripción por página ya vienen de B-01 | S                   | M     | Astro              | B-07, A-12             | ⬜ Pendiente |
-| B-15 | Aviso de cookies (solo si se usa algo que lo exija: analítica, embeds de Instagram)                                                                                                                                                                                                                                     | S                   | S     | Astro              | A-17                   | ⬜ Pendiente |
+| B-15 | Aviso de cookies (solo si se usa algo que lo exija: analítica, embeds de Instagram)                                                                                                                                                                                                                                     | S                   | S     | Astro              | A-17                   | ➖ No aplica: la web no usa cookies que necesiten consentimiento (decisiones.md, sección 3). Se reabre si se añade algo de terceros |
 | B-16 | Página Repte 5 Cims (informativa)                                                                                                                                                                                                                                                                                       | P                   | M     | Astro              | A-09                   | ⬜ Pendiente |
-| B-17 | Revisión final antes de publicar: `/impeccable audit` + `polish`, enlaces rotos, móvil                                                                                                                                                                                                                                  | P + S               | M     | Impeccable         | Todo                   | ⬜ Pendiente |
+| B-17 | Revisión final antes de publicar: `/impeccable audit` + `polish`, enlaces rotos, móvil; comprobar en las herramientas del navegador que las páginas públicas no guardan cookies ni datos                                                                                                                                                                                                                                  | P + S               | M     | Impeccable         | Todo                   | ⬜ Pendiente |
 
 ---
 
@@ -140,7 +140,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 - Apartado "Equips inscrits": aparece cuando hay al menos un equipo **confirmado** (los pendientes no salen); separado en dos categorías: **Infantil/Cadet** y **Juvenil/Sènior**.
 - Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
 - Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
-- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los menores, solo el primer nombre, sin apellidos.
+- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los adultos, nombre y primer apellido; de los menores, solo el primer nombre. La lista se quita de la web una semana después del torneo.
 - Pensado para reutilizarse con el siguiente evento sin reprogramar.
 - Mientras las inscripciones estén abiertas, franja del torneo en lo alto de la portada, visible sin hacer scroll.
 - Preguntas frecuentes en la página del torneo: el texto está en [info-montca.md](info-montca.md).
@@ -149,8 +149,8 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 **C-05 · Inscripción de equipos** (diseño de Saúl del 2026-11-18; los casos raros se cierran en `clarify`)
 - Cualquier jugador puede crear un equipo; quien lo crea queda como **administrador del equipo**.
 - Lo primero que se pregunta es la **edad**: mayor de edad → formulario de adultos; menor → formulario de menores (uno solo para todos los menores, sin distinguir categoría).
-- **Adultos**: nombre y apellidos, DNI, fecha de nacimiento, teléfono, correo, casilla de derechos de imagen (opcional) y casilla para recibir información de otras actividades (opcional).
-- **Menores**: nombre y apellidos, DNI y fecha de nacimiento del menor; datos del tutor legal (los mismos que en adultos); casilla de derechos de imagen del menor (opcional); casilla para recibir información de otras actividades en el correo del tutor (opcional); **autorización del tutor para que el menor participe, la única casilla obligatoria**.
+- **Adultos**: nombre y apellidos, DNI, fecha de nacimiento, correo, dorsal, teléfono (solo si es el administrador del equipo, y entonces obligatorio), casilla de derechos de imagen (opcional) y casilla para recibir información de otras actividades (opcional).
+- **Menores**: nombre y apellidos, DNI, fecha de nacimiento y dorsal del menor; teléfono y correo del menor (solo si es el administrador del equipo, y entonces obligatorios); datos del tutor legal (nombre y apellidos, DNI, fecha de nacimiento para comprobar que es mayor de edad, teléfono y correo); casilla de derechos de imagen del menor (opcional); casilla para recibir información de otras actividades en el correo del tutor (opcional); **autorización del tutor para que el menor participe, la única casilla obligatoria**.
 - La casilla de imagen es una sola en cada formulario (en el de menores, sin separar por edad). Se guarda si cada jugador la ha marcado, para la lista de C-06.
 - Al crear el equipo, el administrador recibe **por correo un enlace único del equipo** para pasarlo a quien quiera. **Solo se entra en un equipo con ese enlace.** Quien entra sigue los mismos pasos: edad → formulario de adulto o de menor.
 - Categoría por año de nacimiento: **Infantil/Cadet** 2011–2014 · **Juvenil/Sènior** 2010 o antes. Hay menores en las dos.
@@ -158,12 +158,12 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente. Al acabar una
 - Estados: **pendiente** (no llega al mínimo o falta la revisión de Montca) → **confirmado** (llega al mínimo y Montca lo revisa). Solo los confirmados ocupan plaza y salen en la web. Con las plazas llenas, los demás equipos van a **lista de espera**.
 - Página de confirmación tras crear el equipo: dice que el enlace llega por correo. Otra más sencilla para cada jugador que se apunta.
 - Las páginas con enlace de equipo no se indexan (`noindex`).
-- Dorsal: estaba previsto pedirlo y mostrarlo en la página del equipo, pero no está en la lista de campos del 2026-11-18. Confirmar si se mantiene.
+- Dorsal obligatorio, del 1 al 99, sin repetirse dentro del equipo; se muestra junto al nombre del jugador.
+- El administrador del equipo no ve los datos de sus jugadores, solo lo que ve todo el mundo.
 - Casos a resolver en `clarify`:
   - Equipo que no llega al mínimo antes del cierre.
   - Enlace reenviado a desconocidos.
   - Jugador que se borra.
-  - Administrador menor de edad: ¿el correo con el enlace va al tutor?
   - Jugador nacido en un año que no es de la categoría del equipo.
   - El mismo DNI en dos equipos.
   - Menores de 14 sin DNI.
