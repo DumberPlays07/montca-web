@@ -118,7 +118,7 @@ type ResultadoEquipos =
 |---|---|---|---|---|
 | Infantil/Cadet | "Prova · Els Falcons" | confirmado | forms | menores con nombre compuesto ("Maria José" → "Maria"), dorsal en unos sí y en otros no, capitán, un menor **sin** autorización (no sale) |
 | Infantil/Cadet | "Prova · Les Cabretes" | pendiente | web | no sale y no cuenta para las plazas |
-| Juvenil/Sènior | "Prova · Mariola Bàsquet Club Amb Un Nom Molt Llarg" | confirmado | web | adultos ("Marc G."), un menor nacido en 2010 (solo el nombre), sin fecha de nacimiento (se trata como menor), nombre largo |
+| Juvenil/Sènior | "Prova · Mariola Bàsquet Club Amb Un Nom Molt Llarg" | confirmado | web | adultos ("Marc García"; uno con apellido "de la Fuente"), un menor nacido en 2010 (solo el nombre), sin fecha de nacimiento (se trata como menor), nombre largo |
 | Juvenil/Sènior | "Prova · Cocentaina Pàdel" | pendiente | forms | no sale |
 
 Todos los nombres de equipo empiezan por "Prova ·", así que se ven como prueba en la página (constitución III).

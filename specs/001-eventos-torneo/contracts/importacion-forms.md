@@ -19,7 +19,7 @@ node scripts/importar-forms/importar.ts --evento torneig-nadal-2026 --csv /ruta/
 6. **Capitán**: quien lo marque en el Forms; si nadie lo marca, la primera respuesta (la de "Marca temporal" más antigua) del equipo.
 7. **Autorización** de los menores: `autorizacion_entrega` es `papel` o `softco` según la respuesta o lo que diga Montca. `autorizacion_registrada` vale `false` hasta que Montca confirme que la ha recibido (C-06; mientras tanto, a mano en Supabase).
 8. **Repetible**: cada jugador lleva una `clave_importacion` estable, sacada de la "Marca temporal" y del correo o DNI de la respuesta (se guarda un *hash*, no el dato). Si se vuelve a ejecutar, se actualizan las filas existentes, no se duplican, y nunca se cambia el `estado` de un equipo.
-9. **Informe** en pantalla, sin datos personales completos (solo nombre e inicial):
+9. **Informe** en pantalla, sin datos personales completos (solo el nombre público, como en la web):
    - equipos nuevos y jugadores nuevos o actualizados;
    - nombres de equipo parecidos;
    - jugadores fuera del año de su categoría;

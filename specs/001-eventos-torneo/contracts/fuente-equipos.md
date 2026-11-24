@@ -17,7 +17,7 @@ interface FuenteEquipos {
 ## Garantías que da toda implementación
 
 1. Solo devuelve equipos **confirmados** del evento pedido.
-2. Cada `nombrePublico` ya viene calculado: primer nombre si es menor; nombre e inicial del primer apellido con punto si es adulto. La UI **no** recorta nombres.
+2. Cada `nombrePublico` ya viene calculado: primer nombre si es menor; nombre y primer apellido si es adulto. La UI **no** recorta nombres.
 3. No devuelve menores sin autorización registrada.
 4. No devuelve ningún otro campo: ni apellidos, ni fechas, ni origen, ni estado, ni contacto.
 5. `categoria` es uno de los `categorias[].id` del YAML del evento. Si llega uno desconocido, la UI lo ignora y deja un aviso en la consola de desarrollo.

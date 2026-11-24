@@ -27,7 +27,7 @@
 - Q: ¿La página sale ya en las dos lenguas o solo en valenciano hasta B-07? → A: En las dos ya. El selector VAL / CAST que ya tiene la Cabecera cambia todo el texto de valenciano a castellano y al revés. No hay botones de idioma dentro de la página.
 - Q: ¿Qué se ve en "Equips inscrits" cuando aún no hay ningún equipo confirmado? → A: La lista no sale, pero sí las plazas libres por categoría con un texto que anima a apuntarse ("Sigues el primer!") y el botón.
 - Q: ¿Cómo se ve una categoría llena con lista de espera? → A: La categoría pone "Completa" con el texto "Pots apuntar-te a la llista d'espera", y el botón sigue. Los equipos en espera no salen ni se cuentan en la web. Mientras la inscripción por la web no esté lista, el botón de una categoría completa lleva igualmente al Google Forms, y la lista de espera la gestiona Montca. **Pendiente de confirmar con Montca (A-26).**
-- Q: ¿Qué se muestra de los jugadores adultos? → A: Nombre e inicial del primer apellido ("Marc G."). **Cambia la decisión del 15/11 de `docs/decisiones.md` ("nombres de los jugadores"): pendiente de aprobación de Saúl en el PR de la spec.**
+- Q: ¿Qué se muestra de los jugadores adultos? → A: Nombre y primer apellido ("Marc García"), como dicen `docs/legal/tratamientos.md` (T7), `docs/legal/privacidad.md` (2.7) y la decisión del 19/11 de `docs/decisiones.md`. (En la primera sesión del clarify se había propuesto "Marc G."; se descarta para coincidir con los textos legales ya aprobados.)
 - Q (`shape`): ¿Dónde entra "Esdeveniments" en el menú? → A: En el menú móvil y en el pie y, en escritorio, en el lugar de "Montca Sports". La barra inferior no cambia. La clave nueva va en `src/components/textos-navegacion.ts` (provisional hasta B-07), sin tocar `src/i18n`.
 - Q (`shape`): ¿Qué estructura tiene la primera pantalla de la página del torneo? → A: "Cartell de les dues jornades" (diseño en [diseno.md](diseno.md)).
 
@@ -69,7 +69,7 @@ Quien ya se ha apuntado quiere comprobar que su equipo sale y quién más juega;
 2. **Given** Infantil/Cadet tiene sus 8 equipos confirmados y Juvenil/Sènior aún tiene plazas, **When** abro la página, **Then** Infantil/Cadet pone "Completa" con el texto de que se puede entrar en la lista de espera, Juvenil/Sènior muestra sus plazas libres y el botón "Inscriure's" sigue visible. Los equipos en lista de espera no salen.
 3. **Given** hay un equipo confirmado y otro pendiente en Infantil/Cadet, **When** abro la página, **Then** en Infantil/Cadet sale solo el confirmado y las plazas libres son 7 de 8.
 4. **Given** un equipo confirmado del formulario de Montca y otro confirmado de la web en Juvenil/Sènior, **When** abro la página, **Then** los dos salen con el mismo aspecto, sin ninguna marca de origen, y los dos cuentan para las plazas (quedan 4 de 6).
-5. **Given** un equipo confirmado con un jugador menor de edad y uno adulto, **When** veo el equipo, **Then** del menor sale solo el primer nombre ("Laia") y del adulto el nombre y la inicial del primer apellido ("Marc G."), nunca apellidos completos.
+5. **Given** un equipo confirmado con un jugador menor de edad y uno adulto, **When** veo el equipo, **Then** del menor sale solo el primer nombre ("Laia") y del adulto el nombre y el primer apellido ("Marc García"), nunca el segundo apellido.
 6. **Given** un equipo confirmado, **When** veo el equipo, **Then** el capitán está marcado de forma que se entiende sin depender solo del color.
 7. **Given** se confirma un equipo nuevo en los datos, **When** pasa como mucho 1 hora, **Then** aparece en la página sin que nadie toque el código.
 8. **Given** la fuente de equipos no responde, **When** abro la página, **Then** veo toda la información del torneo y el botón de inscribirse, y en lugar de la lista un aviso breve de que no se ha podido cargar; la página no se rompe.
@@ -169,7 +169,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **FR-020**: El apartado "Equips inscrits" MUST mostrar solo equipos **confirmados**, separados por categoría (en el torneo: **Infantil/Cadet** y **Juvenil/Sènior**). Los pendientes y los de lista de espera MUST NOT salir como inscritos.
 - **FR-021**: La lista de equipos MUST salir cuando haya al menos un equipo confirmado en el evento. Mientras no haya ninguno, en su lugar MUST mostrarse las plazas libres por categoría con un texto que anima a ser el primer equipo (si hay fuente de equipos; si no, FR-015).
 - **FR-022**: De cada equipo MUST mostrarse solo: nombre del equipo, jugadores, el dorsal de cada jugador **si lo tiene** (es opcional; quien no lo tiene sale sin él, sin hueco ni guion) y quién es el capitán.
-- **FR-023**: De los jugadores menores de edad MUST mostrarse solo el **primer nombre** (la primera palabra del nombre), nunca los apellidos. De los adultos MUST mostrarse el nombre y la **inicial del primer apellido** con punto ("Marc G."), nunca los apellidos completos (cambio de la decisión del 15/11, pendiente de aprobación de Saúl). Un jugador es menor si lo era en la fecha de inscripción o si no se conoce su fecha de nacimiento. El nombre público MUST calcularse antes de salir de la base de datos (FR-026).
+- **FR-023**: De los jugadores menores de edad MUST mostrarse solo el **primer nombre** (la primera palabra del nombre), nunca los apellidos. De los adultos MUST mostrarse el nombre y el **primer apellido** ("Marc García"), nunca el segundo (`docs/legal/tratamientos.md`, T7). Si el primer apellido empieza por partículas ("de", "del", "de la"…), se muestran con él ("Ana de la Fuente"). Un jugador es menor si lo era en la fecha de inscripción o si no se conoce su fecha de nacimiento. El nombre público MUST calcularse antes de salir de la base de datos (FR-026).
 - **FR-024**: Un menor sin autorización del tutor registrada MUST NOT salir en la lista pública.
 - **FR-025**: Los equipos MUST mostrarse igual sea cual sea su origen (formulario de Montca o web); el origen MUST NOT verse en la parte pública. Los dos orígenes MUST contar igual para las plazas.
 - **FR-026**: La parte pública MUST NOT recibir ni contener ningún dato que no se muestre: ni apellidos de menores, ni DNI, fecha de nacimiento, teléfono, correo, origen, autorización ni estado de los equipos no confirmados. Esto se comprueba también en el código fuente de la página y en las respuestas que reciba el navegador, no solo en lo que se ve.
@@ -195,7 +195,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
   La regla de agrupación es provisional hasta que Montca confirme cómo está hecho su Forms (A-26).
 - **FR-034**: Los datos reales de inscripción (incluidas las respuestas del formulario de Montca y cualquier archivo exportado de su hoja) MUST NOT guardarse nunca en el repositorio, que es público y contendría DNI de menores.
 - **FR-035**: Para hacer y probar la interfaz MUST usarse datos de prueba inventados, marcados como tales, que nunca se publiquen en producción: por categoría, un equipo confirmado y uno pendiente; entre ellos, al menos uno de cada origen.
-- **FR-039**: Publicar los nombres de los jugadores (primer nombre de los menores; nombre e inicial de los adultos), el dorsal y el capitán MUST figurar en la política de privacidad (A-17, PR #56) y en el registro de tratamientos (A-19, PR #54) antes de que se publique "Equips inscrits" con datos reales.
+- **FR-039**: Publicar los nombres de los jugadores (primer nombre de los menores; nombre y primer apellido de los adultos), el dorsal y el capitán MUST figurar en la política de privacidad (A-17, PR #56) y en el registro de tratamientos (A-19, PR #54) antes de que se publique "Equips inscrits" con datos reales.
 
 **Reutilización e idiomas**
 
@@ -221,7 +221,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **Categoría**: grupo de edad dentro de un evento. Nombre (Infantil/Cadet, Juvenil/Sènior), años de nacimiento, máximo de equipos, mínimo y máximo de jugadores por equipo. Sus plazas libres se calculan con los equipos confirmados.
 - **Equipo**: pertenece a una categoría de un evento. Nombre (tal como se muestra) y nombre normalizado (para agrupar al importar), estado (pendiente, confirmado, lista de espera), origen (`forms` / `web`), capitán. Solo los confirmados son públicos y ocupan plaza.
 - **Jugador**: pertenece a un equipo. Nombre y apellidos, fecha de nacimiento, dorsal (opcional), si es el capitán, origen (`forms` / `web`) y, si es menor, cómo se entregó la autorización del tutor (papel, Softco o casilla web) y si está registrada. El resto de datos de C-05 (DNI, contacto, tutor, casillas de imagen e información) son de C-05 y C-06 y nunca llegan a la parte pública.
-- **Vista pública de un equipo**: lo único que sale de la base de datos hacia la web: nombre del equipo, categoría, nombre público de cada jugador (primer nombre si es menor; nombre e inicial del primer apellido si es adulto), dorsal si lo tiene y capitán.
+- **Vista pública de un equipo**: lo único que sale de la base de datos hacia la web: nombre del equipo, categoría, nombre público de cada jugador (primer nombre si es menor; nombre y primer apellido si es adulto), dorsal si lo tiene y capitán.
 
 ## Success Criteria *(mandatory)*
 
@@ -229,7 +229,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 
 - **SC-001**: La página del torneo con la información y el botón de inscripción por el canal de Montca se puede publicar sin base de datos y sin i18n, antes que el resto de la feature.
 - **SC-002**: Desde la portada, con las inscripciones abiertas, se llega al formulario de inscripción en 2 toques (franja → Inscriure's) en un móvil de 375 px; desde un enlace directo a la página del torneo, en 1.
-- **SC-003**: En una revisión del código fuente y de las respuestas que recibe el navegador con los datos de prueba, hay 0 apellidos de menores, 0 apellidos completos de adultos y 0 datos no públicos (DNI, fecha de nacimiento, contacto, origen, autorización, equipos no confirmados).
+- **SC-003**: En una revisión del código fuente y de las respuestas que recibe el navegador con los datos de prueba, hay 0 apellidos de menores, 0 segundos apellidos de adultos y 0 datos no públicos (DNI, fecha de nacimiento, contacto, origen, autorización, equipos no confirmados).
 - **SC-004**: El 100 % de los datos del torneo mostrados coincide con `docs/info-montca.md`; no hay ninguna cifra, fecha ni norma inventada.
 - **SC-005**: La prueba de resultados enriquecidos de Google valida el `Event` de la página sin errores.
 - **SC-006**: Un segundo evento de prueba con categorías distintas se publica cambiando solo datos, con 0 líneas de código cambiadas.
@@ -249,7 +249,6 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **Textos nuevos** (explicación junto al botón, estados, avisos): se redactan en valenciano y los revisa Montca antes de publicar.
 - **Datos de prueba**: inventados, sin parecido con personas reales, marcados como prueba y fuera de producción.
 - **Frescura de 1 hora** (FR-027): suficiente para un torneo con inscripción de días; si Montca necesita que sea inmediato, se revisa en el plan.
-- **Cambio de decisión pendiente de aprobación (Saúl)**: de los adultos se publica "nombre + inicial del primer apellido", no el nombre completo que permitía la decisión del 15/11. Si Saúl lo aprueba, se anota en `docs/decisiones.md` al fusionar.
 - **Pendiente de confirmar con Montca (A-26)**: que con una categoría o el torneo completos el botón siga llevando al Google Forms y que Montca gestione la lista de espera; cómo está hecho su Forms (una respuesta por jugador, si pregunta el capitán y el dorsal).
 - **Privacidad**: publicar nombres de jugadores tiene que estar en la política de privacidad (A-17, PR #56) y en el registro de tratamientos (A-19, PR #54). Lo lleva Saúl.
 - **`docs/tareas.md` y `docs/info-montca.md`** ya están actualizados en el PR #68; esta spec no los toca.

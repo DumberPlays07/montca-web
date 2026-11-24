@@ -47,7 +47,7 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 1. **Places i equips**: un bloque por categoría (plano Herba clara) con el nombre, los años de nacimiento, "N de M places lliures" y jugadores por equipo.
    - Categoría llena: "Completa" y el texto "Pots apuntar-te a la llista d'espera".
    - Sin equipos confirmados: las plazas y "Encara no hi ha cap equip confirmat. Sigues el primer!".
-   - Lista de equipos confirmados: cada equipo es un desplegable (`<details>`) con su nombre y el número de jugadores; dentro, los jugadores con su nombre público, el dorsal si lo tienen ("Laia · 7", "Marc G.") y el capitán con el texto "capità" (no solo un icono ni un color).
+   - Lista de equipos confirmados: cada equipo es un desplegable (`<details>`) con su nombre y el número de jugadores; dentro, los jugadores con su nombre público, el dorsal si lo tienen ("Laia · 7", "Marc García · 10") y el capitán con el texto "capità" (no solo un icono ni un color).
    - Sin fuente de equipos (antes de A-14): este bloque no sale.
    - Error al cargar: un aviso de una línea en lugar de la lista; el resto de la página sigue.
 2. **Inscriure's** (segunda vez, debajo de los equipos, como pide la spec) con la misma nota del canal de Montca.

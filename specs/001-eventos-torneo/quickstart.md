@@ -23,7 +23,7 @@ Tiene que pasar:
   - `cerradaAMano` → `tancades`;
   - las dos categorías llenas → `completes`; una sola llena → `obertes`;
   - sin recuento nunca da `completes`.
-- Vista pública: los nueve casos de [contracts/vista-publica.md](contracts/vista-publica.md).
+- Vista pública: los once casos de [contracts/vista-publica.md](contracts/vista-publica.md).
 - Datos de prueba: con las filas de [data-model.md](data-model.md) §5 solo salen los dos equipos confirmados, y las plazas libres son 7/8 y 5/6.
 
 ## 2. Entrega 1: página informativa, sin Supabase (US1)
@@ -53,7 +53,7 @@ PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 ```
 
 1. Infantil/Cadet: "7 de 8 places lliures"; solo "Prova · Els Falcons". "Maria José" sale como "Maria", el menor sin autorización no sale y el capitán lleva "capità".
-2. Juvenil/Sènior: "5 de 6"; adultos como "Marc G.", el menor de 2010 solo con el nombre, el nombre largo no rompe los 375 px.
+2. Juvenil/Sènior: "5 de 6"; adultos como "Marc García" y "Ana de la Fuente", el menor de 2010 solo con el nombre, el nombre largo no rompe los 375 px.
 3. Los equipos pendientes no salen.
 4. **Privacidad (SC-003)**: en el HTML servido (Ver código fuente) y en la pestaña Red, buscar los apellidos de las filas de prueba y "Les Cabretes" → 0 resultados.
 5. Ver una categoría llena (cambiar `maxEquipos` a 1 en local) → "Completa" y el texto de la lista de espera, con el botón visible. Las dos llenas → estado "completes".
@@ -73,7 +73,7 @@ PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 
 ## 6. Con A-14 (Saúl)
 
-1. Comprobaciones de [contracts/vista-publica.md](contracts/vista-publica.md) (permisos y nueve casos).
+1. Comprobaciones de [contracts/vista-publica.md](contracts/vista-publica.md) (permisos y once casos).
 2. `node scripts/importar-forms/importar.ts --evento torneig-nadal-2026 --csv <fuera del repo> --simular` → informe sin errores; después, sin `--simular`; después, otra vez → 0 filas nuevas.
 3. Confirmar un equipo en Supabase → aparece en la página en menos de 1 hora (en la práctica, al recargar).
 4. Antes de pasar `PUBLIC_FUENTE_EQUIPOS=supabase` a producción: privacidad y registro de tratamientos actualizados (FR-039).

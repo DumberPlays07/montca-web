@@ -55,7 +55,7 @@ El trabajo va ordenado para que **lo primero que se publique sea la página info
 | I. Móvil primero | ✅ | Diseño a 375 px ([diseno.md](diseno.md)); dos toques desde la portada hasta el Forms y uno desde la página (SC-002) |
 | II. VAL y CAST | ✅ | Textos de interfaz en el diccionario provisional `textos-eventos.ts` y del evento en su YAML `{ca, es}`. El esquema hace fallar el build si falta un idioma. Mismo patrón provisional que B-09, sin tocar `src/i18n` |
 | III. No se inventan datos | ✅ | Precio "pendent" y sin `offers`; normas, dirección y URL del Forms vacías hasta que las dé Montca; datos de prueba con el prefijo "Prova ·" y nunca en producción (el build falla) |
-| IV. Privacidad y menores | ✅ (con riesgos anotados) | Vista pública mínima; menores sin autorización fuera; "Marc G."; Supabase en la UE; CSV fuera del repo; FR-039 antes de publicar nombres. **Riesgos fuera de nuestro control**, en el PR: el Google Forms y la hoja de Montca guardan DNI de menores en Google (servidores no garantizados en la UE) y su texto legal es de Montca |
+| IV. Privacidad y menores | ✅ (con riesgos anotados) | Vista pública mínima; menores sin autorización fuera; adultos con nombre y primer apellido (T7); Supabase en la UE; CSV fuera del repo; FR-039 antes de publicar nombres. **Riesgos fuera de nuestro control**, en el PR: el Google Forms y la hoja de Montca guardan DNI de menores en Google (servidores no garantizados en la UE) y su texto legal es de Montca |
 | V. Accesibilidad | ✅ | `<details>` nativos; capitán con texto; foco visible; 44 px; sin movimiento |
 | VI. Sencillez | ✅ | Astro y Netlify estáticos; Supabase ya acordado (decisión del 15/11); sin librerías nuevas en la web; `fetch` en lugar de `supabase-js` |
 | VII. Flujo | ✅ | Issues por zona después del PR de la spec; PR revisado por el otro |
@@ -146,7 +146,7 @@ No depende de A-14 ni de B-07. Sí depende de B-02 (Netlify) para publicarse.
 
 Producción sigue con `ninguna`, así que publicarla no cambia nada visible.
 
-1. **[P]** `vista-publica.ts` con los nueve casos del contrato, y `datos-prueba.ts`.
+1. **[P]** `vista-publica.ts` con los once casos del contrato, y `datos-prueba.ts`.
 2. **[P]** `fuente-equipos.ts` (`ninguna`, `prueba`) y el fallo del build si hay datos de prueba en producción.
 3. **[P]** `PlacesIEquips.astro` con todos sus estados (sin equipos, completa, error) y la parte de equipos de `eventos-cliente.ts`.
 4. **[P]** Quickstart §3, con la prueba de privacidad (SC-003).
@@ -186,4 +186,3 @@ Producción sigue con `ninguna`, así que publicarla no cambia nada visible.
 2. **Confirmar equipos sin C-06**: hasta que exista, alguien tiene que cambiar `estado` a mano en Supabase. Si nadie lo hace, la lista sale vacía aunque haya inscritos.
 3. **B-02 (Netlify)** sin hacer: sin él no se publica ni la entrega 1.
 4. **Agrupación del Forms** provisional (A-26): si Montca usa una respuesta por equipo, se rehace la lectura del script, no la UI.
-5. **Cambio "Marc G."** pendiente de aprobación de Saúl. Si no lo aprueba, cambian una línea de la vista SQL, una de `vista-publica.ts` y sus casos.

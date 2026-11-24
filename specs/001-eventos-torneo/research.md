@@ -38,7 +38,7 @@ Decisiones técnicas tomadas para el plan. Cada una dice qué se elige, por qué
 
 - **Decision**: las tablas `equipos` y `jugadores` tienen RLS (seguridad por filas) activada y **ninguna política para `anon`**. La única puerta pública es la **vista `equipos_publicos`**, que:
   - devuelve solo los equipos confirmados;
-  - calcula en SQL el nombre público (primer nombre de los menores; nombre e inicial de los adultos);
+  - calcula en SQL el nombre público (primer nombre de los menores; nombre y primer apellido de los adultos);
   - deja fuera a los menores sin autorización registrada;
   - devuelve solo nombre del equipo, categoría, nombre público, dorsal y capitán.
 - **Rationale**: el navegador no puede recibir un dato que no esté en la vista, por mucho que alguien manipule la petición. La regla del nombre público vive en un solo sitio en producción (SQL), y las mismas reglas se prueban en TypeScript con los datos de prueba (contrato en [contracts/vista-publica.md](contracts/vista-publica.md)).
