@@ -1,4 +1,8 @@
 ---
+import { Font } from 'astro:assets';
+import BarraInferior from '../components/BarraInferior.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Pie from '../components/Pie.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -33,7 +37,9 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 <html lang={lang}>
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- viewport-fit=cover: la barra inferior respeta la zona segura del móvil con env(). -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<Font cssVariable="--font-overpass" preload />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="description" content={description} />
@@ -43,6 +49,11 @@ const imageUrl = new URL(image, Astro.site ?? Astro.url).href;
 		<title>{title}</title>
 	</head>
 	<body>
-		<slot />
+		<Cabecera lang={lang} />
+		<div id="contenido" class="contenido" tabindex="-1">
+			<slot />
+		</div>
+		<Pie lang={lang} />
+		<BarraInferior lang={lang} />
 	</body>
 </html>

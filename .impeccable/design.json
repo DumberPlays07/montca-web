@@ -1,0 +1,372 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-22T18:23:34+00:00",
+  "title": "Design System: Montca Actiu",
+  "extensions": {
+    "colorMeta": {
+      "boira": {
+        "role": "neutral",
+        "displayName": "Boira de Mariola",
+        "canonical": "oklch(96.7% 0.011 136.6)",
+        "tonalRamp": [
+          "#0a0c0a",
+          "#242623",
+          "#40433f",
+          "#5f635d",
+          "#80847e",
+          "#a3a6a1",
+          "#c7cac6",
+          "#edefec"
+        ]
+      },
+      "herba-clara": {
+        "role": "neutral",
+        "displayName": "Herba clara",
+        "canonical": "oklch(94.2% 0.043 136.7)",
+        "tonalRamp": [
+          "#070d05",
+          "#1f281b",
+          "#3a4635",
+          "#576750",
+          "#788871",
+          "#9caa96",
+          "#c1cebc",
+          "#e8f2e4"
+        ]
+      },
+      "pedra": {
+        "role": "tertiary",
+        "displayName": "Pedra de la torre",
+        "canonical": "oklch(92.8% 0.042 87.4)",
+        "tonalRamp": [
+          "#0f0b03",
+          "#2b2416",
+          "#49412e",
+          "#6b6048",
+          "#8c8168",
+          "#aea48e",
+          "#d0c8b6",
+          "#f4eedf"
+        ]
+      },
+      "verd-prat": {
+        "role": "neutral",
+        "displayName": "Verd prat",
+        "canonical": "oklch(73.3% 0.115 124.3)",
+        "tonalRamp": [
+          "#070e00",
+          "#1e2a00",
+          "#384a06",
+          "#546b1c",
+          "#758d41",
+          "#99af70",
+          "#bfd29e",
+          "#e6f6cc"
+        ]
+      },
+      "verd-fulla": {
+        "role": "secondary",
+        "displayName": "Verd fulla",
+        "canonical": "oklch(52.8% 0.089 136.8)",
+        "tonalRamp": [
+          "#030f00",
+          "#172b0e",
+          "#304a24",
+          "#4a6c3c",
+          "#6b8e5c",
+          "#91b084",
+          "#b8d2ae",
+          "#e1f6d9"
+        ]
+      },
+      "verd-bosc": {
+        "role": "secondary",
+        "displayName": "Verd bosc",
+        "canonical": "oklch(42.0% 0.060 145.9)",
+        "tonalRamp": [
+          "#040e04",
+          "#182a1a",
+          "#324933",
+          "#4d6a4e",
+          "#6d8c6e",
+          "#93ad94",
+          "#bad0bb",
+          "#e3f4e3"
+        ]
+      },
+      "tinta": {
+        "role": "neutral",
+        "displayName": "Tinta de bosc",
+        "canonical": "oklch(29.9% 0.038 151.5)",
+        "tonalRamp": [
+          "#060d07",
+          "#1c281f",
+          "#37473a",
+          "#536757",
+          "#748978",
+          "#98ab9c",
+          "#becec1",
+          "#e6f2e8"
+        ]
+      },
+      "teula": {
+        "role": "primary",
+        "displayName": "Teula de Cocentaina",
+        "canonical": "oklch(52.6% 0.107 46.8)",
+        "tonalRamp": [
+          "#1c0300",
+          "#3f1803",
+          "#653216",
+          "#8e4d2c",
+          "#b36f4d",
+          "#d19578",
+          "#efbca4",
+          "#ffe5d1"
+        ]
+      },
+      "teula-fosca": {
+        "role": "primary",
+        "displayName": "Teula fosca",
+        "canonical": "oklch(42.3% 0.087 46.3)",
+        "tonalRamp": [
+          "#190500",
+          "#3a1b0b",
+          "#5f3621",
+          "#875238",
+          "#ab7358",
+          "#ca9881",
+          "#e9bfab",
+          "#ffe6d7"
+        ]
+      },
+      "teula-clara": {
+        "role": "primary",
+        "displayName": "Teula clara",
+        "canonical": "oklch(82.4% 0.084 56.8)",
+        "tonalRamp": [
+          "#180600",
+          "#381d07",
+          "#5c381c",
+          "#835533",
+          "#a67653",
+          "#c59b7d",
+          "#e5c1a8",
+          "#ffe8d4"
+        ]
+      },
+      "blanco": {
+        "role": "neutral",
+        "displayName": "Blanco",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "linea": {
+        "role": "neutral",
+        "displayName": "Línea",
+        "canonical": "rgb(55 86 57 / 0.18)"
+      },
+      "linea-sobre-verde": {
+        "role": "neutral",
+        "displayName": "Línea sobre verde",
+        "canonical": "rgb(241 246 239 / 0.16)"
+      },
+      "hover-sobre-verde": {
+        "role": "neutral",
+        "displayName": "Hover sobre verde",
+        "canonical": "rgb(241 246 239 / 0.08)"
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "h1–h3 en Verd bosc; tamaños pendientes de la portada."
+      },
+      "marca": {
+        "displayName": "Marca",
+        "purpose": "\"Montca Actiu\" en cabecera y pie hasta que llegue el logo (A-07)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Enlaces del menú móvil y nombres de actividad."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido, 65–70 caracteres por línea."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Selector de idioma, avisos legales y datos rápidos."
+      },
+      "label-barra": {
+        "displayName": "Label barra",
+        "purpose": "Etiquetas de la barra inferior del móvil."
+      },
+      "marca-pie": {
+        "displayName": "Marca del pie",
+        "purpose": "\"Montca Actiu\" en el pie, más grande que en la cabecera."
+      },
+      "nav-escritorio": {
+        "displayName": "Menú de escritorio",
+        "purpose": "Enlaces del menú horizontal desde 64rem."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "transicion",
+        "value": "160ms ease-out",
+        "purpose": "Cambios de color de fondo y de texto en hover; nada se desplaza."
+      }
+    ],
+    "focus": [
+      {
+        "name": "foco-claro",
+        "value": "outline: 3px solid #9c5530; outline-offset: 2px",
+        "purpose": "Foco sobre fondos claros."
+      },
+      {
+        "name": "foco-oscuro",
+        "value": "outline: 3px solid #f0b890",
+        "purpose": "Foco sobre Verd bosc (barra inferior, pie)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tableta",
+        "value": "48rem"
+      },
+      {
+        "name": "escritorio",
+        "value": "64rem"
+      },
+      {
+        "name": "solo-icono-menu",
+        "value": "max-width: 22.49rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón de acción (teja)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Reserva, Apunta't, Demana pressupost: la acción principal de cada pantalla.",
+      "html": "<a class=\"ds-boton-accion\" href=\"#\">Reserva</a>",
+      "css": ".ds-boton-accion { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 24px; background: var(--color-teula, #9c5530); color: #ffffff; font-family: Overpass, system-ui, sans-serif; font-weight: 600; text-decoration: none; border-radius: 6px; transition: background-color 160ms ease-out; } .ds-boton-accion:hover, .ds-boton-accion:active { background: var(--color-teula-fosca, #743d21); text-decoration: underline; text-decoration-thickness: 2px; } .ds-boton-accion:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    },
+    {
+      "name": "Control de señal",
+      "kind": "button",
+      "refersTo": "button-senal",
+      "description": "Selector VAL / CAST y botón Menú de la cabecera.",
+      "html": "<a class=\"ds-senal\" href=\"#\" lang=\"es\" aria-label=\"Castellano\">CAST</a>",
+      "css": ".ds-senal { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 12px; color: var(--color-verd-bosc, #375639); font-family: Overpass, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.02em; text-decoration: none; border: 1px solid rgb(55 86 57 / 0.18); border-radius: 4px; transition: background-color 160ms ease-out; } .ds-senal:hover { background: var(--color-herba-clara, #dff3d7); } .ds-senal:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    },
+    {
+      "name": "Cabecera (escritorio)",
+      "kind": "nav",
+      "refersTo": "nav-cabecera",
+      "description": "Menú horizontal con la marca de pintura bajo la página actual.",
+      "html": "<nav class=\"ds-cabecera\"><a class=\"ds-marca\" href=\"#\">Montca Actiu</a><a class=\"ds-enlace\" href=\"#\">Activitats</a><a class=\"ds-enlace\" href=\"#\" aria-current=\"page\">Agenda</a><a class=\"ds-enlace\" href=\"#\">Contacte</a></nav>",
+      "css": ".ds-cabecera { display: flex; align-items: center; gap: 24px; padding: 4px 16px; background: var(--color-boira, #f1f6ef); border-bottom: 1px solid rgb(55 86 57 / 0.18); font-family: Overpass, system-ui, sans-serif; } .ds-marca { margin-right: auto; color: var(--color-verd-bosc, #375639); font-size: 1.25rem; font-weight: 800; text-decoration: none; } .ds-enlace { position: relative; display: flex; align-items: center; min-height: 44px; color: var(--color-tinta, #1f3324); font-size: 0.9375rem; font-weight: 600; text-decoration: none; } .ds-enlace:hover { color: var(--color-verd-bosc, #375639); text-decoration: underline; text-decoration-thickness: 2px; } .ds-enlace[aria-current=\"page\"] { color: var(--color-verd-bosc, #375639); } .ds-enlace[aria-current=\"page\"]::after { content: \"\"; position: absolute; left: 0; bottom: 4px; width: 20px; height: 5px; background: var(--color-teula, #9c5530); } .ds-enlace:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    },
+    {
+      "name": "Barra inferior (móvil)",
+      "kind": "nav",
+      "refersTo": "nav-barra-inferior",
+      "description": "Agenda · Activitats · WhatsApp al alcance del pulgar; marca en teula clara.",
+      "html": "<nav class=\"ds-barra\"><a class=\"ds-hueco\" href=\"#\" aria-current=\"page\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 6.5h16v13.5H4z\"/><path d=\"M4 10.5h16\"/><path d=\"M8.5 3.5v5\"/><path d=\"M15.5 3.5v5\"/></svg><span>Agenda</span></a><a class=\"ds-hueco\" href=\"#\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2.5 19.5l6-10 4 6.5 2.5-4 6.5 7.5z\"/><path d=\"M7 12l1.5 1.2L10 12\"/></svg><span>Activitats</span></a><a class=\"ds-hueco\" href=\"#\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 20l1.3-4A8 8 0 1 1 8.4 19z\"/><path d=\"M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-1 .8a4 4 0 0 1-2.1-2.1l.8-1-1-2z\"/></svg><span>WhatsApp</span></a></nav>",
+      "css": ".ds-barra { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--color-verd-bosc, #375639); font-family: Overpass, system-ui, sans-serif; } .ds-hueco { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 64px; color: var(--color-boira, #f1f6ef); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em; text-decoration: none; transition: background-color 160ms ease-out; } .ds-hueco:hover { background: rgb(241 246 239 / 0.08); } .ds-hueco[aria-current=\"page\"]::before { content: \"\"; position: absolute; top: 0; left: 50%; width: 24px; height: 5px; background: var(--color-teula-clara, #f0b890); transform: translateX(-50%); } .ds-hueco:focus-visible { outline: 3px solid var(--color-teula-clara, #f0b890); outline-offset: -4px; }"
+    },
+    {
+      "name": "Pie",
+      "kind": "custom",
+      "refersTo": "pie",
+      "description": "Contacto, todas las secciones y avisos legales sobre verde bosque.",
+      "html": "<footer class=\"ds-pie\"><a class=\"ds-pie-marca\" href=\"#\">Montca Actiu</a><p class=\"ds-pie-lema\">Associació juvenil i esportiva de Cocentaina.</p><a class=\"ds-pie-enlace\" href=\"#\">Avís legal</a></footer>",
+      "css": ".ds-pie { display: grid; gap: 16px; padding: 24px 16px; background: var(--color-verd-bosc, #375639); color: var(--color-boira, #f1f6ef); font-family: Overpass, system-ui, sans-serif; } .ds-pie-marca { color: #ffffff; font-size: 1.5rem; font-weight: 800; text-decoration: none; } .ds-pie-lema { margin: 0; color: var(--color-herba-clara, #dff3d7); } .ds-pie-enlace { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-boira, #f1f6ef); text-decoration: none; } .ds-pie-enlace:hover { text-decoration: underline; text-decoration-thickness: 2px; } .ds-pie-enlace:focus-visible { outline: 3px solid var(--color-teula-clara, #f0b890); outline-offset: 2px; }"
+    },
+    {
+      "name": "Enlace Tornar",
+      "kind": "custom",
+      "refersTo": "enlace-volver",
+      "description": "Vuelta a la lista desde fichas y eventos; flecha en SVG.",
+      "html": "<a class=\"ds-volver\" href=\"#\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 12H5\"/><path d=\"M11 6l-6 6 6 6\"/></svg><span>Tornar</span></a>",
+      "css": ".ds-volver { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--color-verd-bosc, #375639); font-family: Overpass, system-ui, sans-serif; font-weight: 600; text-decoration: none; } .ds-volver:hover { text-decoration: underline; text-decoration-thickness: 2px; } .ds-volver:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Senda senyalitzada",
+    "overview": "**Creative North Star: \"Senda senyalitzada\"**\n\nLa web funciona como un sendero bien marcado de la Serra de Mariola. Quien llega desde un reel no tiene que pensar por dónde ir: en cada pantalla hay una señal clara que dice \"por aquí\", y esa señal lleva a apuntarse o a pedir la actividad para un grupo. El menú, la barra inferior y los botones son la señalética del camino. El color teja hace de **marca de pintura**: aparece donde hay que actuar y en ningún otro sitio.\n\nEl territorio pone el resto. El fondo es la neblina verde clara del cielo del mapa y los verdes son los de sus bancales, del prado al bosque. La teja sale de los tejados de Cocentaina y la crema, de la piedra de la torre. La interfaz es plana y tranquila, con poca densidad y mucho aire. La ilustración del mapa y las fotos de las actividades se llevan la atención, y la interfaz se limita a orientar.\n\nEl tono visual es igual que el de los textos: **cercano pero serio**. Es lo bastante amable para un chaval de 16 años y lo bastante ordenado para que un padre o una profesora confíen.",
+    "keyCharacteristics": [
+      "Móvil primero (375 px); el escritorio amplía, no reordena.",
+      "Una sola señal de acción por pantalla en color teja.",
+      "Superficies planas por planos de color, como los bancales del mapa; casi sin sombras.",
+      "Tipografía de señalética (Overpass): legible a primera vista y con peso en los titulares.",
+      "Zonas táctiles de al menos 44 px y foco siempre visible."
+    ],
+    "rules": [
+      {
+        "name": "The Paint Mark Rule",
+        "body": "La teja es la pintura del sendero: marca la acción y el \"estás aquí\", nada más. Nunca se usa como fondo de una sección, en titulares ni como decoración. Si en una pantalla hay más de dos elementos en teja, uno sobra.",
+        "section": "colors"
+      },
+      {
+        "name": "The Dark Ground Rule",
+        "body": "La teula (#9c5530) nunca va sobre Verd bosc ni sobre otro verde oscuro: el contraste se queda en 1.5:1 y la marca desaparece. Sobre fondos verdes oscuros (barra inferior, pie), la marca de pintura y el anillo de foco son siempre Teula clara (#f0b890, 4.7:1).",
+        "section": "colors"
+      },
+      {
+        "name": "The Mist Ground Rule",
+        "body": "El fondo es siempre Boira de Mariola (#f1f6ef), nunca blanco puro ni crema. La crema se reserva para superficies puntuales.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast Floor Rule",
+        "body": "El texto pequeño mide al menos 4.5:1 y los iconos, bordes funcionales y anillos de foco, al menos 3:1. Verd prat y la teja original del mapa (#ae7349) no llevan texto.",
+        "section": "colors"
+      },
+      {
+        "name": "The Signpost Rule",
+        "body": "Las etiquetas de navegación y los botones dicen a dónde llevan con una o dos palabras (Agenda, Activitats, Apunta't). Si una etiqueta necesita una frase, la señal está mal puesta.",
+        "section": "typography"
+      },
+      {
+        "name": "The 16px Floor Rule",
+        "body": "Ningún texto de lectura baja de 1rem en el móvil, y ninguna etiqueta baja de 0.8125rem.",
+        "section": "typography"
+      },
+      {
+        "name": "The Terrace Rule",
+        "body": "Lo que está más cerca se distingue por el color de su plano, no por una sombra. Las sombras solo aparecen en capas que flotan de verdad (paneles que suben y menús desplegados).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.png`) y comprobar su contraste antes de usarlo.",
+      "**Do** reservar la teja (#9c5530) para la acción principal y la marca de \"estás aquí\".",
+      "**Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.",
+      "**Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.",
+      "**Do** mantener las transiciones cortas (160 ms) y solo de color u opacidad; si un componente añade desplazamientos o animaciones, ofrece su alternativa con `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "**Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.",
+      "**Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).",
+      "**Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.",
+      "**Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.",
+      "**Don't** usar blanco puro ni crema como fondo general de la página.",
+      "**Don't** añadir sombras, degradados ni efectos de cristal para separar zonas; se separan por planos de color.",
+      "**Don't** cargar fuentes desde servidores externos (Google Fonts u otros).",
+      "**Don't** inventar datos para rellenar la interfaz (precios, plazas, fechas, certificados): los textos de prueba se marcan como tales (ver `PRODUCT.md`)."
+    ]
+  }
+}

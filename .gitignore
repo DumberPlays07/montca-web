@@ -18,3 +18,11 @@ Thumbs.db
 
 # configuración personal de Claude Code
 .claude/settings.local.json
+
+# datos descargados para generar el mapa (no se suben)
+scripts/mapa/datos/
+# imágenes y JSON generados por los scripts del mapa (se regeneran)
+scripts/mapa/salida/
+
+# caché de Python
+__pycache__/
