@@ -20,7 +20,7 @@
 
 ### Session 2026-11-24
 
-- Q: ¿Cómo se cargan los equipos inscritos fuera de la web mientras no exista C-06? → A: Con un script de importación: Saúl descarga la hoja de respuestas como CSV **fuera del repositorio** y el script la vuelca a la base de datos; se puede repetir sin duplicar. Hasta que exista A-14, la web sale sin lista y sin plazas.
+- Q: ¿Cómo se cargan los equipos inscritos fuera de la web mientras no exista C-06? → A: Con un script de importación: Saúl descarga la hoja de respuestas como CSV **fuera del repositorio** y el script la vuelca a la base de datos; se puede repetir sin duplicar. Hasta que exista A-14, la web sale sin lista y sin plazas. *(Revisado al alinear la spec con `docs/legal/tratamientos.md` §5: descargar la hoja a un ordenador y usar allí la clave de servicio choca con el registro, así que la forma de importar queda pendiente de A-30; ver FR-033.)*
 - Q: Al importar el Google Forms, ¿cómo se agrupan los jugadores en equipos? → A: Una respuesta por jugador, que escribe el nombre de su equipo; se agrupa por nombre de equipo y categoría. Capitán: quien lo marque en el Forms; si nadie lo marca, la primera respuesta del equipo. (Montca aún lo está confirmando; si cambia, se ajusta la importación.)
 - Q: ¿Qué se hace con los nombres de equipo escritos de formas distintas? → A: Se unen solos los que solo se diferencian en mayúsculas, tildes o espacios. Los que se parecen sin ser iguales los lista el script, y deciden Montca o Saúl. Nunca se unen por parecido.
 - Q: ¿Se muestra el dorsal? → A: Se muestra si existe. **Inscripción por la web (C-05): obligatorio, del 1 al 99 y sin repetir dentro del equipo** (`docs/legal/tratamientos.md`, T2 y T3, y decisión del 19/11). **Equipos importados del Forms: opcional**; si el Forms no lo pide o viene vacío, el jugador sale sin dorsal.
@@ -122,7 +122,7 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 - **Equipo con un nombre muy largo, con tildes, ñ, comillas o emojis**: se muestra entero y sin romper la maquetación en 375 px.
 - **Nombre de equipo con insultos o datos personales**: no se publica hasta que Montca lo confirma (solo salen equipos confirmados).
 - **Cambio de estado a medianoche**: la apertura y el cierre se calculan en la hora de Madrid; el estado cambia en la fecha sin que nadie tenga que volver a publicar la web.
-- **Importación repetida**: al volver a ejecutar el script con la hoja actualizada, los equipos y jugadores ya importados no se duplican y los nuevos se añaden como pendientes.
+- **Importación repetida**: al volver a importar la hoja actualizada, los equipos y jugadores ya importados no se duplican y los nuevos se añaden como pendientes.
 - **Jugador del Forms en una categoría que no le toca por año de nacimiento, o el mismo jugador dos veces**: el script lo señala en su informe y no lo resuelve solo; decide Montca.
 - **Retirada de la lista** (FR-040): el 09/01/2027 a las 23:59 la lista se ve; el 10/01/2027 a las 00:00 ya no se ve en la página ni la devuelve la fuente pública, sin que nadie publique la web. La página del evento sigue accesible con su información.
 - **Datos de prueba en producción**: nunca salen en la web publicada; solo en local y en las vistas previas, marcados de forma visible como prueba.
@@ -187,12 +187,11 @@ Cualquier visitante encuentra en la web una sección **Eventos**, separada del f
 
 - **FR-031**: Cada equipo y cada jugador MUST guardar su **origen**: `forms` (formulario de Montca, importado) o `web` (C-05).
 - **FR-032**: La **autorización del tutor** de cada menor MUST guardarse en un registro **aparte de los jugadores** (`docs/legal/tratamientos.md`, T4): qué menor, qué tutor (nombre y DNI), fecha y hora, forma (`casilla_web`, `firma_digital` o `papel` (entregado en Softco)), versión del texto y si Montca la ha recibido. Tiene su propio plazo de borrado, **un año después de la última jornada** (03/01/2028 en este torneo), distinto del de los jugadores (T2 y T3, tres meses), así que no puede depender de la fila del jugador. Es requisito para C-06 (validar autorizaciones).
-- **FR-033**: Los equipos del formulario de Montca MUST cargarse en la base de datos con un **script de importación** que lee la hoja de respuestas de Montca exportada como CSV, cuando exista A-14. El script:
-  - lee el CSV desde una ruta **fuera del repositorio**;
+- **FR-033**: Los equipos del formulario de Montca MUST cargarse en la base de datos con una **importación desde la hoja de respuestas de Montca**, cuando exista A-14. **La forma de importar la decide Saúl en A-30 (issue #70)** entre las dos opciones de [contracts/importacion-forms.md](contracts/importacion-forms.md): (a) Apps Script en la cuenta de Montca + Netlify Function con un secreto, que escribe en Supabase con la clave que ya está en Netlify (recomendada); (b) importación puntual desde un ordenador, solo si antes se cambia el registro de tratamientos. Sea cual sea, MUST cumplir `docs/legal/tratamientos.md` §5: ningún dato de la hoja pasa por un ordenador personal y la clave de servicio de Supabase solo está en Netlify (salvo que A-30 cambie el registro para la opción b). La importación:
   - trata cada respuesta como **un jugador** y lo agrupa en un equipo por **nombre de equipo normalizado + categoría**;
   - marca como capitán a quien lo indique en el Forms; si nadie lo indica, a la primera respuesta del equipo;
   - normaliza los nombres de equipo (mayúsculas, tildes y espacios) y une solo los que coinciden tras normalizar; los nombres **parecidos sin ser iguales** los lista para que Montca o Saúl decidan, y nunca los une solo;
-  - se puede **volver a ejecutar** con la hoja actualizada sin duplicar equipos ni jugadores;
+  - se puede **repetir** con la hoja actualizada sin duplicar equipos ni jugadores (los jugadores se reconocen por DNI);
   - guarda los equipos importados como **pendientes** y con origen `forms`; confirmarlos es decisión de Montca.
   La regla de agrupación es provisional hasta que Montca confirme cómo está hecho su Forms (A-26).
 - **FR-034**: Los datos reales de inscripción (incluidas las respuestas del formulario de Montca y cualquier archivo exportado de su hoja) MUST NOT guardarse nunca en el repositorio, que es público y contendría DNI de menores.

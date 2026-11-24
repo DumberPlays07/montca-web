@@ -45,7 +45,7 @@ Reglas:
 |---|---|---|---|
 | Tablas, RLS y vista | — | Creadas según [vista-publica.md](vista-publica.md) | Saúl |
 | `fuenteSupabase` | Implementación que devuelve `{ tipo: 'sin-fuente' }` | `fetch` real | Saúl |
-| Importación del Forms | — | Primera ejecución ([importacion-forms.md](importacion-forms.md)) | Saúl |
+| Importación del Forms | — | La opción que se decida en A-30 y su primera ejecución ([importacion-forms.md](importacion-forms.md)) | Saúl |
 | Variables de Netlify | `PUBLIC_FUENTE_EQUIPOS=ninguna` | `supabase` + URL + clave pública | Saúl |
 | UI | Ya hecha con datos de prueba | **Nada** | — |
 | Textos legales | La lista pública ya está en `docs/legal/tratamientos.md` (T7) y `privacidad.md` (2.7) | A-30 (issue #70) hecha **antes** de pasar a `supabase` en producción (FR-039) | Saúl |

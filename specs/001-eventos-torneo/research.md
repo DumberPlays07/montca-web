@@ -49,24 +49,15 @@ Decisiones técnicas tomadas para el plan. Cada una dice qué se elige, por qué
 
 ## R5. Importación del Google Forms (FR-033, FR-034)
 
-- **Decision**: un script de Node en `scripts/importar-forms/`, ejecutado **en el ordenador de Saúl**, con dos datos de entrada:
-  - la ruta del CSV exportado de la hoja de Montca, que se pasa como argumento y tiene que estar **fuera del repositorio** (el script se niega a leer un archivo dentro del repo);
-  - la clave de servicio de Supabase, en una variable de entorno de `.env`, que ya está en `.gitignore`.
-
-  Qué hace:
-  - agrupa los jugadores por nombre de equipo normalizado y categoría;
-  - inserta o actualiza con una clave estable por respuesta, así que se puede repetir sin duplicar;
-  - guarda los equipos como `pendiente` y con origen `forms`;
-  - escribe un informe en pantalla con nombres parecidos, jugadores fuera de su categoría y duplicados.
-
-  El CSV se borra después de importar.
-- **Rationale**: cumple la decisión del clarify (script, CSV fuera del repo, repetible) y la regla de que los datos reales nunca entran en el repositorio.
+- **Decision**: **pendiente de Saúl en A-30 (issue #70)**. Hay dos opciones, descritas en [contracts/importacion-forms.md](contracts/importacion-forms.md):
+  - **(a) Apps Script + Netlify Function** (recomendada): un Apps Script vinculado a la hoja, en la cuenta de Google de Montca, envía las filas con un secreto compartido a una Netlify Function, que escribe en Supabase con la clave de servicio que ya está en Netlify.
+  - **(b) Importación puntual desde un ordenador**: solo si A-30 cambia antes el registro de tratamientos.
+- **Rationale**: `docs/legal/tratamientos.md` §5 dice que las exportaciones no van a dispositivos personales y que la clave de servicio solo está en Netlify. La primera versión de este plan (CSV descargado y script local con la clave en `.env`) chocaba con las dos reglas. La opción (a) las cumple sin tocar el registro.
 - **Alternatives considered**:
-  - *Apps Script en la hoja de Montca que escriba en Supabase*: dejaría la clave de servicio en la cuenta de Google de Montca y es más difícil de probar.
+  - *Script local con el CSV descargado y la clave en `.env`* (primera versión): descartado por `tratamientos.md` §5, salvo que A-30 lo permita (opción b).
+  - *Apps Script que escriba directamente en Supabase*: dejaría la clave de servicio en la cuenta de Google de Montca, fuera de Netlify.
   - *Copiar los datos a mano en el editor de Supabase*: descartado en el clarify.
-- **Por decidir (Saúl)**:
-  - Si el CSV se lee con un analizador hecho a mano o con una librería. Las respuestas del Forms pueden llevar comas y comillas; si se usa una librería, se justifica en el PR (constitución VI).
-  - Las columnas exactas del Forms (A-26): si pregunta el capitán y el dorsal, y cómo viene la autorización.
+- **Por decidir (Saúl)**: la opción, y las columnas exactas del Forms (A-26): si pregunta el capitán y el dorsal, y cómo viene la autorización.
 
 ## R6. Zona horaria y fechas (FR-012, FR-040)
 

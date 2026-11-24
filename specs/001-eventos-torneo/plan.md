@@ -19,7 +19,7 @@ El trabajo va ordenado para que **lo primero que se publique sea la página info
 
 **Language/Version**: TypeScript (tsconfig estricto de Astro), Node ≥ 22.23 (`package.json`).
 
-**Primary Dependencies**: Astro 7.4.11 (ya instalado). **Ninguna librería nueva** en la web. El script de importación puede necesitar un lector de CSV (R5): si se añade, se justifica en su PR.
+**Primary Dependencies**: Astro 7.4.11 (ya instalado). **Ninguna librería nueva** en la web. La importación del Forms (R5) se decide en A-30; si necesitara una librería, se justifica en su PR.
 
 **Storage**:
 - Contenido YAML en el repo (eventos).
@@ -55,7 +55,7 @@ El trabajo va ordenado para que **lo primero que se publique sea la página info
 | I. Móvil primero | ✅ | Diseño a 375 px ([diseno.md](diseno.md)); dos toques desde la portada hasta el Forms y uno desde la página (SC-002) |
 | II. VAL y CAST | ✅ | Textos de interfaz en el diccionario provisional `textos-eventos.ts` y del evento en su YAML `{ca, es}`. El esquema hace fallar el build si falta un idioma. Mismo patrón provisional que B-09, sin tocar `src/i18n` |
 | III. No se inventan datos | ✅ | Precio "pendent" y sin `offers`; normas, dirección y URL del Forms vacías hasta que las dé Montca; datos de prueba con el prefijo "Prova ·" y nunca en producción (el build falla) |
-| IV. Privacidad y menores (v2.0.0) | ✅ (con A-30) | Solo se publica lo de `docs/legal/tratamientos.md` T7 (FR-039) y se retira a los 7 días (FR-040); menores sin autorización fuera; Supabase en la UE; CSV fuera del repo. El Google Forms guarda datos en Google (EE. UU., cubierto por el Marco de Privacidad UE-EE. UU.): la constitución v2.0.0 lo admite si consta en la privacidad, que es lo que hace **A-30 (#70)**; hasta entonces el botón no se publica |
+| IV. Privacidad y menores (v2.0.0) | ✅ (con A-30) | Solo se publica lo de `docs/legal/tratamientos.md` T7 (FR-039) y se retira a los 7 días (FR-040); menores sin autorización fuera; Supabase en la UE; importación sin pasar por ordenadores personales ni sacar la clave de servicio de Netlify (A-30). El Google Forms guarda datos en Google (EE. UU., cubierto por el Marco de Privacidad UE-EE. UU.): la constitución v2.0.0 lo admite si consta en la privacidad, que es lo que hace **A-30 (#70)**; hasta entonces el botón no se publica |
 | V. Accesibilidad | ✅ | `<details>` nativos; capitán con texto; foco visible; 44 px; sin movimiento |
 | VI. Sencillez | ✅ | Astro y Netlify estáticos; Supabase ya acordado (decisión del 15/11); sin librerías nuevas en la web; `fetch` en lugar de `supabase-js` |
 | VII. Flujo | ✅ | Issues por zona después del PR de la spec; PR revisado por el otro |
@@ -117,7 +117,7 @@ src/
     ├── esdeveniments/index.astro · [evento].astro
     ├── es/esdeveniments/index.astro · [evento].astro
     └── index.astro                           (+ FranjaEsdeveniment)
-scripts/importar-forms/importar.ts            [S] importación (contrato: importacion-forms.md)
+(importación del Forms)                       [S] pendiente de A-30: opción (a) Apps Script + Netlify Function, u opción (b) (contrato: importacion-forms.md)
 supabase/ (o donde decida Saúl)               [S] SQL de tablas, RLS y vista (sin datos)
 package.json                                  [P→S] script "test"
 ```
@@ -165,7 +165,7 @@ Producción sigue con `ninguna`, así que publicarla no cambia nada visible.
 
 1. **[S]** Tablas, RLS y vista `equipos_publicos` según [vista-publica.md](contracts/vista-publica.md), con sus comprobaciones.
 2. **[S]** `fuente-supabase.ts` según [fuente-equipos.md](contracts/fuente-equipos.md).
-3. **[S]** `scripts/importar-forms/` según [importacion-forms.md](contracts/importacion-forms.md); primera importación con `--simular`.
+3. **[S]** Importación del Forms según la opción que se decida en A-30 ([importacion-forms.md](contracts/importacion-forms.md)); primera importación en modo simular.
 4. **[S]** A-30 (#70) hecha y comprobado que la lista coincide con `docs/legal/tratamientos.md` T7 y `privacidad.md` 2.7 (FR-039).
 5. **[S]** Variables de Netlify: `PUBLIC_FUENTE_EQUIPOS=supabase`, URL y clave pública. **Este es el único cambio que activa los equipos en producción.**
 

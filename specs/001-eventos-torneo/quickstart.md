@@ -5,7 +5,7 @@ Guía para comprobar que la feature funciona. No contiene la implementación.
 ## Requisitos
 
 - Node ≥ 22.23 y `npm install` hecho.
-- Para la fase con datos: A-14 hecha y las variables de Supabase en `.env` local (nunca en el repo).
+- Para la fase con datos: A-14 hecha y, para probar en local, solo las variables **públicas** de Supabase (URL y clave `anon`) en `.env` (nunca en el repo). La clave de servicio no sale nunca de Netlify.
 - **Spec Kit en otro ordenador**: `.specify/feature.json` no se sube (es estado local), y la rama no sigue el formato `NNN-nombre`. Para que los comandos de Spec Kit encuentren esta spec, haz una de estas dos cosas:
   - crear `.specify/feature.json` con `{"feature_directory": "specs/001-eventos-torneo"}`;
   - o lanzar los comandos con la variable `SPECIFY_FEATURE_DIRECTORY=specs/001-eventos-torneo` (en Git Bash de Windows: `export SPECIFY_FEATURE_DIRECTORY=specs/001-eventos-torneo`). La variable manda sobre el archivo, y los comandos que escriben la guardan también en `.specify/feature.json`.
@@ -76,7 +76,7 @@ PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 ## 6. Con A-14 (Saúl)
 
 1. Comprobaciones de [contracts/vista-publica.md](contracts/vista-publica.md) (permisos y once casos).
-2. `node scripts/importar-forms/importar.ts --evento torneig-nadal-2026 --csv <fuera del repo> --simular` → informe sin errores; después, sin `--simular`; después, otra vez → 0 filas nuevas.
+2. Importación (la opción que se decida en A-30): primero en modo simular → informe sin errores; después, en serio; después, otra vez → 0 filas nuevas. Comprobar que ningún dato de la hoja ha pasado por un ordenador personal y que la clave de servicio no está fuera de Netlify.
 3. Confirmar un equipo en Supabase → aparece en la página en menos de 1 hora (en la práctica, al recargar).
 4. Antes de pasar `PUBLIC_FUENTE_EQUIPOS=supabase` a producción: A-30 (issue #70) hecha y la lista igual a `docs/legal/tratamientos.md` T7 (FR-039).
 5. `eventos.ultima_jornada` en Supabase = última jornada del YAML (FR-040).
