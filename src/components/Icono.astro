@@ -1,0 +1,50 @@
+---
+/**
+ * Iconos de trazo de 24 px con extremos redondeados (DESIGN.md, Shapes).
+ * Son decorativos: el texto de al lado da el nombre accesible.
+ */
+const trazos = {
+	menu: ['M4 7h16', 'M4 12h16', 'M4 17h16'],
+	cerrar: ['M6 6l12 12', 'M18 6L6 18'],
+	agenda: ['M4 6.5h16v13.5H4z', 'M4 10.5h16', 'M8.5 3.5v5', 'M15.5 3.5v5'],
+	// Dos picos: la Serra de Mariola.
+	actividades: ['M2.5 19.5l6-10 4 6.5 2.5-4 6.5 7.5z', 'M7 12l1.5 1.2L10 12'],
+	whatsapp: [
+		'M4 20l1.3-4A8 8 0 1 1 8.4 19z',
+		'M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-1 .8a4 4 0 0 1-2.1-2.1l.8-1-1-2z',
+	],
+	correo: ['M3.5 6h17v12h-17z', 'M3.5 6.5l8.5 6.5 8.5-6.5'],
+	volver: ['M19 12H5', 'M11 6l-6 6 6 6'],
+} as const;
+
+interface Props {
+	nombre: keyof typeof trazos;
+	clase?: string;
+}
+
+const { nombre, clase } = Astro.props;
+---
+
+<svg
+	class:list={['icono', clase]}
+	width="24"
+	height="24"
+	viewBox="0 0 24 24"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="2"
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	aria-hidden="true"
+	focusable="false"
+>
+	{trazos[nombre].map((trazo) => <path d={trazo} />)}
+</svg>
+
+<style>
+	.icono {
+		flex-shrink: 0;
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+</style>

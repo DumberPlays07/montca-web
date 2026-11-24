@@ -1,0 +1,39 @@
+---
+/**
+ * Enlace "← Tornar" para fichas de actividad y eventos (la web solo tiene dos niveles,
+ * así que no hay migas de pan). Recibe a dónde vuelve: la lista de la que cuelga.
+ * La flecha es un SVG porque Overpass no tiene el carácter "←".
+ */
+import Icono from './Icono.astro';
+import { type Idioma, t } from './textos-navegacion';
+
+interface Props {
+	lang: Idioma;
+	href: string;
+}
+
+const { lang, href } = Astro.props;
+---
+
+<a class="volver" href={href}>
+	<Icono nombre="volver" />
+	<span>{t(lang, 'volver')}</span>
+</a>
+
+<style>
+	.volver {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		padding-right: var(--espacio-2);
+		color: var(--color-verd-bosc);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.volver:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+</style>

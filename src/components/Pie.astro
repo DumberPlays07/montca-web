@@ -1,0 +1,203 @@
+---
+/**
+ * Pie de todas las páginas: marca, contacto, todas las secciones y avisos legales.
+ * Lleva todas las secciones para que la web se pueda recorrer también sin JavaScript.
+ */
+import Icono from './Icono.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
+import { type ClaveRuta, type Idioma, ruta, t } from './textos-navegacion';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+
+const secciones: ClaveRuta[] = [
+	'actividades',
+	'agenda',
+	'repte',
+	'sports',
+	'escuelas',
+	'quienesSomos',
+	'contacto',
+];
+// Las páginas legales las crea la B-08.
+const avisosLegales: ClaveRuta[] = ['avisoLegal', 'privacidad', 'cookies'];
+const enlaceWhatsapp = urlWhatsapp(t(lang, 'mensajeWhatsapp'));
+const anioActual = new Date().getFullYear();
+// TODO: añadir los enlaces a Instagram y TikTok cuando Montca pase las cuentas.
+---
+
+<footer class="pie">
+	<div class="pie-interior">
+		<div class="pie-marca">
+			<a class="marca" href={ruta(lang, 'inicio')}>Montca Actiu</a>
+			<p class="lema">{t(lang, 'lema')}</p>
+		</div>
+
+		<ul class="contacto">
+			<li>
+				<a class="enlace-pie enlace-contacto" href={`mailto:${CORREO_CONTACTO}`}>
+					<Icono nombre="correo" />
+					<span><span class="solo-lector">{t(lang, 'correo')}: </span>{CORREO_CONTACTO}</span>
+				</a>
+			</li>
+			{
+				enlaceWhatsapp !== null && (
+					<li>
+						<a class="enlace-pie enlace-contacto" href={enlaceWhatsapp}>
+							<Icono nombre="whatsapp" />
+							<span>{t(lang, 'whatsapp')}</span>
+						</a>
+					</li>
+				)
+			}
+		</ul>
+
+		<nav class="secciones" aria-label={t(lang, 'navegacionPie')}>
+			<ul>
+				{
+					secciones.map((clave) => (
+						<li>
+							<a class="enlace-pie" href={ruta(lang, clave)}>
+								{t(lang, clave)}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<div class="pie-final">
+			<nav aria-label={t(lang, 'navegacionLegal')}>
+				<ul class="legales">
+					{
+						avisosLegales.map((clave) => (
+							<li>
+								<a class="enlace-pie" href={ruta(lang, clave)}>
+									{t(lang, clave)}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</nav>
+			<p class="derechos">© {anioActual} Montca Actiu</p>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.pie {
+		margin-top: var(--espacio-8);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
+	}
+
+	.pie-interior {
+		display: grid;
+		gap: var(--espacio-4);
+		max-width: var(--ancho-maximo);
+		margin: 0 auto;
+		padding: var(--espacio-6) var(--margen-lateral) var(--espacio-4);
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.marca {
+		display: inline-flex;
+		align-items: center;
+		min-height: var(--zona-tactil);
+		color: var(--color-blanco);
+		font-size: 1.5rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+		text-decoration: none;
+	}
+
+	.lema {
+		max-width: 32ch;
+		color: var(--color-herba-clara);
+	}
+
+	.enlace-pie {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		color: var(--color-boira);
+		text-decoration: none;
+	}
+
+	.enlace-pie:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	/* Fondo verde bosque: foco en teula clara (DESIGN.md, regla del fondo oscuro). */
+	.enlace-pie:focus-visible,
+	.marca:focus-visible {
+		outline-color: var(--color-teula-clara);
+	}
+
+	.enlace-contacto {
+		font-weight: 600;
+		overflow-wrap: anywhere;
+	}
+
+	.secciones ul {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: var(--espacio-4);
+	}
+
+	.pie-final {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0 var(--espacio-6);
+		padding-top: var(--espacio-2);
+		border-top: 1px solid var(--color-linea-sobre-verde);
+		font-size: 0.875rem;
+	}
+
+	.legales {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: var(--espacio-6);
+	}
+
+	.derechos {
+		color: var(--color-herba-clara);
+	}
+
+	/* Desde tableta, el pie recupera el aire: ahí no compite por la pantalla. */
+	@media (min-width: 48rem) {
+		.pie {
+			margin-top: var(--espacio-12);
+		}
+
+		.pie-interior {
+			grid-template-columns: 1.2fr 1fr 1.3fr;
+			align-items: start;
+			gap: var(--espacio-8);
+			padding: var(--espacio-12) var(--margen-lateral) var(--espacio-8);
+		}
+
+		.pie-final {
+			grid-column: 1 / -1;
+			gap: var(--espacio-2) var(--espacio-6);
+			padding-top: var(--espacio-4);
+		}
+	}
+</style>
