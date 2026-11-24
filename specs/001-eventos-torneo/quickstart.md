@@ -53,7 +53,7 @@ En `http://localhost:4321/esdeveniments/torneig-nadal-2026/`, a 375 px y en escr
 PUBLIC_FUENTE_EQUIPOS=prueba npm run dev
 ```
 
-1. Infantil/Cadet: "7 de 8 places lliures"; solo "Prova · Els Falcons". "Maria José" sale como "Maria", el menor sin autorización no sale y el capitán lleva "capità".
+1. Infantil/Cadet: "7 de 8 places lliures"; solo "Prova · Els Falcons", **sin jugadores** (interruptor apagado, FR-041) y sin ningún nombre de sus jugadores en el código fuente ni en la pestaña Red. Encendiendo `jugadores_forms_publicables` en local: "Maria José" sale como "Maria", el menor sin autorización no sale y el capitán lleva "capità".
 2. Juvenil/Sènior: "5 de 6"; adultos como "Marc García" y "Ana de la Fuente", el menor de 2010 solo con el nombre, el nombre largo no rompe los 375 px.
 3. Los equipos pendientes no salen.
 4. **Privacidad (SC-003)**: en el HTML servido (Ver código fuente) y en la pestaña Red, buscar los apellidos de las filas de prueba y "Les Cabretes" → 0 resultados.

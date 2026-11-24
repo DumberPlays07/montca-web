@@ -69,8 +69,9 @@ Los nombres son orientativos y los fija Saúl. Lo que no se puede cambiar es lo 
 |---|---|---|
 | `id` | text, clave | = `id` del YAML (`torneig-nadal-2026`) |
 | `ultima_jornada` | date | = la última `jornadas[].fecha` del YAML. Saúl la copia al dar de alta el evento; la comprobación del quickstart §6 mira que coincidan |
+| `jugadores_forms_publicables` | boolean, por defecto `false` | FR-041. Apagado: los jugadores con origen `forms` no salen en la vista. Se enciende cuando A-30 (#70) confirme que están informados de la lista pública |
 
-Solo existe para que la vista sepa cuándo dejar de publicar (FR-040). Los datos públicos del evento siguen en el YAML.
+Solo existe para que la vista sepa cuándo dejar de publicar (FR-040) y si puede publicar los jugadores del Forms (FR-041). Los datos públicos del evento siguen en el YAML.
 
 ### `equipos`
 
@@ -127,7 +128,13 @@ Una fila por equipo **confirmado** de un evento cuya lista no se ha retirado (ho
 
 ```ts
 type JugadorPublico = { nombrePublico: string; dorsal: number | null; esCapitan: boolean };
-type EquipoPublico = { categoria: string; nombre: string; jugadores: JugadorPublico[] };
+type EquipoPublico = {
+  categoria: string;
+  nombre: string;
+  /** true cuando sus jugadores aún no se pueden publicar (FR-041): la UI muestra solo el nombre. */
+  jugadoresOcultos: boolean;
+  jugadores: JugadorPublico[];
+};
 type ResultadoEquipos =
   | { tipo: 'sin-fuente' }
   | { tipo: 'ok'; equipos: EquipoPublico[] }
@@ -140,9 +147,11 @@ type ResultadoEquipos =
 
 | Categoría | Equipo | Estado | Origen | Para probar |
 |---|---|---|---|---|
-| Infantil/Cadet | "Prova · Els Falcons" | confirmado | forms | menores con nombre compuesto ("Maria José" → "Maria"), dorsal en unos sí y en otros no, capitán, un menor **sin** autorización (no sale) |
+| Infantil/Cadet | "Prova · Els Falcons" | confirmado | forms | con el interruptor apagado (como en producción), sale sin jugadores (FR-041); encendido: menores con nombre compuesto ("Maria José" → "Maria"), dorsal en unos sí y en otros no, capitán, un menor **sin** autorización (no sale) |
 | Infantil/Cadet | "Prova · Les Cabretes" | pendiente | web | no sale y no cuenta para las plazas |
 | Juvenil/Sènior | "Prova · Mariola Bàsquet Club Amb Un Nom Molt Llarg" | confirmado | web | adultos ("Marc García"; uno con apellido "de la Fuente"), un menor nacido en 2010 (solo el nombre), sin fecha de nacimiento (se trata como menor), nombre largo |
 | Juvenil/Sènior | "Prova · Cocentaina Pàdel" | pendiente | forms | no sale |
+
+Los datos de prueba llevan también su fila de `eventos`, con `jugadores_forms_publicables = false`; para ver los jugadores de "Els Falcons" se enciende en local.
 
 Todos los nombres de equipo empiezan por "Prova ·", así que se ven como prueba en la página (constitución III).

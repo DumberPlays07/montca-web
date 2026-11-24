@@ -9,6 +9,7 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
   "evento": "torneig-nadal-2026",
   "categoria": "infantil-cadet",
   "nombre": "Els Falcons",
+  "jugadores_ocultos": false,
   "jugadores": [
     { "nombre_publico": "Laia", "dorsal": 7, "es_capitan": true },
     { "nombre_publico": "Maria", "dorsal": null, "es_capitan": false }
@@ -16,7 +17,9 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 }
 ```
 
-`fuenteSupabase` lo convierte a `EquipoPublico` (`nombrePublico`, `esCapitan`).
+`fuenteSupabase` lo convierte a `EquipoPublico` (`nombrePublico`, `esCapitan`, `jugadoresOcultos`).
+
+Con `jugadores_ocultos: true`, `jugadores` es siempre `[]`.
 
 ## Reglas
 
@@ -28,6 +31,7 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
    - **adulto** → primera palabra de `nombre` + espacio + **primer apellido**: la primera palabra de `apellidos`, junto con las partículas que la preceden (`de`, `del`, `dels`, `la`, `las`, `los`, `d'`). Sin apellidos, solo el nombre. Se respeta cómo lo escribió la persona (mayúsculas y tildes).
 4. Un menor sale solo si tiene una fila en `autorizaciones` con su `jugador_id` y `recibida = true`. Si no, no sale.
 5. Un equipo confirmado que se queda sin jugadores visibles sale igualmente, con la lista vacía: ocupa plaza.
+5b. **Interruptor `eventos.jugadores_forms_publicables`** (FR-041): mientras sea `false`, un equipo con `origen = forms` sale con `jugadores_ocultos = true` y `jugadores = []`, y en los equipos `web` no sale ningún jugador con `origen = forms`. La vista no devuelve ningún dato de esos jugadores. Con `true`, se aplican las reglas 2–4 a todos.
 6. Permisos: `anon` tiene `select` sobre la vista y nada sobre `eventos`, `equipos`, `jugadores` ni `autorizaciones`.
 
 ## Casos que tienen que dar lo mismo en SQL y en TS
@@ -51,4 +55,5 @@ Es lo único de Supabase que puede leer el navegador. La misma regla está en Ty
 - Con la clave `anon`: `select * from equipos`, `jugadores` y `autorizaciones` fallan o no devuelven filas.
 - Con la clave `anon`: `select * from equipos_publicos` devuelve solo confirmados y solo las columnas de arriba.
 - Con `ultima_jornada` puesta en una fecha de hace 7 días o más, la vista no devuelve el evento; con hace 6 días, sí.
+- Con `jugadores_forms_publicables = false`: un equipo `forms` confirmado sale con `jugadores_ocultos = true` y sin jugadores; un jugador `forms` en un equipo `web` no sale. Con `true`: salen.
 - Se cargan los once casos de la tabla y se compara la salida con la columna `nombre_publico`.

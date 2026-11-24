@@ -19,6 +19,7 @@ interface FuenteEquipos {
 1. Solo devuelve equipos **confirmados** del evento pedido.
 2. Cada `nombrePublico` ya viene calculado: primer nombre si es menor; nombre y primer apellido si es adulto. La UI **no** recorta nombres.
 3. No devuelve menores sin autorización registrada.
+3b. Con el interruptor de FR-041 apagado, los equipos del Forms vienen con `jugadoresOcultos: true` y sin jugadores; la UI muestra solo su nombre.
 4. No devuelve ningún otro campo: ni apellidos, ni fechas, ni origen, ni estado, ni contacto.
 5. `categoria` es uno de los `categorias[].id` del YAML del evento. Si llega uno desconocido, la UI lo ignora y deja un aviso en la consola de desarrollo.
 6. El orden de los equipos es alfabético por `nombre`; el de los jugadores, capitán primero y después alfabético.
