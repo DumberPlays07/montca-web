@@ -1,7 +1,7 @@
 /* Variables, reset y tipografía base. Los valores salen de DESIGN.md (B-09). */
 
 :root {
-	/* Colores medidos sobre el mapa (src/assets/mapa/mapa-mariola.png). */
+	/* Colores medidos sobre el mapa (src/assets/mapa/mapa-mariola.webp). */
 	--color-boira: #f1f6ef;
 	--color-herba-clara: #dff3d7;
 	--color-pedra: #f3e6c8;

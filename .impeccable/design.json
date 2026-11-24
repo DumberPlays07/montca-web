@@ -360,7 +360,7 @@
       }
     ],
     "dos": [
-      "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.png`) y comprobar su contraste antes de usarlo.",
+      "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.",
       "**Do** reservar la teja (#9c5530) para la acción principal y la marca de \"estás aquí\".",
       "**Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.",
       "**Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.",

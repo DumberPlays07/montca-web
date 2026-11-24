@@ -36,7 +36,10 @@ from scipy.ndimage import gaussian_filter, map_coordinates, sobel
 
 CARPETA = Path(__file__).resolve().parent
 SALIDA = CARPETA / "salida"
-IMAGEN_DEFINITIVA = CARPETA / "fuentes" / "mapa-definitivo.png"
+IMAGEN_DEFINITIVA = CARPETA / "fuentes" / "mapa-definitivo.webp"
+# Las medidas en px de abajo están pensadas para la imagen a 1024 px de ancho; la
+# definitiva (2560 px) se reduce a este ancho antes de buscar los picos.
+ANCHO_TRABAJO = 1024
 RENDER = SALIDA / "mapa-3d.png"
 PICOS_RENDER = SALIDA / "picos-3d.json"
 
@@ -86,7 +89,9 @@ def main():
     for ruta in (IMAGEN_DEFINITIVA, RENDER, PICOS_RENDER):
         if not ruta.exists():
             sys.exit(f"Falta {ruta}. Ejecuta antes generar_mapa_3d.py.")
-    definitiva = np.asarray(Image.open(IMAGEN_DEFINITIVA).convert("L")).astype(float)
+    imagen = Image.open(IMAGEN_DEFINITIVA).convert("L")
+    alto_trabajo = round(imagen.height * ANCHO_TRABAJO / imagen.width)
+    definitiva = np.asarray(imagen.resize((ANCHO_TRABAJO, alto_trabajo), Image.LANCZOS)).astype(float)
     alto, ancho = definitiva.shape
     render = np.asarray(Image.open(RENDER).convert("L")).astype(float)
     bordes_render = bordes(render_en_marco_definitivo(render, alto, ancho))

@@ -108,7 +108,7 @@ components:
 
 # Design System: Montca Actiu
 
-> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.png`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
+> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
 
 ## Overview
 
@@ -289,7 +289,7 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 ### Do:
 
 - **Do** poner toda imagen con `Foto.astro`, con su texto alternativo en VAL y CAST, y guardarla en `src/assets/`.
-- **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.png`) y comprobar su contraste antes de usarlo.
+- **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.
 - **Do** reservar la teja (#9c5530) para la acción principal y la marca de "estás aquí".
 - **Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.
 - **Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.
