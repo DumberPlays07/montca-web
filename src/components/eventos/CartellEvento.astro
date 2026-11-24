@@ -26,7 +26,12 @@ const { precio } = evento;
 
 <section class="cartell" aria-labelledby="titol-esdeveniment">
 	<div class="cartell-cap">
-		<p class="kicker">{evento.marca} · {t(lang, 'esdeveniment')}</p>
+		<p class="kicker">
+			<span>{evento.marca}</span>
+			<span class="punt" aria-hidden="true" />
+			<span class="solo-lector">, </span>
+			<span>{t(lang, 'esdeveniment')}</span>
+		</p>
 		<h1 id="titol-esdeveniment">{evento.nombre[lang]}</h1>
 
 		<ol class="jornades">
@@ -34,7 +39,10 @@ const { precio } = evento;
 				evento.jornadas.map((jornada) => (
 					<li class="jornada">
 						<time class="numeral" datetime={jornada.fecha}>
-							{numeralJornada(jornada.fecha)}
+							<span>{numeralJornada(jornada.fecha).dia}</span>
+							<span class="punt" aria-hidden="true" />
+							<span class="solo-lector">/</span>
+							<span>{numeralJornada(jornada.fecha).mes}</span>
 						</time>
 						<span class="dia">
 							{diaDeLaSemana(jornada.fecha, lang)}, {jornada.nombre[lang]}
@@ -79,6 +87,9 @@ const { precio } = evento;
 	}
 
 	.kicker {
+		display: flex;
+		align-items: center;
+		gap: 0.4em;
 		margin: 0;
 		color: var(--color-verd-fulla);
 		font-size: 0.875rem;
@@ -112,12 +123,24 @@ const { precio } = evento;
 	}
 
 	.numeral {
+		display: flex;
+		align-items: center;
 		color: var(--color-verd-bosc);
 		font-size: clamp(3rem, 2.4rem + 2.5vw, 4rem);
 		font-weight: 800;
 		line-height: 1;
 		letter-spacing: -0.02em;
 		font-variant-numeric: tabular-nums;
+	}
+
+	/* Punto volado dibujado con CSS: el "·" de Overpass se dibuja con un espaciado raro. */
+	.punt {
+		flex-shrink: 0;
+		width: 0.14em;
+		height: 0.14em;
+		margin: 0 0.12em;
+		background: currentColor;
+		border-radius: 1px;
 	}
 
 	.dia {
@@ -156,7 +179,7 @@ const { precio } = evento;
 	@media (min-width: 64rem) {
 		.cartell {
 			grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-			align-items: end;
+			align-items: start;
 			gap: var(--espacio-12);
 		}
 

@@ -18,10 +18,10 @@ export function diaMesAnio(instante: string): string {
 	return `${dia}/${mes}/${anio}`;
 }
 
-/** "27·12" a partir de una fecha `AAAA-MM-DD` (los numerales grandes de las jornadas). */
-export function numeralJornada(fecha: string): string {
+/** Día y mes con dos cifras ("27" y "12") para los numerales grandes de las jornadas. */
+export function numeralJornada(fecha: string): { dia: string; mes: string } {
 	const [, mes, dia] = fecha.split('-');
-	return `${dia}·${mes}`;
+	return { dia, mes };
 }
 
 /** "Diumenge" / "Domingo" a partir de una fecha `AAAA-MM-DD`. */

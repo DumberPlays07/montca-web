@@ -13,9 +13,9 @@ describe('fechas de un evento', () => {
 		assert.equal(diaMesAnio('2026-11-25T00:00:00+01:00'), '25/11/2026');
 	});
 
-	it('numeralJornada con dos cifras y punto volado', () => {
-		assert.equal(numeralJornada('2027-01-03'), '03·01');
-		assert.equal(numeralJornada('2026-12-27'), '27·12');
+	it('numeralJornada con dos cifras', () => {
+		assert.deepEqual(numeralJornada('2027-01-03'), { dia: '03', mes: '01' });
+		assert.deepEqual(numeralJornada('2026-12-27'), { dia: '27', mes: '12' });
 	});
 
 	it('día de la semana en cada idioma, con mayúscula', () => {
