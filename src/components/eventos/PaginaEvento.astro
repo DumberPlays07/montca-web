@@ -16,6 +16,7 @@ import { calcularEstado } from '../../lib/eventos/estado';
 import { eventoJsonLd, jsonLdComoTexto } from '../../lib/eventos/json-ld';
 import CartellEvento from './CartellEvento.astro';
 import ComArribar from './ComArribar.astro';
+import PlacesIEquips from './PlacesIEquips.astro';
 import PreguntesFrequents from './PreguntesFrequents.astro';
 import QueCalSaber from './QueCalSaber.astro';
 import type { DatosEvento } from './tipos';
@@ -66,10 +67,8 @@ const imagen = evento.imagenCompartir
 
 		<CartellEvento lang={lang} evento={evento} estado={estado} />
 
-		<!--
-			Places i equips y el segundo Inscriure's van aquí (T029, fase 4). El segundo botón
-			solo tiene sentido debajo de las plazas: sin ellas quedaría pegado al primero.
-		-->
+		<!-- El segundo Inscriure's va dentro: sin plazas quedaría pegado al primero. -->
+		<PlacesIEquips lang={lang} evento={evento} estado={estado} />
 
 		<div class="debajo">
 			<QueCalSaber lang={lang} evento={evento} />

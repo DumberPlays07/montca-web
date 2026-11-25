@@ -29,6 +29,23 @@ export interface CategoriaParaPlazas {
 /** Equipos confirmados por `id` de categoría. */
 export type ConfirmadosPorCategoria = Record<string, number>;
 
+/**
+ * Equipos confirmados por categoría. Cuenta una por una las categorías del evento (con cero si
+ * no hay ninguno) y se salta las que el evento no tiene.
+ */
+export function confirmadosPorCategoria(
+	equipos: { categoria: string }[],
+	idsCategorias: string[],
+): ConfirmadosPorCategoria {
+	const recuento: ConfirmadosPorCategoria = Object.fromEntries(idsCategorias.map((id) => [id, 0]));
+	for (const equipo of equipos) {
+		if (equipo.categoria in recuento) {
+			recuento[equipo.categoria] += 1;
+		}
+	}
+	return recuento;
+}
+
 /** La lista de equipos se retira una semana después de la última jornada (FR-040). */
 const DIAS_HASTA_RETIRAR_LISTA = 7;
 
