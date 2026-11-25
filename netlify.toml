@@ -1,0 +1,13 @@
+# Netlify (B-02). La versión de Node la toma de .nvmrc.
+
+[build]
+  # Las pruebas van antes del build: si alguna falla, no se publica nada.
+  command = "npm test && npm run build"
+  publish = "dist"
+
+# Mientras la web sea una demo para Montca, ninguna página se indexa en buscadores.
+# Quitar este bloque al publicar de verdad (B-17, con el dominio de A-11).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
