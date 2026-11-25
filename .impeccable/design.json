@@ -230,9 +230,59 @@
     "shadows": [],
     "motion": [
       {
+        "name": "duracion-rapida",
+        "value": "100ms",
+        "purpose": "Pulsar: el botón o el pico se encoge un poco."
+      },
+      {
+        "name": "duracion-base",
+        "value": "160ms",
+        "purpose": "Hover, color, cerrar paneles y giro del chevron."
+      },
+      {
+        "name": "duracion-media",
+        "value": "240ms",
+        "purpose": "Abrir la ficha y el menú, aparición de los picos. Nada pasa de 240 ms."
+      },
+      {
+        "name": "escalon",
+        "value": "40ms",
+        "purpose": "Entre picos al aparecer; el último empieza como mucho a los 400 ms."
+      },
+      {
+        "name": "curva-salida",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Ease-out fuerte para entrar, salir, hover y pulsar."
+      },
+      {
+        "name": "curva-panel",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Solo paneles que se deslizan: ficha en el móvil y menú móvil."
+      },
+      {
+        "name": "escala-entrada",
+        "value": "0.95",
+        "purpose": "Las entradas parten de esta escala y opacity 0; nunca scale(0). Vale 1 con movimiento reducido."
+      },
+      {
+        "name": "escala-pulsado",
+        "value": "0.97",
+        "purpose": "Escala al pulsar. Vale 1 con movimiento reducido."
+      },
+      {
+        "name": "desplazamiento-panel",
+        "value": "0.5rem",
+        "purpose": "Desplazamiento del menú móvil al abrir. Vale 0 con movimiento reducido."
+      },
+      {
+        "name": "desplazamiento-flecha",
+        "value": "3px",
+        "purpose": "La flecha de la franja y de la cuenta atrás avanza al hover (solo ratón). Vale 0 con movimiento reducido."
+      },
+      {
         "name": "transicion",
-        "value": "160ms ease-out",
-        "purpose": "Cambios de color de fondo y de texto en hover; nada se desplaza."
+        "value": "var(--duracion-base) var(--curva-salida)",
+        "purpose": "Cambios de color de fondo y de texto en hover y pulsado (excepción explícita a «solo transform y opacity»)."
       }
     ],
     "focus": [
@@ -408,7 +458,7 @@
       "**Do** poner en Verd bosc el texto pequeño sobre Pedra y Herba clara.",
       "**Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.",
       "**Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.",
-      "**Do** mantener las transiciones cortas (160 ms) y solo de color u opacidad; si un componente añade desplazamientos o animaciones, ofrece su alternativa con `prefers-reduced-motion`."
+      "**Do** seguir la sección Movimiento: tres duraciones, dos curvas, solo `transform` y `opacity` (más el color de hover y pulsado), nada en bucle y una alternativa con `prefers-reduced-motion`."
     ],
     "donts": [
       "**Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.",
