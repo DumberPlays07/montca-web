@@ -127,9 +127,6 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			data-vineta
 			hidden
 		>
-			<button type="button" class="cerrar" data-cerrar aria-label={t(lang, 'cerrarVineta')}>
-				<Icono nombre="cerrar" />
-			</button>
 			<p class="vineta-lugar"><span class="marca" aria-hidden="true"></span><span data-vineta-lugar></span></p>
 			<h3 id="titulo-vineta" data-vineta-titulo></h3>
 			<p class="vineta-frase" data-vineta-frase></p>
@@ -138,6 +135,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 				<Icono nombre="seguir" />
 				<span class="solo-lector" data-vineta-solo-lector></span>
 			</a>
+			<!-- Al final del DOM para que el tabulador pase primero por "Entra" y después por "Tanca". -->
+			<button type="button" class="cerrar" data-cerrar aria-label={t(lang, 'cerrarVineta')}>
+				<Icono nombre="cerrar" />
+			</button>
 		</div>
 	</div>
 
