@@ -60,6 +60,7 @@ const evento = eventoParaFranja(eventos, new Date());
 		background: var(--color-verd-bosc);
 		color: var(--color-boira);
 		text-decoration: none;
+		transition: background-color var(--transicion);
 	}
 
 	/* `display: block` taparía el atributo `hidden` que pone el script. */
@@ -95,17 +96,19 @@ const evento = eventoParaFranja(eventos, new Date());
 
 	.estat {
 		display: inline-flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: var(--espacio-2);
 		font-weight: 600;
 		line-height: 1.3;
 	}
 
-	/* Marca de pintura (DESIGN.md, Shapes) en Teula clara: regla del fondo oscuro. */
+	/* Marca de pintura (DESIGN.md, Shapes) en Teula clara: regla del fondo oscuro.
+	   Centrada en la primera línea, para que siga junto al texto si este ocupa dos. */
 	.pintura {
 		flex-shrink: 0;
 		width: 1.25rem;
 		height: 0.375rem;
+		margin-top: calc((1.3em - 0.375rem) / 2);
 		background: var(--color-teula-clara);
 	}
 
