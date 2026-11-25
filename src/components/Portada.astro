@@ -93,6 +93,11 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		.lema {
 			font-size: 1.125rem;
 		}
+
+		.boton-eventos,
+		.boton-whatsapp {
+			padding-inline: var(--espacio-6);
+		}
 	}
 
 	.accesos {
@@ -108,7 +113,8 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		justify-content: center;
 		gap: var(--espacio-2);
 		min-height: 3rem;
-		padding: 0 var(--espacio-6);
+		/* Con relleno vertical y menos lateral en el móvil: a 320 px el texto no se parte en dos líneas pegadas al borde. */
+		padding: var(--espacio-2) var(--espacio-4);
 		font-size: 1.125rem;
 		font-weight: 600;
 		text-decoration: none;

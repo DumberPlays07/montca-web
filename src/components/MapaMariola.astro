@@ -204,18 +204,19 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 
 	/* Recorte (src/lib/mapa.ts): se enseña solo una franja de la imagen. La máscara difumina el borde
 	   de arriba y los de los lados para que la ilustración se funda con el fondo Boira de la página
-	   (DESIGN.md: el fondo es el cielo del mapa); no separa zonas. No afecta a los picos. */
+	   (DESIGN.md: el fondo es el cielo del mapa); no separa zonas. No afecta a los picos. De cada color de
+	   la máscara solo cuenta que es opaco. */
 	.recorte {
 		position: relative;
 		overflow: hidden;
 		aspect-ratio: var(--proporcion);
 		-webkit-mask-image:
-			linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
-			linear-gradient(to bottom, transparent, #000 12%);
+			linear-gradient(to right, transparent, var(--color-tinta) 5%, var(--color-tinta) 95%, transparent),
+			linear-gradient(to bottom, transparent, var(--color-tinta) 12%);
 		-webkit-mask-composite: source-in;
 		mask-image:
-			linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
-			linear-gradient(to bottom, transparent, #000 12%);
+			linear-gradient(to right, transparent, var(--color-tinta) 5%, var(--color-tinta) 95%, transparent),
+			linear-gradient(to bottom, transparent, var(--color-tinta) 12%);
 		mask-composite: intersect;
 	}
 
@@ -334,7 +335,7 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 		/* Arriba y no abajo: en móviles bajos la barra inferior taparía el aviso. */
 		top: var(--espacio-3);
 		margin: 0;
-		padding: var(--espacio-1) var(--espacio-3);
+		padding: var(--espacio-2) var(--espacio-3);
 		background: var(--color-boira);
 		border: 1px solid var(--color-linea);
 		border-radius: var(--radio-senal);
