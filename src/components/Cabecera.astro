@@ -21,12 +21,12 @@ const { lang } = Astro.props;
 const rutaActual = Astro.url.pathname;
 
 // En escritorio, "Esdeveniments" ocupa el lugar de "Montca Sports" (C-04, decisión del shape del 24/11).
+// Montca Sports ya no está en ningún menú: no tiene página ni tarea (docs/decisiones.md, 2026-11-25).
 const secciones: ClaveRuta[] = ['actividades', 'agenda', 'repte', 'eventos', 'escuelas', 'contacto'];
 const seccionesMenuMovil: ClaveRuta[] = [
 	'actividades',
 	'agenda',
 	'repte',
-	'sports',
 	'eventos',
 	'escuelas',
 	'quienesSomos',
