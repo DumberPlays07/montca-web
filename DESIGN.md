@@ -17,8 +17,22 @@ colors:
   linea-sobre-verde: "rgb(241 246 239 / 0.16)"
   hover-sobre-verde: "rgb(241 246 239 / 0.08)"
 typography:
+  display:
+    fontFamily: "Overpass, system-ui, sans-serif"
+    fontSize: "clamp(2.25rem, 1.5rem + 3vw, 3.5rem)"
+    fontWeight: 800
+    lineHeight: 1.05
+    letterSpacing: "-0.01em"
+  numeral:
+    fontFamily: "Overpass, system-ui, sans-serif"
+    fontSize: "clamp(3rem, 2.4rem + 2.5vw, 4rem)"
+    fontWeight: 800
+    lineHeight: 1
+    letterSpacing: "-0.02em"
+    fontFeature: "tnum"
   headline:
     fontFamily: "Overpass, system-ui, sans-serif"
+    fontSize: "clamp(1.5rem, 1.25rem + 1vw, 2rem)"
     fontWeight: 800
     lineHeight: 1.15
   marca:
@@ -92,6 +106,37 @@ components:
     height: "44px"
   button-senal-hover:
     backgroundColor: "{colors.herba-clara}"
+  button-inscripcion:
+    backgroundColor: "{colors.teula}"
+    textColor: "{colors.blanco}"
+    rounded: "{rounded.boton}"
+    padding: "8px 24px"
+    height: "48px"
+  button-inscripcion-hover:
+    backgroundColor: "{colors.teula-fosca}"
+    textColor: "{colors.blanco}"
+  tarjeta-evento:
+    backgroundColor: "{colors.herba-clara}"
+    textColor: "{colors.tinta}"
+    rounded: "{rounded.boton}"
+    padding: "16px"
+  tarjeta-evento-abierto:
+    backgroundColor: "{colors.pedra}"
+    textColor: "{colors.tinta}"
+    rounded: "{rounded.boton}"
+    padding: "16px"
+  bloque-categoria:
+    backgroundColor: "{colors.herba-clara}"
+    textColor: "{colors.tinta}"
+    rounded: "{rounded.boton}"
+    padding: "16px"
+  franja-evento:
+    backgroundColor: "{colors.verd-bosc}"
+    textColor: "{colors.boira}"
+    padding: "12px 16px"
+  franja-evento-hover:
+    backgroundColor: "{colors.tinta}"
+    textColor: "{colors.boira}"
   nav-cabecera:
     backgroundColor: "{colors.boira}"
     textColor: "{colors.tinta}"
@@ -108,7 +153,7 @@ components:
 
 # Design System: Montca Actiu
 
-> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
+> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
 
 ## Overview
 
@@ -136,27 +181,27 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 
 - **Teula de Cocentaina** (#9c5530): botones de acción (Apunta't, Reserva, Demana pressupost), marca de pintura de la página actual en el menú y anillo de foco sobre fondos claros. Es el tono de los tejados del mapa (#ae7349) oscurecido para que el texto blanco encima llegue a 5.6:1. Sobre la neblina mide 5.1:1, así que también sirve como color de enlace.
 - **Teula fosca** (#743d21): estado `hover` y `active` de los botones teja (blanco encima: 8.6:1). Se distingue de la teula 1.54:1, y el `hover` además subraya el texto del botón, así que el cambio no depende solo del color.
-- **Teula clara** (#f0b890): la marca de pintura y el anillo de foco **sobre fondos verde bosque**, donde la teja normal no se ve (1.5:1). Sobre verde bosque mide 4.7:1.
+- **Teula clara** (#f0b890): la marca de pintura y el anillo de foco **sobre fondos verde bosque**, donde la teja normal no se ve (1.5:1). Sobre verde bosque mide 4.7:1. Es el color de la marca, la flecha y el foco de la franja de evento de la portada.
 
 ### Secondary
 
 - **Verd bosc** (#375639): el verde más presente del mapa (las caras de los bancales). Es el fondo de la barra inferior del móvil y del pie, y el color de los titulares. Blanco o neblina encima: 7.5–8.2:1.
-- **Verd fulla** (#527742): iconos, bordes activos y texto grande. Mide 4.7:1 sobre la neblina; no se usa para texto pequeño sobre crema (4.2:1).
+- **Verd fulla** (#527742): iconos, bordes activos y texto grande. Mide 4.7:1 sobre la neblina; no se usa para texto pequeño sobre crema (4.2:1) ni sobre Herba clara (4.4:1): ahí el texto pequeño va en Verd bosc (la marca de la tarjeta de evento).
 
 ### Tertiary
 
-- **Pedra de la torre** (#f3e6c8): la crema, sacada de la piedra de la torre (#dcc291) y aclarada. Se usa en superficies cálidas puntuales: tarjetas destacadas, avisos de "Properament" y franjas de confianza. No es el fondo general.
+- **Pedra de la torre** (#f3e6c8): la crema, sacada de la piedra de la torre (#dcc291) y aclarada. Se usa en superficies cálidas puntuales: tarjetas destacadas, avisos de "Properament", franjas de confianza, el plano de deportes y precio del cartel de un evento y la tarjeta de un evento con las inscripciones abiertas. No es el fondo general.
 
 ### Neutral
 
 - **Boira de Mariola** (#f1f6ef): el fondo de toda la web, que es el cielo del mapa. Se elige en lugar de un blanco o una crema para que la ilustración se funda con la página.
-- **Herba clara** (#dff3d7): superficies teñidas, `hover` de los enlaces del menú y separación de bloques sin usar líneas.
+- **Herba clara** (#dff3d7): superficies teñidas, `hover` de los enlaces del menú, separación de bloques sin usar líneas, los bloques de plazas por categoría y las tarjetas de evento sin inscripción abierta.
 - **Tinta de bosc** (#1f3324): el texto de cuerpo. Mide 12.3:1 sobre la neblina y 10.9:1 sobre crema.
 - **Verd prat** (#99b561): solo decoración (ilustración, detalles gráficos). **Nunca texto ni borde funcional** (2.1:1).
 
 ### Named Rules
 
-**The Paint Mark Rule.** La teja es la pintura del sendero: marca la acción y el "estás aquí", nada más. Nunca se usa como fondo de una sección, en titulares ni como decoración. Si en una pantalla hay más de dos elementos en teja, uno sobra.
+**The Paint Mark Rule.** La teja es la pintura del sendero: marca la acción y el "estás aquí", nada más. Nunca se usa como fondo de una sección, en titulares ni como decoración. Si en una pantalla hay más de dos elementos en teja, uno sobra. Lo que informa no es acción: la marca de la línea de estado de un evento ("Inscripcions obertes…") va en Verd bosc, así la lista de eventos no multiplica la teja con cada evento abierto. Una misma acción repetida en la página (los dos "Inscriure's") cuenta como una sola señal.
 
 **The Dark Ground Rule.** La teula (#9c5530) nunca va sobre Verd bosc ni sobre otro verde oscuro: el contraste se queda en 1.5:1 y la marca desaparece. Sobre fondos verdes oscuros (barra inferior, pie), la marca de pintura y el anillo de foco son siempre Teula clara (#f0b890, 4.7:1).
 
@@ -175,20 +220,23 @@ La fuente se sirve desde la propia web con la API de fuentes de Astro (proveedor
 
 ### Hierarchy
 
-Tamaños pensados para 375 px. Lo que ya está construido lleva su valor; Display y los tamaños de Headline se fijan con la primera página con contenido (portada), y en escritorio crecen con `clamp()`.
+Tamaños pensados para 375 px, que en escritorio crecen con `clamp()`. Display, Numeral y Headline se fijaron con la página del torneo (C-04).
 
-- **Display** (800, ~2.25rem → ~3.5rem, interlineado 1.05): nombres grandes de portada y de cada sección (Montca Sports, Repte 5 Cims). *Pendiente de construir.*
-- **Headline** (800, interlineado 1.15, `text-wrap: balance`; tamaño ~1.5rem → ~2rem pendiente): `h1`–`h3`, en Verd bosc.
+- **Display** (800, `clamp(2.25rem, 1.5rem + 3vw, 3.5rem)`, interlineado 1.05, espaciado -0.01em): el `h1` de la página de un evento y de la sección Eventos. Reservado para los nombres grandes de sección (Montca Sports, Repte 5 Cims) cuando existan.
+- **Numeral** (800, `clamp(3rem, 2.4rem + 2.5vw, 4rem)`, interlineado 1, espaciado -0.02em, cifras tabulares): el día y el mes de cada jornada en el cartel de un evento (27·12).
+- **Headline** (800, `clamp(1.5rem, 1.25rem + 1vw, 2rem)`, interlineado 1.15, `text-wrap: balance`): los `h2` de las secciones de un evento (Què cal saber, Preguntes freqüents, Places i equips) y el nombre en la tarjeta de evento. Los `h3` de las categorías van a 1.25rem. Todos en Verd bosc.
 - **Marca** (800, 1.25rem en la cabecera y 1.5rem en el pie, espaciado -0.01em): el nombre "Montca Actiu" mientras no llegue el logo (A-07).
 - **Title** (600, 1.125rem): enlaces del menú desplegable del móvil; también nombres de actividad en tarjetas y fichas.
 - **Body** (400, 1rem, 1.55): texto corrido, con un máximo de 65–70 caracteres por línea.
-- **Label** (600, 0.875rem, espaciado 0.02em): selector VAL / CAST y avisos legales. Los enlaces del menú de escritorio van a 0.9375rem y la barra inferior a 0.8125rem. Sin mayúsculas forzadas: los textos en valenciano se leen mejor en minúscula (VAL / CAST son abreviaturas, no mayúsculas forzadas).
+- **Label** (600, 0.875rem, espaciado 0.02em): selector VAL / CAST, avisos legales y la marca de un evento ("Montca Sports" sobre el nombre). Los enlaces del menú de escritorio van a 0.9375rem y la barra inferior a 0.8125rem. Sin mayúsculas forzadas: los textos en valenciano se leen mejor en minúscula (VAL / CAST son abreviaturas, no mayúsculas forzadas).
 
 ### Named Rules
 
 **The Signpost Rule.** Las etiquetas de navegación y los botones dicen a dónde llevan con una o dos palabras (Agenda, Activitats, Apunta't). Si una etiqueta necesita una frase, la señal está mal puesta.
 
 **The 16px Floor Rule.** Ningún texto de lectura baja de 1rem en el móvil, y ninguna etiqueta baja de 0.8125rem.
+
+**The Floating Dot Rule.** El "·" de Overpass se dibuja con un espaciado raro, así que el punto que separa dos datos (27·12, "Montca Sports · Esdeveniment", "Laia · 7") se dibuja con CSS: un cuadrado de 0.14em en `currentColor`, oculto a los lectores de pantalla, con un texto solo para ellos donde hace falta.
 
 ## Layout
 
@@ -197,6 +245,7 @@ Móvil primero. Se diseña para 375 px y se amplía:
 - **Móvil (base, desde 320 px):** una columna con un margen lateral de 16 px. Cabecera fija arriba (`position: sticky`, 56 px), con la marca, el selector VAL/CAST y el botón de menú; por debajo de 360 px el botón se queda solo con el icono, y si el texto está muy ampliado las acciones bajan a una segunda línea. **Barra fija abajo** (64 px) con Agenda · Activitats · WhatsApp al alcance del pulgar. El `body` reserva ese alto más `env(safe-area-inset-bottom)` para que la barra no tape nada.
 - **Tableta (desde 48rem):** el margen lateral pasa a 32 px y el pie se reparte en tres columnas; la barra inferior se mantiene.
 - **Escritorio (desde 64rem):** la barra inferior desaparece y sus destinos pasan al menú horizontal de la cabecera, con el botón Reserva en teja a la derecha (como en el wireframe). El contenido se centra con un ancho máximo de 72rem.
+- **Página de un evento:** en 375 px el cartel cabe entero en la primera pantalla (marca, título, jornadas, plano de deportes y precio, lugar, estado y botón). Desde 64rem se reparte en dos columnas, el cartel a la izquierda (1.15fr) y la acción a la derecha (1fr), alineadas arriba. Las categorías de plazas y las tarjetas de la lista de eventos van en rejilla de al menos 20rem por columna.
 
 Ritmo de espaciado sobre una base de 8 px (4 px para ajustes finos), con más aire encima de un título que debajo. La densidad es baja: cada bloque de la portada respira como un bancal del mapa.
 
@@ -212,7 +261,7 @@ El menú desplegable del móvil tampoco lleva sombra: ocupa toda la pantalla ent
 
 ## Shapes
 
-Formas de señal de sendero: rectángulos con esquinas ligeramente suavizadas (4–6 px), nunca píldoras ni círculos en los controles principales. La **marca de pintura** es la forma propia de la web: una franja rectangular corta y gruesa en teja (o teja clara sobre verde), como las marcas pintadas en las rocas de los senderos. Marca la página actual en el menú y en la barra inferior. Los iconos son de trazo, de 24 px, con los extremos redondeados para que hagan juego con Overpass.
+Formas de señal de sendero: rectángulos con esquinas ligeramente suavizadas (4–6 px), nunca píldoras ni círculos en los controles principales. La **marca de pintura** es la forma propia de la web: una franja rectangular corta y gruesa en teja (o teja clara sobre verde), como las marcas pintadas en las rocas de los senderos. Marca la página actual en el menú y en la barra inferior. Los iconos son de trazo, de 24 px, con los extremos redondeados para que hagan juego con Overpass. En el cartel de un evento, una raya Verd bosc de 5 px sobre cada fecha hace de "bancal" del mapa.
 
 ## Components
 
@@ -250,7 +299,20 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 
 ### Iconos
 
-Trazo de 2 px, 24 × 24, extremos y uniones redondeados, en `currentColor` y decorativos (`aria-hidden`): siempre van con texto. Están en `Icono.astro`: menú, cerrar, agenda, actividades (dos picos de Mariola), WhatsApp, correo y volver.
+Trazo de 2 px, 24 × 24, extremos y uniones redondeados, en `currentColor` y decorativos (`aria-hidden`): siempre van con texto. Están en `Icono.astro`: menú, cerrar, agenda, actividades (dos picos de Mariola), WhatsApp, correo, volver, seguir (la flecha → de la franja), lugar (chincheta) y externo (enlace que se abre fuera).
+
+### Eventos
+
+Las piezas de la sección Eventos y de la página de cada evento (C-04). Todo texto sale del contenido del evento o del diccionario por idioma, nunca escrito en el componente.
+
+- **Botón de inscripción ("Inscriure's"):** el botón primario (teja) a todo el ancho, de 48 px de alto mínimo y 1.125rem en peso 600; `hover` y `active` en Teula fosca y subrayado, como el resto. Debajo, la nota del canal de Montca. Sin dirección de inscripción, en su lugar sale "Escriu-nos per a apuntar-te" (WhatsApp o, sin número, correo) y nunca un botón roto. No sale con "pròximament" ni "tancades". Sale dos veces en la página (en el cartel y debajo de las plazas) y cuenta como una sola señal de acción.
+- **Cartel de evento:** la primera pantalla de la página. Marca en Label, `h1` en Display, cada jornada con su Numeral sobre la raya Verd bosc, el plano Pedra de deportes y precio (con "preu final pendent" mientras no esté confirmado), el lugar con "Com arribar" (enlace externo de 44 px, en Verd bosc y no en teja), la línea de estado y el botón.
+- **Línea de estado:** texto en peso 600 con una marca de pintura de 20 × 6 px en **Verd bosc** que solo sale con las inscripciones abiertas. El script cambia el texto y el estado sin recargar. No es teja porque informa y no es una acción (Paint Mark Rule).
+- **Plazas y equipos:** un bloque Herba clara por categoría (6 px de radio, 16 px de relleno) con el nombre, los años de nacimiento, "N de M places lliures" en 1.5rem y peso 800 (o "Completa" y "Pots apuntar-te a la llista d'espera") y la lista de equipos. Cada equipo es un desplegable de 44 px con "+" que pasa a "−", como las preguntas; dentro, "nombre · dorsal" con el punto volado, y el capitán lleva "capità" en texto sobre una etiqueta Boira. Un equipo con los jugadores ocultos sale solo con su nombre. Sin equipos confirmados, las plazas y "Sigues el primer!"; con error, una línea de aviso. Con la fuente sin datos, no sale.
+- **Tarjeta de evento:** Herba clara, o Pedra si el evento tiene las inscripciones abiertas (cambia con el estado). Marca en Verd bosc, nombre en Headline, jornadas, lugar con su icono y la línea de estado. Toda la tarjeta es un enlace: el del nombre se estira por encima (`::after`), así el lector oye solo el nombre y el foco rodea la tarjeta entera. Por eso no lleva otros enlaces dentro.
+- **Lista de eventos:** rejilla de tarjetas por orden de la primera jornada, sin los eventos ya pasados. Sin ninguno, un mensaje y el botón secundario (verde) "Escriu-nos" a WhatsApp o al correo.
+- **Franja de evento (portada):** banda a todo el ancho en Verd bosc con el nombre (1.125rem, peso 800) y la línea de estado con su marca, todo en Boira; la marca, la flecha y el foco van en Teula clara (Dark Ground). Toda la banda es un enlace de al menos 44 px, no es fija y en `hover` pasa a Tinta con el nombre subrayado. El foco se dibuja por dentro de la banda. Solo sale con las inscripciones abiertas y la oculta el script cuando dejan de estarlo.
+- **Contenido de un evento:** "Què cal saber" (tabla de categorías que se desplaza dentro de su caja si no cabe), "Preguntes freqüents" (desplegables de 44 px) y "Com arribar".
 
 ### Imágenes y fotos
 
@@ -290,7 +352,8 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 
 - **Do** poner toda imagen con `Foto.astro`, con su texto alternativo en VAL y CAST, y guardarla en `src/assets/`.
 - **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.
-- **Do** reservar la teja (#9c5530) para la acción principal y la marca de "estás aquí".
+- **Do** reservar la teja (#9c5530) para la acción principal y la marca de "estás aquí"; lo que solo informa (el estado de un evento) va en Verd bosc.
+- **Do** poner en Verd bosc el texto pequeño sobre Pedra y Herba clara.
 - **Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.
 - **Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.
 - **Do** mantener las transiciones cortas (160 ms) y solo de color u opacidad; si un componente añade desplazamientos o animaciones, ofrece su alternativa con `prefers-reduced-motion`.
@@ -302,6 +365,9 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 - **Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).
 - **Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.
 - **Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.
+- **Don't** poner Verd fulla en texto pequeño sobre Pedra ni sobre Herba clara (4.2:1 y 4.4:1).
+- **Don't** escribir el "·" como carácter entre datos: se dibuja con CSS (Floating Dot Rule).
+- **Don't** meter enlaces dentro de una tarjeta que ya es un enlace.
 - **Don't** usar blanco puro ni crema como fondo general de la página.
 - **Don't** añadir sombras, degradados ni efectos de cristal para separar zonas; se separan por planos de color.
 - **Don't** cargar fuentes desde servidores externos (Google Fonts u otros).

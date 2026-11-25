@@ -127,10 +127,10 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 ## Phase 7: Polish & Cross-Cutting
 
-- [ ] T046 (Pablo) `/impeccable audit` de la página del torneo, la lista y la franja (375 px y escritorio, teclado, contraste, 44 px) y corregir lo que salga
-- [ ] T047 (Pablo) `/impeccable document` para actualizar `DESIGN.md` y su anexo con el tamaño Display y los componentes nuevos
+- [X] T046 (Pablo) `/impeccable audit` de la página del torneo, la lista y la franja (375 px y escritorio, teclado, contraste, 44 px) y corregir lo que salga
+- [X] T047 (Pablo) `/impeccable document` para actualizar `DESIGN.md` y su anexo con el tamaño Display y los componentes nuevos
 - [ ] T048 [P] (Pablo) Pasar la página construida por la prueba de resultados enriquecidos de Google (SC-005) y anotarlo en el PR
-- [ ] T049 (Saúl, al fusionar el PR de la spec) Anotar en `docs/decisiones.md` "Esdeveniments" en el lugar de "Montca Sports" en el menú
+- [X] T049 (Saúl, al fusionar el PR de la spec) Anotar en `docs/decisiones.md` "Esdeveniments" en el lugar de "Montca Sports" en el menú
 
 ---
 

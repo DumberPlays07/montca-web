@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-23T19:10:00+00:00",
+  "generatedAt": "2026-11-25T15:21:37+00:00",
   "title": "Design System: Montca Actiu",
   "extensions": {
     "colorMeta": {
@@ -186,9 +186,17 @@
       }
     },
     "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "h1 de la página de un evento y de la sección Eventos; nombres grandes de sección cuando existan."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Día y mes de cada jornada en el cartel de un evento (27·12), con cifras tabulares."
+      },
       "headline": {
         "displayName": "Headline",
-        "purpose": "h1–h3 en Verd bosc; tamaños pendientes de la portada."
+        "purpose": "h2 de las secciones de un evento y nombre en la tarjeta de evento, en Verd bosc; los h3 de categoría, a 1.25rem."
       },
       "marca": {
         "displayName": "Marca",
@@ -204,7 +212,7 @@
       },
       "label": {
         "displayName": "Label",
-        "purpose": "Selector de idioma, avisos legales y datos rápidos."
+        "purpose": "Selector de idioma, avisos legales y datos rápidos y marca de un evento (\"Montca Sports\")."
       },
       "label-barra": {
         "displayName": "Label barra",
@@ -237,6 +245,11 @@
         "name": "foco-oscuro",
         "value": "outline: 3px solid #f0b890",
         "purpose": "Foco sobre Verd bosc (barra inferior, pie)."
+      },
+      {
+        "name": "foco-interior",
+        "value": "outline: 3px solid #f0b890; outline-offset: -5px",
+        "purpose": "Franja de evento: el contorno va por dentro de la banda para no taparse con la cabecera."
       }
     ],
     "breakpoints": [
@@ -310,6 +323,30 @@
       "description": "Vuelta a la lista desde fichas y eventos; flecha en SVG.",
       "html": "<a class=\"ds-volver\" href=\"#\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 12H5\"/><path d=\"M11 6l-6 6 6 6\"/></svg><span>Tornar</span></a>",
       "css": ".ds-volver { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--color-verd-bosc, #375639); font-family: Overpass, system-ui, sans-serif; font-weight: 600; text-decoration: none; } .ds-volver:hover { text-decoration: underline; text-decoration-thickness: 2px; } .ds-volver:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; }"
+    },
+    {
+      "name": "Tarjeta de evento",
+      "kind": "card",
+      "refersTo": "tarjeta-evento",
+      "description": "Un evento en la lista de Eventos. Pedra con las inscripciones abiertas, Herba clara en los demás casos; toda la tarjeta es el enlace del nombre estirado.",
+      "html": "<article class=\"ds-tarjeta ds-tarjeta-abierta\"><p class=\"ds-marca\">Montca Sports</p><h2><a class=\"ds-enlace\" href=\"#\">Torneig de Nadal</a></h2><p class=\"ds-jornadas\">Diumenge 27/12 &nbsp; Diumenge 03/01</p><p class=\"ds-lugar\"><svg class=\"ds-icono\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z\"/><path d=\"M12 7.5a2.5 2.5 0 1 1 0 5a2.5 2.5 0 1 1 0-5z\"/></svg><span>Poliesportiu Municipal de Cocentaina</span></p><p class=\"ds-estat\"><span class=\"ds-pintura\"></span>Inscripcions obertes fins al 20/12</p></article>",
+      "css": ".ds-tarjeta { position: relative; display: grid; gap: 8px; padding: 16px; background: var(--color-herba-clara, #dff3d7); color: var(--color-tinta, #1f3324); border-radius: 6px; font-family: Overpass, system-ui, sans-serif; } .ds-tarjeta-abierta { background: var(--color-pedra, #f3e6c8); } .ds-marca { margin: 0; color: var(--color-verd-bosc, #375639); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.02em; } .ds-tarjeta h2 { margin: 0; font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem); font-weight: 800; line-height: 1.15; color: var(--color-verd-bosc, #375639); } .ds-enlace { color: inherit; text-decoration: none; } .ds-enlace::after { content: ''; position: absolute; inset: 0; border-radius: 6px; } .ds-tarjeta:hover .ds-enlace { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.15em; } .ds-enlace:focus-visible { outline: none; } .ds-enlace:focus-visible::after { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; } .ds-jornadas { margin: 0; font-weight: 600; } .ds-lugar { display: flex; align-items: center; gap: 8px; margin: 0; } .ds-icono { flex-shrink: 0; width: 24px; height: 24px; color: var(--color-verd-fulla, #527742); } .ds-estat { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 600; } .ds-pintura { flex-shrink: 0; width: 20px; height: 6px; background: var(--color-verd-bosc, #375639); }"
+    },
+    {
+      "name": "Franja de evento",
+      "kind": "nav",
+      "refersTo": "franja-evento",
+      "description": "Banda de la portada que avisa de unas inscripciones abiertas. Marca, flecha y foco en Teula clara (Dark Ground).",
+      "html": "<a class=\"ds-franja\" href=\"#\"><span class=\"ds-interior\"><span class=\"ds-textos\"><span class=\"ds-nombre\">Torneig de Nadal</span> <span class=\"ds-estat\"><span class=\"ds-pintura\"></span>Inscripcions obertes fins al 20/12</span></span><svg class=\"ds-icono ds-flecha\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M13 6l6 6-6 6\"/></svg></span></a>",
+      "css": ".ds-franja { display: block; background: var(--color-verd-bosc, #375639); color: var(--color-boira, #f1f6ef); text-decoration: none; font-family: Overpass, system-ui, sans-serif; transition: background-color 160ms ease-out; } .ds-interior { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; padding: 12px 16px; box-sizing: border-box; } .ds-textos { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 4px; } .ds-nombre { font-size: 1.125rem; font-weight: 800; line-height: 1.2; } .ds-estat { display: inline-flex; align-items: flex-start; gap: 8px; font-weight: 600; line-height: 1.3; } .ds-pintura { flex-shrink: 0; width: 20px; height: 6px; margin-top: calc((1.3em - 6px) / 2); background: var(--color-teula-clara, #f0b890); } .ds-icono { flex-shrink: 0; width: 24px; height: 24px; color: var(--color-teula-clara, #f0b890); } .ds-franja:hover { background: var(--color-tinta, #1f3324); } .ds-franja:hover .ds-nombre { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.15em; } .ds-franja:focus-visible { outline: 3px solid var(--color-teula-clara, #f0b890); outline-offset: -5px; }"
+    },
+    {
+      "name": "Plazas por categoría",
+      "kind": "card",
+      "refersTo": "bloque-categoria",
+      "description": "Bloque Herba clara con las plazas libres de una categoría y sus equipos en desplegables de 44 px.",
+      "html": "<section class=\"ds-categoria\"><h3>Juvenil/Sènior</h3><p class=\"ds-nacidos\">Nascuts: 2010 o abans</p><p class=\"ds-plazas\">5 de 6 places lliures</p><ul class=\"ds-lista\"><li><details open><summary><span class=\"ds-nombre-equipo\">Prova · Mariola Bàsquet Club</span><span class=\"ds-num\">2 jugadors</span></summary><ul class=\"ds-jugadores\"><li>Marc García<span class=\"ds-dorsal\"><span class=\"ds-punto\"></span>10</span><span class=\"ds-capita\">capità</span></li><li>Núria<span class=\"ds-dorsal\"><span class=\"ds-punto\"></span>8</span></li></ul></details></li></ul></section>",
+      "css": ".ds-categoria { padding: 16px 16px 8px; background: var(--color-herba-clara, #dff3d7); color: var(--color-tinta, #1f3324); border-radius: 6px; font-family: Overpass, system-ui, sans-serif; } .ds-categoria h3 { margin: 0; color: var(--color-verd-bosc, #375639); font-size: 1.25rem; font-weight: 800; line-height: 1.15; } .ds-nacidos { margin: 4px 0 12px; } .ds-plazas { margin: 0; color: var(--color-verd-bosc, #375639); font-size: 1.5rem; font-weight: 800; line-height: 1.2; } .ds-lista { margin: 16px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--color-linea, rgb(55 86 57 / 0.18)); } .ds-lista > li { border-bottom: 1px solid var(--color-linea, rgb(55 86 57 / 0.18)); } .ds-categoria summary { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding: 8px 32px 8px 0; list-style: none; cursor: pointer; } .ds-categoria summary::-webkit-details-marker { display: none; } .ds-categoria summary::before, .ds-categoria summary::after { content: ''; position: absolute; top: 50%; right: 8px; width: 14px; height: 2px; background: var(--color-verd-bosc, #375639); } .ds-categoria summary::after { transform: rotate(90deg); } .ds-categoria details[open] > summary::after { display: none; } .ds-categoria summary:focus-visible { outline: 3px solid var(--color-teula, #9c5530); outline-offset: 2px; } .ds-nombre-equipo { color: var(--color-verd-bosc, #375639); font-weight: 600; line-height: 1.35; overflow-wrap: break-word; } .ds-num { flex-shrink: 0; font-size: 0.9375rem; } .ds-jugadores { margin: 0; padding: 0 0 12px; list-style: none; } .ds-jugadores li { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 4px; padding: 4px 0; } .ds-dorsal { display: inline-flex; align-items: baseline; } .ds-punto { align-self: center; flex-shrink: 0; width: 0.14em; height: 0.14em; margin: 0 0.3em 0 0.2em; background: currentColor; } .ds-capita { margin-left: 8px; padding: 0 8px; background: var(--color-boira, #f1f6ef); border-radius: 4px; color: var(--color-verd-bosc, #375639); font-size: 0.875rem; font-weight: 600; line-height: 1.5; }"
     }
   ],
   "narrative": {
@@ -325,7 +362,7 @@
     "rules": [
       {
         "name": "The Paint Mark Rule",
-        "body": "La teja es la pintura del sendero: marca la acción y el \"estás aquí\", nada más. Nunca se usa como fondo de una sección, en titulares ni como decoración. Si en una pantalla hay más de dos elementos en teja, uno sobra.",
+        "body": "La teja es la pintura del sendero: marca la acción y el \"estás aquí\", nada más. Nunca se usa como fondo de una sección, en titulares ni como decoración. Si en una pantalla hay más de dos elementos en teja, uno sobra. Lo que informa no es acción: la marca de la línea de estado de un evento (\"Inscripcions obertes…\") va en Verd bosc, así la lista de eventos no multiplica la teja con cada evento abierto. Una misma acción repetida en la página (los dos \"Inscriure's\") cuenta como una sola señal.",
         "section": "colors"
       },
       {
@@ -354,23 +391,34 @@
         "section": "typography"
       },
       {
+        "name": "The Floating Dot Rule",
+        "body": "El \"·\" de Overpass se dibuja con un espaciado raro, así que el punto que separa dos datos (27·12, \"Montca Sports · Esdeveniment\", \"Laia · 7\") se dibuja con CSS: un cuadrado de 0.14em en `currentColor`, oculto a los lectores de pantalla, con un texto solo para ellos donde hace falta.",
+        "section": "typography"
+      },
+      {
         "name": "The Terrace Rule",
         "body": "Lo que está más cerca se distingue por el color de su plano, no por una sombra. Las sombras solo aparecen en capas que flotan de verdad (paneles que suben y menús desplegados).",
         "section": "elevation"
       }
     ],
     "dos": [
+      "**Do** poner toda imagen con `Foto.astro`, con su texto alternativo en VAL y CAST, y guardarla en `src/assets/`.",
       "**Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.",
-      "**Do** reservar la teja (#9c5530) para la acción principal y la marca de \"estás aquí\".",
+      "**Do** reservar la teja (#9c5530) para la acción principal y la marca de \"estás aquí\"; lo que solo informa (el estado de un evento) va en Verd bosc.",
+      "**Do** poner en Verd bosc el texto pequeño sobre Pedra y Herba clara.",
       "**Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.",
       "**Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.",
       "**Do** mantener las transiciones cortas (160 ms) y solo de color u opacidad; si un componente añade desplazamientos o animaciones, ofrece su alternativa con `prefers-reduced-motion`."
     ],
     "donts": [
+      "**Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.",
       "**Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.",
       "**Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).",
       "**Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.",
       "**Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.",
+      "**Don't** poner Verd fulla en texto pequeño sobre Pedra ni sobre Herba clara (4.2:1 y 4.4:1).",
+      "**Don't** escribir el \"·\" como carácter entre datos: se dibuja con CSS (Floating Dot Rule).",
+      "**Don't** meter enlaces dentro de una tarjeta que ya es un enlace.",
       "**Don't** usar blanco puro ni crema como fondo general de la página.",
       "**Don't** añadir sombras, degradados ni efectos de cristal para separar zonas; se separan por planos de color.",
       "**Don't** cargar fuentes desde servidores externos (Google Fonts u otros).",
