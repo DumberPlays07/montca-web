@@ -107,7 +107,7 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 **Independent Test**: [quickstart.md](quickstart.md) §4.
 
 - [X] T041 [US3] (Pablo) Crear `src/components/eventos/FranjaEsdeveniment.astro`: banda Verd bosc a todo el ancho, texto Boira, flecha y foco en Teula clara, toda la banda es un enlace de al menos 44 px, no fija. Elige el evento abierto que cierra antes (FR-030). Al construir solo se renderiza si el estado es `obertes`; en el navegador, `eventos-cliente.ts` la oculta o la muestra según el estado actual
-- [ ] T042 [US3] (Pablo, avisa a Saúl) Colocar `FranjaEsdeveniment` al principio del contenido de `src/pages/index.astro` y comprobar a 375 × 667 que se ve entera sin scroll (depende de T041)
+- [X] T042 [US3] (Pablo, avisa a Saúl) Colocar `FranjaEsdeveniment` al principio del contenido de `src/pages/index.astro` y comprobar a 375 × 667 que se ve entera sin scroll (depende de T041)
 
 ---
 
