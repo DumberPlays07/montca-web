@@ -35,6 +35,8 @@ function elemento<T extends Element>(raiz: ParentNode, selector: string): T {
 }
 
 function iniciar(raiz: HTMLElement): void {
+	// Los estilos que solo tienen sentido con JavaScript (cursor y efectos de los picos) cuelgan de esta clase.
+	raiz.classList.add('con-js');
 	const caja = elemento<HTMLElement>(raiz, '[data-caja]');
 	const marco = elemento<HTMLElement>(raiz, '[data-marco]');
 	const vineta = elemento<HTMLElement>(raiz, '[data-vineta]');
