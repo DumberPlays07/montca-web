@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-24 (B-10, B-12 y A-29 acabadas; spec de C-04 fusionada; Montca inscribe por Google Forms desde el 25/11 mientras no esté la web). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-25 (nuevas B-18 y B-19: lenguaje de movimiento y micro-animaciones del mapa). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -94,6 +94,8 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | B-15 | Aviso de cookies (solo si se usa algo que lo exija: analítica, embeds de Instagram)                                                                                                                                                                                                                                     | S                   | S     | Astro              | A-17                   | ➖ No aplica: la web no usa cookies que necesiten consentimiento (decisiones.md, sección 3). Se reabre si se añade algo de terceros |
 | B-16 | Página Repte 5 Cims (informativa)                                                                                                                                                                                                                                                                                       | P                   | M     | Astro              | A-09                   | ⬜ Pendiente |
 | B-17 | Revisión final antes de publicar: `/impeccable audit` + `polish`, enlaces rotos, móvil; comprobar en las herramientas del navegador que las páginas públicas no guardan cookies ni datos                                                                                                                                                                                                                                  | P + S               | M     | Impeccable         | Todo                   | ⬜ Pendiente |
+| B-18 | Lenguaje de movimiento: instalar en el proyecto las skills `animate` y `review-animations` de Emil Kowalski (no taste-skill ni `emil-design-eng`: el diseño lo sigue llevando Impeccable) y ampliar la regla de movimiento de DESIGN.md (qué se puede mover, duraciones, curvas y alternativa con `prefers-reduced-motion`). Apuntar la decisión en decisiones.md | P | S | Impeccable + skills de Emil | — | ⬜ Pendiente |
+| B-19 | Micro-animaciones del mapa de Mariola: aparición escalonada de los picos al cargar, respuesta de cada botón al pasar el ratón, al foco y al pulsar, y transición al filtrar con el buscador. Solo `transform` y `opacity`, sin librerías, con `prefers-reduced-motion`; revisión con `review-animations` y `/impeccable audit` | P | M | `animate` + Impeccable | B-18, C-02 | ⬜ Pendiente |
 
 ---
 
