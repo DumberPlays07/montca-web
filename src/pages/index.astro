@@ -1,17 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import FranjaEsdeveniment from '../components/eventos/FranjaEsdeveniment.astro';
-import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../components/imagen-compartir';
+import Portada from '../components/Portada.astro';
 ---
 
-<BaseLayout
-	title="Montca Actiu"
-	description="Associació juvenil i esportiva de Cocentaina: activitats a la Serra de Mariola."
-	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
-	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
->
-	<main>
-		<FranjaEsdeveniment lang="ca" />
-		<h1>Montca Actiu</h1>
-	</main>
-</BaseLayout>
+<Portada lang="ca" />
