@@ -1,0 +1,151 @@
+---
+/**
+ * Portada de la demo (B-19), en valenciano y en castellano: la franja del torneo, el título con el
+ * lema, el mapa de Mariola como protagonista y dos accesos. Sin buscador (C-02) ni agenda.
+ *
+ * Los accesos van entre el mapa y la lista de cims para que se vean sin bajar mucho: Esdeveniments
+ * es la única acción principal (teja) y WhatsApp, un botón secundario (verde).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FranjaEsdeveniment from './eventos/FranjaEsdeveniment.astro';
+import Icono from './Icono.astro';
+import MapaMariola from './MapaMariola.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from './imagen-compartir';
+import { type Idioma, ruta, t as tNavegacion } from './textos-navegacion';
+import { t as tProximament } from './textos-proximament';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+
+const enlaceWhatsapp = urlWhatsapp(lang);
+const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
+---
+
+<BaseLayout
+	title="Montca Actiu"
+	description={tNavegacion(lang, 'lema')}
+	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
+	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
+	lang={lang}
+>
+	<main>
+		<FranjaEsdeveniment lang={lang} />
+
+		<div class="portada">
+			<header class="presentacion">
+				<h1>Montca Actiu</h1>
+				<p class="lema">{tNavegacion(lang, 'lema')}</p>
+			</header>
+
+			<MapaMariola lang={lang}>
+				<div class="accesos">
+					<a class="boton-eventos" href={ruta(lang, 'eventos')}>
+						{tProximament(lang, 'verEventos')}
+						<Icono nombre="seguir" />
+					</a>
+					<a
+						class="boton-whatsapp"
+						href={enlaceContacto}
+						target={enlaceWhatsapp !== null ? '_blank' : undefined}
+						rel={enlaceWhatsapp !== null ? 'noopener' : undefined}
+					>
+						<Icono nombre={enlaceWhatsapp !== null ? 'whatsapp' : 'correo'} />
+						{tProximament(lang, 'escribenosWhatsapp')}
+						{enlaceWhatsapp !== null && <span class="solo-lector"> ({tProximament(lang, 'nuevaPestana')})</span>}
+					</a>
+				</div>
+			</MapaMariola>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	.portada {
+		max-width: var(--ancho-maximo);
+		margin: 0 auto;
+		padding: var(--espacio-6) var(--margen-lateral) var(--espacio-12);
+	}
+
+	.presentacion {
+		margin-bottom: var(--espacio-4);
+	}
+
+	/* Display (DESIGN.md). */
+	h1 {
+		margin: 0;
+		font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+		line-height: 1.05;
+		letter-spacing: -0.01em;
+	}
+
+	.lema {
+		max-width: 40rem;
+		margin: var(--espacio-2) 0 0;
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+
+	@media (min-width: 48rem) {
+		.lema {
+			font-size: 1.125rem;
+		}
+	}
+
+	.accesos {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--espacio-3);
+	}
+
+	.boton-eventos,
+	.boton-whatsapp {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--espacio-2);
+		min-height: 3rem;
+		padding: 0 var(--espacio-6);
+		font-size: 1.125rem;
+		font-weight: 600;
+		text-decoration: none;
+		border-radius: var(--radio-boton);
+		transition: background-color var(--transicion);
+	}
+
+	/* Botón primario (teja): la única acción principal de la portada. */
+	.boton-eventos {
+		background: var(--color-teula);
+		color: var(--color-blanco);
+	}
+
+	.boton-eventos:hover,
+	.boton-eventos:active {
+		background: var(--color-teula-fosca);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	/* Botón secundario (verde). */
+	.boton-whatsapp {
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
+	}
+
+	.boton-whatsapp:hover,
+	.boton-whatsapp:active {
+		background: var(--color-tinta);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	@media (max-width: 47.99rem) {
+		.boton-eventos,
+		.boton-whatsapp {
+			flex: 1 1 100%;
+		}
+	}
+</style>
