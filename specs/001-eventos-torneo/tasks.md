@@ -121,7 +121,7 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 - [X] T043 [P] [US4] (Pablo) Crear `src/components/eventos/TargetaEsdeveniment.astro`: nombre, jornadas, lugar y `EstatInscripcio`; toda la tarjeta es un enlace de al menos 44 px; plano Pedra si el evento está `obertes` y Herba clara si no
 - [X] T044 [US4] (Pablo) Completar `src/components/eventos/PaginaEventos.astro`: tarjetas de los eventos no pasados (`esEventoPasado`), ordenadas por primera jornada, y mensaje sin eventos con contacto (FR-003, FR-004) (depende de T043)
-- [ ] T045 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
+- [X] T045 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
 
 ---
 
