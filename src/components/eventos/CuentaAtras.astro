@@ -1,0 +1,203 @@
+---
+/**
+ * Cuenta atrás de la portada (B-13): cuánto falta para la primera jornada del próximo evento.
+ *
+ * La franja de la portada habla de las inscripciones; esta pieza, de cuándo empieza. Por eso no
+ * lleva botón de inscripción ni el plazo, y es un enlace discreto a la página del evento.
+ *
+ * Al construir elige el próximo evento (`eventosProximos`) y calcula la cuenta con la hora de
+ * Madrid. En el navegador, `cuenta-atras-cliente.ts` la recalcula cada minuto, sin volver a
+ * publicar. Sin evento con fecha sale "Properament", sin enlace.
+ */
+import { getCollection } from 'astro:content';
+import { calcularCuentaAtras } from '../../lib/eventos/cuenta-atras';
+import { numeralJornada } from '../../lib/eventos/fechas';
+import { eventosProximos } from '../../lib/eventos/lista';
+import { textosCuentaAtras } from '../cuenta-atras-textos';
+import Icono from '../Icono.astro';
+import { type Idioma, ruta } from '../textos-navegacion';
+import { t } from '../textos-portada';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+
+const eventos = (await getCollection('eventos')).map((entrada) => ({ id: entrada.id, ...entrada.data }));
+const ahora = new Date();
+const evento = eventosProximos(eventos, ahora)[0] ?? null;
+const cuenta = calcularCuentaAtras(evento, ahora);
+// Sin evento, o con uno que ya terminó, no hay enlace ni nombre: solo "Properament".
+const hayEvento = evento !== null && cuenta.tipo !== 'proximament';
+
+const inicio = evento?.jornadas[0].fecha ?? '';
+const { dia, mes } = inicio === '' ? { dia: '', mes: '' } : numeralJornada(inicio);
+const textos = textosCuentaAtras(lang, cuenta, `${dia}/${mes}`);
+
+const Etiqueta = hayEvento ? 'a' : 'div';
+---
+
+<Etiqueta
+	class="cuenta"
+	href={hayEvento ? `${ruta(lang, 'eventos')}${evento.id}/` : undefined}
+	data-cuenta-atras
+	data-tipo={cuenta.tipo}
+	data-lang={lang}
+	data-inicio={inicio}
+	data-fin={evento?.jornadas[evento.jornadas.length - 1].fecha ?? ''}
+>
+	<span class="datos">
+		<span class="marca">
+			{/* El punto va pegado a la marca: si el nombre baja de línea, el punto no se queda solo al principio. */}
+			<span class="grupo-marca">
+				<span data-marca>{hayEvento ? evento.marca : t(lang, 'cuentaMarcaFija')}</span>
+				{hayEvento && (
+					<span class="separador" data-nombre-evento>
+						<span class="punt" aria-hidden="true" />
+						<span class="solo-lector">, </span>
+					</span>
+				)}
+			</span>
+			{hayEvento && <span data-nombre-evento>{evento.nombre[lang]}</span>}
+		</span>
+		<span class="cifra">
+			<span class="solo-lector" data-prefijo>{textos.prefijo}</span>
+			<span class="valor" data-valor>{textos.valor}</span>
+			{' '}
+			<span class="unidad" data-unidad>{textos.unidad}</span>
+		</span>
+		<span class="detalle" data-detalle>{textos.detalle}</span>
+	</span>
+	<Icono nombre="seguir" clase="flecha" />
+</Etiqueta>
+
+<script>
+	import '../../scripts/cuenta-atras-cliente';
+</script>
+
+<style>
+	/* Plano Pedra (DESIGN.md, Tertiary): superficie cálida puntual, sin sombra ni degradado. */
+	.cuenta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--espacio-4);
+		min-height: var(--zona-tactil);
+		padding: var(--espacio-4);
+		margin-bottom: var(--espacio-3);
+		background: var(--color-pedra);
+		color: var(--color-tinta);
+		border-radius: var(--radio-boton);
+		text-decoration: none;
+		transition: background-color var(--transicion);
+	}
+
+	.cuenta[href]:hover {
+		background: var(--color-herba-clara);
+	}
+
+	.datos {
+		display: grid;
+		gap: var(--espacio-1);
+	}
+
+	/* Verd bosc y no Verd fulla: sobre Pedra el texto pequeño en Verd fulla no llega a 4,5:1. */
+	.marca {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+	}
+
+	.grupo-marca {
+		display: inline-flex;
+		align-items: center;
+		white-space: nowrap;
+	}
+
+	.separador {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	/* Punto volado dibujado con CSS: el "·" de Overpass se dibuja con un espaciado raro. */
+	.punt {
+		flex-shrink: 0;
+		width: 0.14em;
+		height: 0.14em;
+		margin: 0 0.5em;
+		background: currentColor;
+	}
+
+	/* Numeral (DESIGN.md) para los números; las palabras ("Hui", "Properament") van en Headline. */
+	.cifra {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		column-gap: var(--espacio-2);
+		color: var(--color-verd-bosc);
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: -0.02em;
+	}
+
+	.valor {
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+		line-height: 1.15;
+		text-wrap: balance;
+	}
+
+	[data-tipo='dias'] .valor,
+	[data-tipo='horas'] .valor {
+		font-size: clamp(3rem, 2.4rem + 2.5vw, 4rem);
+		line-height: 1;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.unidad {
+		font-size: 1.25rem;
+		letter-spacing: 0;
+	}
+
+	.unidad:empty {
+		display: none;
+	}
+
+	.detalle {
+		font-size: 1rem;
+		line-height: 1.4;
+	}
+
+	.detalle:empty {
+		display: none;
+	}
+
+	.cuenta :global(.flecha) {
+		flex-shrink: 0;
+		color: var(--color-verd-bosc);
+	}
+
+	/* Sin enlace (Properament, también cuando el script quita el `href`) no hay flecha. */
+	.cuenta:not([href]) :global(.flecha) {
+		display: none;
+	}
+
+	/* Escritorio: una fila como el boceto, con la marca a un lado, el número en medio y la fecha al otro. */
+	@media (min-width: 48rem) {
+		.datos {
+			flex: 1;
+			grid-template-columns: 1fr auto 1fr;
+			align-items: center;
+			gap: var(--espacio-6);
+		}
+
+		.detalle {
+			justify-self: end;
+			text-align: right;
+		}
+	}
+</style>

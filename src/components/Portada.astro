@@ -4,9 +4,12 @@
  * lema, el mapa de Mariola como protagonista y dos accesos. Sin buscador (C-02) ni agenda.
  *
  * Los accesos van entre el mapa y la lista de cims para que se vean sin bajar mucho: Esdeveniments
- * es la única acción principal (teja) y WhatsApp, un botón secundario (verde).
+ * es la única acción principal (teja) y WhatsApp, un botón secundario (verde). Encima de ellos va la
+ * cuenta atrás del próximo evento (B-13): enlaza a la página del evento y Esdeveniments sigue siendo
+ * el camino a la lista.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CuentaAtras from './eventos/CuentaAtras.astro';
 import FranjaEsdeveniment from './eventos/FranjaEsdeveniment.astro';
 import Icono from './Icono.astro';
 import MapaMariola from './MapaMariola.astro';
@@ -42,6 +45,7 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 			</header>
 
 			<MapaMariola lang={lang}>
+				<CuentaAtras lang={lang} />
 				<div class="accesos">
 					<a class="boton-eventos" href={ruta(lang, 'eventos')}>
 						{tProximament(lang, 'verEventos')}
