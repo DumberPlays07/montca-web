@@ -12,6 +12,9 @@
  * - `src`: imagen importada de `src/assets` (nunca una ruta de `public/` ni una URL).
  * - `principal`: solo para la imagen grande de la primera pantalla; se carga enseguida.
  *   Como mucho una por página. El resto se cargan al acercarse a la pantalla.
+ * - `inmediata`: carga la imagen ya (`loading="eager"`) sin subirle la prioridad de red: para
+ *   las imágenes pequeñas que se ven en la primera pantalla, como el logo de la cabecera.
+ *   No sustituye a `principal`, que es para la imagen grande.
  * - `ancho`: ancho máximo en pantalla, en px. Por defecto, el de la imagen sin pasar del
  *   ancho máximo del contenido.
  * - `sizes`: solo si la imagen ocupa menos que el ancho de la pantalla en móvil
@@ -27,12 +30,13 @@ interface Props {
 	alt: TextoAlternativo;
 	lang: Idioma;
 	principal?: boolean;
+	inmediata?: boolean;
 	ancho?: number;
 	sizes?: string;
 	class?: string;
 }
 
-const { src, alt, lang, principal = false, ancho, sizes, class: clase } = Astro.props;
+const { src, alt, lang, principal = false, inmediata = false, ancho, sizes, class: clase } = Astro.props;
 
 exigirTextoAlternativo(alt, `la imagen ${src?.src ?? '(sin src)'} en ${Astro.url.pathname}`);
 
@@ -47,6 +51,7 @@ const anchoMostrado = Math.min(ancho ?? src.width, src.width, ANCHO_MAXIMO_CONTE
 	width={anchoMostrado}
 	sizes={sizes}
 	priority={principal}
+	loading={inmediata ? 'eager' : undefined}
 	class:list={['foto', clase]}
 	style={`max-width: ${anchoMostrado}px`}
 />
