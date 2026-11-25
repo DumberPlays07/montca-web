@@ -2,6 +2,10 @@
  * Script del mapa de Mariola (B-21): abre y cierra la viñeta de un botón, coloca el mapa al empezar y
  * enseña el aviso y los degradados de deslizar en el móvil. Sin animaciones.
  *
+ * Sin este script cada botón del mapa es un enlace (`<a href>`) directo a su apartado. Al cargar, el
+ * script los convierte en botones que abren la viñeta (role, aria-expanded y aria-controls) y deja de
+ * seguir el enlace.
+ *
  * Los botones del mapa llevan en `data-*` lo que la viñeta enseña (lugar, título, frase y enlace). La
  * viñeta es una sola: al pulsar otro botón se rellena con el suyo.
  */
@@ -36,21 +40,21 @@ function iniciar(raiz: HTMLElement): void {
 	const vineta = elemento<HTMLElement>(raiz, '[data-vineta]');
 	const pista = elemento<HTMLElement>(raiz, '[data-pista]');
 	const enlace = elemento<HTMLAnchorElement>(vineta, '[data-vineta-enlace]');
-	const botones = Array.from(raiz.querySelectorAll<HTMLButtonElement>('button.boton'));
+	const botones = Array.from(raiz.querySelectorAll<HTMLAnchorElement>('a.boton'));
 	const escritorio = window.matchMedia('(min-width: 48rem)');
 
-	let abierto: HTMLButtonElement | null = null;
+	let abierto: HTMLAnchorElement | null = null;
 
 	// ---- Viñeta ----
 
-	function marcarAbierto(boton: HTMLButtonElement | null): void {
+	function marcarAbierto(boton: HTMLAnchorElement | null): void {
 		for (const otro of botones) {
 			otro.setAttribute('aria-expanded', String(otro === boton));
 		}
 	}
 
 	/** Pone la viñeta junto al botón (escritorio). En el móvil es un panel fijo y no se coloca. */
-	function colocar(boton: HTMLButtonElement): void {
+	function colocar(boton: HTMLAnchorElement): void {
 		if (!escritorio.matches) {
 			return;
 		}
@@ -75,7 +79,7 @@ function iniciar(raiz: HTMLElement): void {
 	 * En el móvil el panel es fijo y puede tapar el botón elegido: si es así, sube la página lo justo
 	 * para dejarlo a la vista encima del panel, sin pasarse de la cabecera (sin animación).
 	 */
-	function dejarBotonALaVista(boton: HTMLButtonElement): void {
+	function dejarBotonALaVista(boton: HTMLAnchorElement): void {
 		if (escritorio.matches) {
 			return;
 		}
@@ -87,12 +91,12 @@ function iniciar(raiz: HTMLElement): void {
 		}
 	}
 
-	function abrir(desde: HTMLButtonElement): void {
+	function abrir(desde: HTMLAnchorElement): void {
 		const titulo = desde.dataset.titulo ?? '';
 		elemento<HTMLElement>(vineta, '[data-vineta-lugar]').textContent = desde.dataset.lugar ?? '';
 		elemento<HTMLElement>(vineta, '[data-vineta-titulo]').textContent = titulo;
 		elemento<HTMLElement>(vineta, '[data-vineta-frase]').textContent = desde.dataset.frase ?? '';
-		enlace.href = desde.dataset.href ?? enlace.href;
+		enlace.href = desde.getAttribute('href') ?? enlace.href;
 		// B-19 lee este atributo para saber a qué apartado va el enlace e interceptar el clic.
 		enlace.dataset.destino = desde.dataset.destino ?? '';
 		// Para el lector de pantalla el enlace dice "Entra a Repte 5 Cims", no solo "Entra".
@@ -119,13 +123,34 @@ function iniciar(raiz: HTMLElement): void {
 		origen.focus({ preventScroll: true });
 	}
 
+	// Los enlaces pasan a ser botones. El `href` se queda (copiar el enlace, abrirlo en otra pestaña),
+	// pero un clic normal ya no lo sigue.
 	for (const boton of botones) {
-		boton.addEventListener('click', () => {
+		boton.setAttribute('role', 'button');
+		boton.setAttribute('aria-haspopup', 'dialog');
+		boton.setAttribute('aria-expanded', 'false');
+		boton.setAttribute('aria-controls', vineta.id);
+		boton.addEventListener('click', (evento) => {
+			// Con Ctrl, Cmd, Mayús o botón del medio, el navegador abre el apartado como un enlace normal.
+			if (evento.ctrlKey || evento.metaKey || evento.shiftKey || evento.altKey) {
+				return;
+			}
+			evento.preventDefault();
 			if (abierto === boton) {
 				cerrar();
 				return;
 			}
 			abrir(boton);
+		});
+	}
+
+	// Un enlace solo se activa con Intro; un botón también con la barra espaciadora.
+	for (const boton of botones) {
+		boton.addEventListener('keydown', (evento) => {
+			if (evento.key === ' ') {
+				evento.preventDefault();
+				boton.click();
+			}
 		});
 	}
 

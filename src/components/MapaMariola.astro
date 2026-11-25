@@ -13,13 +13,14 @@
  *   aviso y los degradados quedan fuera del lienzo para que no se escalen.
  * - **Pensado para B-19 y B-22 (sin animar nada aquí):** cada botón se centra con `translate` y no con
  *   `transform`, y lleva `--x`, `--y` y `--orden`; el punto y la placa son elementos separados; el
- *   enlace de la viñeta lleva `data-destino`; los estados van en `aria-expanded` y `hidden`.
+ *   enlace de la viñeta lleva `data-destino`; los estados van en `aria-expanded` y `hidden` (que pone el script).
  * - **En el móvil el mapa mide 56rem y se desliza** dentro de su marco, con degradado en los bordes y
  *   un aviso que desaparece al primer deslizamiento. Empieza centrado en el 76 % del ancho.
  * - **La viñeta** es una sola para todos los botones y la rellena `mapa-mariola-cliente.ts`: panel
  *   encima de la barra inferior en el móvil y tarjeta con piquito junto al botón en escritorio.
  *
- * Sin JavaScript se ven el mapa con sus placas y la lista de enlaces, pero no la viñeta.
+ * Sin JavaScript cada botón del mapa es un enlace directo a su apartado y no sale la viñeta; el script
+ * los convierte en botones que abren la viñeta (`mapa-mariola-cliente.ts`).
  */
 import Icono from './Icono.astro';
 import Foto from './Foto.astro';
@@ -54,6 +55,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 ---
 
 <section class="mapa-mariola" data-mapa-mariola data-escena-estado="hecha">
+	<h2 class="solo-lector">{t(lang, 'mapaTitulo')}</h2>
 	<div class="caja" data-caja>
 		<div
 			class="marco"
@@ -81,20 +83,16 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 					<div class="botones">
 						{
 							destinos.map((destino) => (
-								<button
-									type="button"
+								<a
 									class="boton"
+									href={destino.href}
 									style={`--x: ${destino.izquierda}%; --y: ${destino.arriba}%; --orden: ${destino.orden}`}
 									data-id={destino.id}
 									data-lugar={destino.texto.lugar}
 									data-titulo={destino.texto.titulo}
 									data-frase={destino.texto.frase}
-									data-href={destino.href}
 									data-destino={destino.ruta}
 									aria-label={`${destino.texto.placaLugar}: ${destino.texto.placaDestino}`}
-									aria-haspopup="dialog"
-									aria-expanded="false"
-									aria-controls="vineta-mapa"
 								>
 									<span class="punto" aria-hidden="true" />
 									<span class="placa" data-lado={destino.lado} aria-hidden="true">
@@ -104,7 +102,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 											{destino.texto.placaDestino}
 										</span>
 									</span>
-								</button>
+								</a>
 							))
 						}
 					</div>
@@ -244,6 +242,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		border: 0;
 		color: var(--color-tinta);
 		font: inherit;
+		text-decoration: none;
 		cursor: pointer;
 		pointer-events: auto;
 		/* `translate` y no `transform`: así B-19 puede escalar y levantar el botón sin descolocarlo. */
@@ -424,8 +423,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		background: var(--color-boira);
 		border-top: 1px solid var(--color-linea);
 		border-radius: var(--radio-boton) var(--radio-boton) 0 0;
-		/* La única sombra de la web: separa este panel del mapa (DESIGN.md, Elevation). */
-		box-shadow: 0 -4px 16px rgb(31 51 36 / 0.12);
+		/* La única sombra de la web (`--sombra-panel`): separa este panel del mapa (DESIGN.md, Elevation). */
+		box-shadow: var(--sombra-panel);
 	}
 
 	.vineta[hidden] {

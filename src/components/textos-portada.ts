@@ -10,6 +10,7 @@ import type { Idioma } from './textos-navegacion';
 
 const textos = {
 	ca: {
+		mapaTitulo: 'Mapa de Mariola',
 		regionMapa: 'Mapa de Mariola: tria un lloc per a anar a cada apartat',
 		llisca: 'Llisca per a veure tota la serra',
 		destinosTitulo: 'Tria per on començar',
@@ -34,6 +35,7 @@ const textos = {
 		cuentaVaComencarEl: 'Va començar el {fecha}',
 	},
 	es: {
+		mapaTitulo: 'Mapa de Mariola',
 		regionMapa: 'Mapa de Mariola: elige un lugar para ir a cada apartado',
 		llisca: 'Desliza para ver toda la sierra',
 		destinosTitulo: 'Elige por dónde empezar',
