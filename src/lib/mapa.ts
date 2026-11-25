@@ -17,6 +17,13 @@ export const RECORTE_SUPERIOR = 0.3;
 /** Parte de abajo de la imagen que NO se enseña, entre 0 y 1: la franja casi blanca bajo el diorama. */
 export const RECORTE_INFERIOR = 0.05;
 
+/**
+ * Ancho mínimo del mapa en rem (56rem = 896 px). Por debajo, el mapa no se encoge: se desliza dentro
+ * de su marco. Con este ancho todos los picos tienen una zona de 44 px salvo el par Montcabrer /
+ * Alt de la Reja (24 px); con menos, muchos picos quedarían a menos de 24 px de otro.
+ */
+export const ANCHO_MINIMO_MAPA_REM = 56;
+
 /** La zona pulsable de un pico mide como mucho 44 px (principio V de la constitución). */
 export const LADO_MAXIMO_ZONA_PULSABLE = 44;
 

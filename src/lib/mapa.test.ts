@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import picosEnCrudo from '../data/picos-mapa.json' with { type: 'json' };
 import {
+	ANCHO_MINIMO_MAPA_REM,
 	LADO_MAXIMO_ZONA_PULSABLE,
 	LADO_MINIMO_ZONA_PULSABLE,
 	RECORTE_INFERIOR,
@@ -211,5 +212,16 @@ describe('colocarFicha', () => {
 	it('si la ficha es más ancha que la caja, se pega a la izquierda', () => {
 		const sitio = colocarFicha({ pico: { x: 50, y: 50 }, caja: { ancho: 200, alto: 400 }, ficha, margen: 12 });
 		assert.equal(sitio.izquierda, 0);
+	});
+});
+
+describe('ancho mínimo del mapa', () => {
+	it('con el ancho mínimo, ninguna zona pulsable baja de 24 px y solo un par baja de 44 px', () => {
+		const ancho = 16 * ANCHO_MINIMO_MAPA_REM;
+		const menores = picos.filter((p) => zonaPulsable(p.vecino, ancho) < LADO_MAXIMO_ZONA_PULSABLE).map((p) => p.nombre);
+		assert.deepEqual(menores.sort(), ['Alt de la Reja', 'Montcabrer']);
+		for (const pico of picos) {
+			assert.ok(zonaPulsable(pico.vecino, ancho) >= LADO_MINIMO_ZONA_PULSABLE, pico.nombre);
+		}
 	});
 });

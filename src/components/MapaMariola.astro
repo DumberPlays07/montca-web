@@ -1,0 +1,518 @@
+---
+/**
+ * Mapa de Mariola (B-19): la ilustración con un botón sobre cada pico, la ficha de cada pico y,
+ * debajo, la lista de los picos (concepto elegido: docs/concepto-elegido-mapa-de-mariola.md).
+ *
+ * - **Sin animaciones:** B-18 y B-19 las añaden después.
+ * - **El mapa se recorta** (cielo de arriba y franja de abajo): las constantes están en
+ *   `src/lib/mapa.ts` y los picos se recalculan solos.
+ * - **En el móvil el mapa mide 56rem y se desliza** dentro de su marco, para que los puntos no
+ *   queden unos encima de otros. Con degradado en los bordes donde hay más mapa y un aviso que
+ *   desaparece al primer deslizamiento.
+ * - **Zonas pulsables:** 44 px, o menos si el vecino está más cerca, y nunca menos de 24 px. Solo
+ *   Montcabrer y Alt de la Reja quedan por debajo de 44 px (excepción del principio V de la
+ *   constitución, con la lista de picos —botones de 44 px— como alternativa; ver el PR).
+ * - **La ficha** es una sola para todos los picos: se abre desde un punto o desde la lista y el script
+ *   (`mapa-mariola-cliente.ts`) la rellena. Panel inferior en el móvil y tarjeta junto al pico en escritorio.
+ *
+ * Sin JavaScript se ve el mapa y la lista, pero no la ficha.
+ */
+import Icono from './Icono.astro';
+import Foto from './Foto.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
+import { type Idioma, textoEnLosDosIdiomas } from './textos-navegacion';
+import { rellenar } from './textos-eventos';
+import { t } from './textos-portada';
+import { t as tProximament } from './textos-proximament';
+import mapa from '../assets/mapa/mapa-mariola.webp';
+import picosEnCrudo from '../data/picos-mapa.json';
+import {
+	ANCHO_MINIMO_MAPA_REM,
+	RECORTE_INFERIOR,
+	RECORTE_SUPERIOR,
+	formatoAltura,
+	preparar,
+	proporcionRecortada,
+} from '../lib/mapa';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+
+const picos = preparar(picosEnCrudo, mapa.width, mapa.height);
+const proporcion = proporcionRecortada(mapa.width, mapa.height);
+const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
+
+// Centro de los picos en % del ancho: el marco empieza desplazado hasta ahí, no en el borde.
+const xs = picos.map((pico) => pico.izquierda);
+const centroX = (Math.min(...xs) + Math.max(...xs)) / 2;
+
+// El mensaje de WhatsApp lleva el nombre del pico. Sin número, el contacto cae al correo.
+const enlaceDe = (nombre: string) =>
+	urlWhatsapp(lang, undefined, rellenar(t(lang, 'mensajePico'), { pico: nombre })) ??
+	`mailto:${CORREO_CONTACTO}`;
+const enlacesExternos = urlWhatsapp(lang) !== null;
+---
+
+<section class="mapa-mariola" data-mapa-mariola>
+	<div class="caja" data-caja>
+		<div
+			class="marco"
+			data-marco
+			data-centro-x={centroX}
+			role="group"
+			aria-label={t(lang, 'regionMapa')}
+			style={`--ancho-minimo: ${ANCHO_MINIMO_MAPA_REM}rem`}
+		>
+			<div class="mapa" style={`--proporcion: ${proporcion}; --recorte-arriba: ${RECORTE_SUPERIOR}; --recorte-visible: ${visible}`}>
+				<div class="recorte">
+					<Foto
+						src={mapa}
+						alt={textoEnLosDosIdiomas('altImagenCompartir')}
+						lang={lang}
+						principal
+						sizes={`(min-width: 72rem) 1152px, max(100vw, ${ANCHO_MINIMO_MAPA_REM}rem)`}
+					/>
+				</div>
+
+				{
+					picos.map((pico) => (
+						<button
+							type="button"
+							class="pico"
+							style={`left: ${pico.izquierda}%; top: ${pico.arriba}%; --vecino: ${pico.vecino}`}
+							data-pico={pico.id}
+							data-nombre={pico.nombre}
+							data-altura={formatoAltura(pico.altura)}
+							data-whatsapp={enlaceDe(pico.nombre)}
+							aria-label={`${pico.nombre}, ${formatoAltura(pico.altura)}`}
+							aria-haspopup="dialog"
+							aria-expanded="false"
+							aria-controls="ficha-mapa"
+						>
+							<span class="punto" aria-hidden="true" />
+							<span class="etiqueta" aria-hidden="true">
+								{pico.nombre}
+							</span>
+						</button>
+					))
+				}
+			</div>
+		</div>
+
+		<!-- Degradados de los bordes con más mapa y aviso de deslizar: solo en el móvil y solo con JS. -->
+		<span class="borde borde-izquierdo" aria-hidden="true"></span>
+		<span class="borde borde-derecho" aria-hidden="true"></span>
+		<p class="pista" data-pista hidden>{t(lang, 'llisca')}</p>
+
+		<div
+			class="ficha"
+			id="ficha-mapa"
+			role="dialog"
+			aria-modal="false"
+			aria-labelledby="titol-ficha"
+			tabindex="-1"
+			data-ficha
+			hidden
+		>
+			<button type="button" class="cerrar" data-cerrar aria-label={t(lang, 'cerrarFicha')}>
+				<Icono nombre="cerrar" />
+			</button>
+			<h3 id="titol-ficha" data-ficha-nombre></h3>
+			<p class="altura" data-ficha-altura></p>
+			<!--
+				C-01 (actividades): aquí irán las actividades de cada cima, por el `data-pico` (el id del
+				pico, p. ej. "montcabrer") que lleva el botón de este pico y que `mapa-mariola-cliente.ts`
+				copia en `data-pico-abierto` de esta ficha. De momento, solo el texto de "pròximament".
+			-->
+			<div class="actividades" data-actividades>
+				<p>{t(lang, 'actividadesPico')}</p>
+			</div>
+			<a
+				class="boton-whatsapp"
+				data-ficha-whatsapp
+				href={enlaceDe('Montca Actiu')}
+				target={enlacesExternos ? '_blank' : undefined}
+				rel={enlacesExternos ? 'noopener' : undefined}
+			>
+				<Icono nombre={enlacesExternos ? 'whatsapp' : 'correo'} />
+				{tProximament(lang, 'escribenosWhatsapp')}
+				{enlacesExternos && <span class="solo-lector"> ({tProximament(lang, 'nuevaPestana')})</span>}
+			</a>
+		</div>
+	</div>
+
+	<section class="cims" aria-labelledby="titol-cims">
+		<h2 id="titol-cims">{t(lang, 'cimsTitulo')}</h2>
+		<p class="ayuda">{t(lang, 'cimsAyuda')}</p>
+		<ul class="lista-cims">
+			{
+				picos.map((pico) => (
+					<li>
+						<button
+							type="button"
+							class="cim"
+							data-pico={pico.id}
+							data-nombre={pico.nombre}
+							data-altura={formatoAltura(pico.altura)}
+							data-whatsapp={enlaceDe(pico.nombre)}
+							aria-haspopup="dialog"
+							aria-expanded="false"
+							aria-controls="ficha-mapa"
+						>
+							<span class="nombre-cim">{pico.nombre}</span>
+							<span class="altura-cim">{formatoAltura(pico.altura)}</span>
+						</button>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</section>
+
+<script>
+	import '../scripts/mapa-mariola-cliente';
+</script>
+
+<style>
+	.mapa-mariola {
+		display: grid;
+		gap: var(--espacio-8);
+	}
+
+	.caja {
+		position: relative;
+	}
+
+	/* ---- Marco: en el móvil, el mapa se desliza dentro de él, de borde a borde de la pantalla. ---- */
+	.marco {
+		overflow-x: auto;
+		overscroll-behavior-x: contain;
+		margin-inline: calc(-1 * var(--margen-lateral));
+		scrollbar-width: thin;
+	}
+
+	.mapa {
+		position: relative;
+		width: max(100%, var(--ancho-minimo));
+	}
+
+	/* Recorte (src/lib/mapa.ts): se enseña solo una franja de la imagen. */
+	.recorte {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: var(--proporcion);
+	}
+
+	.recorte :global(picture) {
+		position: absolute;
+		top: calc(var(--recorte-arriba) / var(--recorte-visible) * -100%);
+		left: 0;
+		width: 100%;
+	}
+
+	/* ---- Picos: zona pulsable de 44 px (o la distancia al vecino, nunca menos de 24 px). ---- */
+	.pico {
+		position: absolute;
+		display: grid;
+		place-items: center;
+		width: clamp(24px, calc(var(--vecino) * 100%), 44px);
+		aspect-ratio: 1;
+		padding: 0;
+		background: none;
+		border: 0;
+		border-radius: 50%;
+		color: var(--color-tinta);
+		font: inherit;
+		cursor: pointer;
+		transform: translate(-50%, -50%);
+	}
+
+	/* El punto se ve más pequeño que su zona pulsable. */
+	.punto {
+		width: 14px;
+		height: 14px;
+		background: var(--color-boira);
+		border: 2px solid var(--color-verd-bosc);
+		border-radius: 50%;
+	}
+
+	.pico:hover .punto,
+	.pico[aria-expanded='true'] .punto {
+		width: 18px;
+		height: 18px;
+		border-width: 3px;
+	}
+
+	.pico[aria-expanded='true'] .punto {
+		background: var(--color-teula-clara);
+		border-color: var(--color-tinta);
+	}
+
+	/* Foco en dos tonos (Boira y Tinta): se ve sobre cualquier verde del mapa. */
+	.pico:focus-visible {
+		outline: none;
+	}
+
+	.pico:focus-visible .punto {
+		box-shadow:
+			0 0 0 3px var(--color-boira),
+			0 0 0 6px var(--color-tinta);
+	}
+
+	.etiqueta {
+		position: absolute;
+		left: 100%;
+		top: 50%;
+		display: none;
+		margin-left: var(--espacio-1);
+		padding: 0 var(--espacio-2);
+		background: var(--color-boira);
+		border-radius: var(--radio-senal);
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 1.5;
+		white-space: nowrap;
+		pointer-events: none;
+		transform: translateY(-50%);
+	}
+
+	.pico:hover .etiqueta,
+	.pico:focus-visible .etiqueta {
+		display: block;
+		z-index: 2;
+	}
+
+	/* ---- Móvil: degradados de los bordes y aviso de deslizar. ---- */
+	.borde {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		display: none;
+		width: 2.5rem;
+		pointer-events: none;
+	}
+
+	.borde-izquierdo {
+		left: calc(-1 * var(--margen-lateral));
+		background: linear-gradient(to right, rgb(241 246 239 / 0.95), rgb(241 246 239 / 0));
+	}
+
+	.borde-derecho {
+		right: calc(-1 * var(--margen-lateral));
+		background: linear-gradient(to left, rgb(241 246 239 / 0.95), rgb(241 246 239 / 0));
+	}
+
+	.caja[data-borde-izquierdo='si'] .borde-izquierdo,
+	.caja[data-borde-derecho='si'] .borde-derecho {
+		display: block;
+	}
+
+	.pista {
+		position: absolute;
+		left: 50%;
+		bottom: var(--espacio-3);
+		margin: 0;
+		padding: var(--espacio-1) var(--espacio-3);
+		background: var(--color-boira);
+		border: 1px solid var(--color-linea);
+		border-radius: var(--radio-senal);
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		white-space: nowrap;
+		pointer-events: none;
+		transform: translateX(-50%);
+	}
+
+	.pista[hidden] {
+		display: none;
+	}
+
+	/* ---- Ficha: panel inferior en el móvil, encima de la barra inferior. ---- */
+	.ficha {
+		position: fixed;
+		right: 0;
+		bottom: calc(var(--alto-barra-inferior) + env(safe-area-inset-bottom));
+		left: 0;
+		z-index: 15;
+		max-height: 60vh;
+		overflow-y: auto;
+		padding: var(--espacio-4) var(--margen-lateral) var(--espacio-6);
+		background: var(--color-boira);
+		border-top: 1px solid var(--color-linea);
+		border-radius: var(--radio-boton) var(--radio-boton) 0 0;
+	}
+
+	.ficha[hidden] {
+		display: none;
+	}
+
+	.ficha:focus {
+		outline: none;
+	}
+
+	.ficha h3 {
+		margin: 0;
+		padding-right: var(--zona-tactil);
+		font-size: 1.25rem;
+	}
+
+	.altura {
+		margin: var(--espacio-1) 0 var(--espacio-3);
+		font-size: 1.5rem;
+		font-weight: 800;
+		line-height: 1.2;
+		color: var(--color-verd-bosc);
+	}
+
+	.actividades p {
+		margin: 0 0 var(--espacio-4);
+	}
+
+	.cerrar {
+		position: absolute;
+		top: var(--espacio-2);
+		right: var(--margen-lateral);
+		display: grid;
+		place-items: center;
+		width: var(--zona-tactil);
+		height: var(--zona-tactil);
+		padding: 0;
+		background: none;
+		border: 0;
+		border-radius: var(--radio-senal);
+		color: var(--color-verd-bosc);
+		cursor: pointer;
+	}
+
+	.cerrar:hover {
+		background: var(--color-herba-clara);
+	}
+
+	/* Botón secundario (verde) de DESIGN.md. */
+	.boton-whatsapp {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		padding: 0 var(--espacio-6);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
+		font-weight: 600;
+		text-decoration: none;
+		border-radius: var(--radio-boton);
+		transition: background-color var(--transicion);
+	}
+
+	.boton-whatsapp:hover,
+	.boton-whatsapp:active {
+		background: var(--color-tinta);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	/* ---- Lista de cims: la alternativa con zonas de 44 px a los puntos del mapa. ---- */
+	.cims h2 {
+		margin: 0 0 var(--espacio-1);
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+	}
+
+	.ayuda {
+		margin: 0 0 var(--espacio-4);
+	}
+
+	.lista-cims {
+		display: grid;
+		gap: 0 var(--espacio-8);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border-top: 1px solid var(--color-linea);
+	}
+
+	.lista-cims li {
+		border-bottom: 1px solid var(--color-linea);
+	}
+
+	.cim {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--espacio-4);
+		width: 100%;
+		min-height: var(--zona-tactil);
+		padding: var(--espacio-2) 0;
+		background: none;
+		border: 0;
+		color: var(--color-verd-bosc);
+		font: inherit;
+		font-size: 1.125rem;
+		font-weight: 600;
+		line-height: 1.35;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.cim:hover .nombre-cim {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	.altura-cim {
+		flex-shrink: 0;
+		color: var(--color-tinta);
+		font-size: 1rem;
+		font-weight: 400;
+	}
+
+	.cim[aria-expanded='true'] {
+		border-left: 5px solid var(--color-verd-bosc);
+		padding-left: var(--espacio-3);
+	}
+
+	@media (min-width: 48rem) {
+		.marco {
+			margin-inline: 0;
+		}
+
+		.borde-izquierdo {
+			left: 0;
+		}
+
+		.borde-derecho {
+			right: 0;
+		}
+
+		.lista-cims {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		/* Escritorio: tarjeta junto al pico; el script le pone `left` y `top` en píxeles. */
+		.ficha {
+			position: absolute;
+			top: var(--ficha-arriba, 0);
+			right: auto;
+			bottom: auto;
+			left: var(--ficha-izquierda, 0);
+			z-index: 5;
+			width: 16rem;
+			max-height: none;
+			padding: var(--espacio-4);
+			border: 1px solid var(--color-linea);
+			border-radius: var(--radio-boton);
+		}
+
+		.cerrar {
+			right: var(--espacio-2);
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.lista-cims {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+</style>
