@@ -1,24 +1,37 @@
 ---
 /**
- * Sección Eventos (C-04). Versión mínima de la T021: título y un enlace por evento, para
- * que "← Tornar" y el menú no lleven a un 404. Las tarjetas, el estado y el mensaje sin
- * eventos llegan con la historia 4 (T043–T044).
+ * Sección Eventos (C-04, historia 4, diseno.md §3): una tarjeta por evento próximo, por orden de
+ * su primera jornada, con nombre, jornadas, lugar y estado de las inscripciones. Un evento cuya
+ * última jornada ya ha pasado deja de salir aquí (FR-004); su página sigue accesible.
+ *
+ * Sin eventos próximos, un mensaje y cómo escribir a Montca (FR-003): WhatsApp o, sin número,
+ * el correo. El siguiente evento aparece aquí con solo añadir su archivo en `src/content/eventos/`.
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../imagen-compartir';
+import Icono from '../Icono.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from '../contacto';
+import { calcularEstado } from '../../lib/eventos/estado';
+import { eventosProximos } from '../../lib/eventos/lista';
 import type { Idioma } from '../textos-navegacion';
-import { ruta } from '../textos-navegacion';
 import { t } from '../textos-eventos';
+import TargetaEsdeveniment from './TargetaEsdeveniment.astro';
 
 interface Props {
 	lang: Idioma;
 }
 
 const { lang } = Astro.props;
-const eventos = (await getCollection('eventos')).sort((a, b) =>
-	a.data.jornadas[0].fecha.localeCompare(b.data.jornadas[0].fecha),
+const ahora = new Date();
+const entradas = await getCollection('eventos');
+const proximos = eventosProximos(
+	entradas.map((entrada) => ({ ...entrada.data, id: entrada.id })),
+	ahora,
 );
+
+const enlaceWhatsapp = urlWhatsapp(lang);
+const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 ---
 
 <BaseLayout
@@ -30,19 +43,39 @@ const eventos = (await getCollection('eventos')).sort((a, b) =>
 >
 	<main class="pagina-eventos">
 		<h1>{t(lang, 'esdeveniments')}</h1>
-		<ul class="llista-eventos">
-			{
-				eventos.map((evento) => (
-					<li>
-						<a class="enlace-evento" href={`${ruta(lang, 'eventos')}${evento.id}/`}>
-							{evento.data.nombre[lang]}
-						</a>
-					</li>
-				))
-			}
-		</ul>
+
+		{
+			proximos.length > 0 ? (
+				<ul class="llista-eventos">
+					{proximos.map((evento) => (
+						<li>
+							<TargetaEsdeveniment lang={lang} evento={evento} estado={calcularEstado(evento, ahora)} />
+						</li>
+					))}
+				</ul>
+			) : (
+				<div class="sin-eventos">
+					<p>{t(lang, 'sinEventos')}</p>
+					<p>{t(lang, 'preguntanos')}</p>
+					<a
+						class="boton-contacto"
+						href={enlaceContacto}
+						target={enlaceWhatsapp !== null ? '_blank' : undefined}
+						rel={enlaceWhatsapp !== null ? 'noopener' : undefined}
+					>
+						<Icono nombre={enlaceWhatsapp !== null ? 'whatsapp' : 'correo'} />
+						{t(lang, 'escribenos')}
+						{enlaceWhatsapp !== null && <span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>}
+					</a>
+				</div>
+			)
+		}
 	</main>
 </BaseLayout>
+
+<script>
+	import '../../scripts/eventos-cliente';
+</script>
 
 <style>
 	.pagina-eventos {
@@ -52,22 +85,51 @@ const eventos = (await getCollection('eventos')).sort((a, b) =>
 	}
 
 	h1 {
-		margin: 0 0 var(--espacio-4);
+		margin: 0 0 var(--espacio-6);
 		font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
 		line-height: 1.05;
 	}
 
 	.llista-eventos {
+		display: grid;
+		gap: var(--espacio-4);
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	.enlace-evento {
+	.sin-eventos {
+		max-width: 40rem;
+	}
+
+	.sin-eventos p {
+		margin: 0 0 var(--espacio-3);
+	}
+
+	/* Botón secundario (verde) de DESIGN.md: no es la acción principal de la página. */
+	.boton-contacto {
 		display: inline-flex;
 		align-items: center;
+		gap: var(--espacio-2);
 		min-height: var(--zona-tactil);
-		font-size: 1.125rem;
+		padding: 0 var(--espacio-6);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
 		font-weight: 600;
+		text-decoration: none;
+		border-radius: var(--radio-boton);
+		transition: background-color var(--transicion);
+	}
+
+	.boton-contacto:hover,
+	.boton-contacto:active {
+		background: var(--color-tinta);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	.boton-contacto:focus-visible {
+		outline-offset: 2px;
 	}
 </style>
