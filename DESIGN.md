@@ -225,7 +225,7 @@ Tamaños pensados para 375 px, que en escritorio crecen con `clamp()`. Display, 
 - **Display** (800, `clamp(2.25rem, 1.5rem + 3vw, 3.5rem)`, interlineado 1.05, espaciado -0.01em): el `h1` de la página de un evento y de la sección Eventos. Reservado para los nombres grandes de sección (Montca Sports, Repte 5 Cims) cuando existan.
 - **Numeral** (800, `clamp(3rem, 2.4rem + 2.5vw, 4rem)`, interlineado 1, espaciado -0.02em, cifras tabulares): el día y el mes de cada jornada en el cartel de un evento (27·12).
 - **Headline** (800, `clamp(1.5rem, 1.25rem + 1vw, 2rem)`, interlineado 1.15, `text-wrap: balance`): los `h2` de las secciones de un evento (Què cal saber, Preguntes freqüents, Places i equips) y el nombre en la tarjeta de evento. Los `h3` de las categorías van a 1.25rem. Todos en Verd bosc.
-- **Marca** (800, 1.25rem en la cabecera y 1.5rem en el pie, espaciado -0.01em): el nombre "Montca Actiu" mientras no llegue el logo (A-07).
+- **Marca**: el nombre "Montca Actiu" ya no se escribe con texto; lo pone el logo (ver Cabecera y Pie). Los tokens `marca` y `marca-pie` del principio quedan sin uso hasta que se retiren.
 - **Title** (600, 1.125rem): enlaces del menú desplegable del móvil; también nombres de actividad en tarjetas y fichas.
 - **Body** (400, 1rem, 1.55): texto corrido, con un máximo de 65–70 caracteres por línea.
 - **Label** (600, 0.875rem, espaciado 0.02em): selector VAL / CAST, avisos legales y la marca de un evento ("Montca Sports" sobre el nombre). Los enlaces del menú de escritorio van a 0.9375rem y la barra inferior a 0.8125rem. Sin mayúsculas forzadas: los textos en valenciano se leen mejor en minúscula (VAL / CAST son abreviaturas, no mayúsculas forzadas).
@@ -285,16 +285,24 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 ### Navigation
 
 - **Cabecera:** fija arriba, fondo Boira y línea inferior de 1 px. En escritorio, los enlaces van en horizontal (600, 0.9375rem, Tinta) y la página actual lleva la marca de pintura debajo del texto: una franja Teula de 20 × 5 px.
+- **Logo (cabecera):** el logo es la **imagen original de Montca** (PNG con fondo transparente, sin redibujar ni cambiar colores), no un SVG, hasta que Montca pase el vectorial; entonces se sustituye. En el móvil se ve el símbolo (hexágono, 52 px de ancho) y desde 30rem (480 px), la línea de texto "Montca Actiu" (232 px de ancho), porque a menos ancho no cabe junto al selector de idioma y el botón Menú. Es un enlace a la portada con el nombre accesible "Montca Actiu" (el `alt` de la imagen visible; la otra va con `display: none`) y una zona táctil de al menos 44 px. Va con `Foto`, como el resto de imágenes. Las piezas salen de `scripts/logo/generar_piezas.py` y están en `src/assets/logo/`.
 - **Menú móvil:** botón Menú con `aria-expanded` y `aria-controls` (patrón disclosure). Al abrirlo, el panel ocupa desde la cabecera hasta la barra inferior, tapa la página y bloquea su desplazamiento. Cada enlace mide 52 px de alto, va separado por líneas de 1 px y la página actual lleva la marca de pintura a la izquierda (14 × 6 px). Al final está el botón Reserva a todo el ancho. Escape lo cierra y devuelve el foco al botón.
 - **Barra inferior (móvil y tableta):** fondo Verd bosc, tres huecos iguales con icono de 24 px y etiqueta (600, 0.8125rem, Boira). La página actual lleva la marca de pintura en Teula clara arriba del hueco (24 × 5 px). Sin número de WhatsApp, el tercer hueco es Contacte.
 - **Selector de idioma:** enlace a la misma página en el otro idioma, con `lang`, `hreflang` y `aria-label` con el nombre del idioma (Castellano / Valencià).
 - **Saltar al contenido:** primer elemento de la página, visible solo con el foco.
 - **Enlace "← Tornar":** Verd bosc en peso 600 con la flecha en SVG (Overpass no tiene "←"). Va en fichas y eventos.
 
+### Logo, favicon e imagen para compartir
+
+- **Mientras no haya vectorial:** el logo es la imagen original de Montca, de 1536 px, con el fondo quitado y recortada (`scripts/logo/`). No se redibuja, no se recolorea y no se hace un SVG que solo envuelva el PNG. Cuando Montca pase el original (SVG, AI o PDF) se sustituyen las piezas y se retira esta nota.
+- **Favicon:** el símbolo sobre un cuadrado Boira de esquinas redondeadas (20 %), en PNG (`public/favicon.png`, 192 px) y `public/favicon.ico`, enlazados desde `BaseLayout`. El fondo claro hace que se vea también en las pestañas en modo oscuro.
+- **Imagen para compartir por defecto:** el logo completo centrado sobre blanco, de 1200 × 630 (`src/assets/logo/imagen-compartir.png`). Una página con imagen propia, como un evento, la sustituye.
+
 ### Pie
 
 - **Fondo:** Verd bosc, con todos los enlaces en Boira y subrayado de 2 px al pasar el ratón.
-- **Contenido:** marca y lema, correo de contacto (y WhatsApp cuando haya número), todas las secciones en dos columnas y, separados por una línea, los avisos legales y el ©. Lleva todas las secciones para que la web se pueda recorrer sin JavaScript.
+- **Logo (pie):** la línea de texto en blanco (la de color pasada a blanco, misma forma), de 240 px como máximo y enlazada a la portada con el nombre "Montca Actiu". Es la imagen original de Montca, igual que en la cabecera.
+- **Contenido:** logo y lema, correo de contacto (y WhatsApp cuando haya número), todas las secciones en dos columnas y, separados por una línea, los avisos legales y el ©. Lleva todas las secciones para que la web se pueda recorrer sin JavaScript.
 - **Densidad:** compacto en el móvil (huecos de 16 px) y con más aire desde 48rem (huecos de 32 px, tres columnas).
 
 ### Iconos

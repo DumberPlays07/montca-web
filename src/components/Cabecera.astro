@@ -3,6 +3,9 @@
  * Cabecera fija de todas las páginas: marca, menú, selector VAL / CAST y Reserva.
  * En el móvil el menú se abre con un botón; desde 64rem se ve en horizontal.
  */
+import linea from '../assets/logo/linea-texto.png';
+import simbolo from '../assets/logo/simbolo.png';
+import Foto from './Foto.astro';
 import Icono from './Icono.astro';
 import {
 	type ClaveRuta,
@@ -32,6 +35,8 @@ const seccionesMenuMovil: ClaveRuta[] = [
 	'quienesSomos',
 	'contacto',
 ];
+// El nombre de la marca es el mismo en los dos idiomas: es el nombre accesible del enlace a la portada.
+const nombreMarca = { ca: 'Montca Actiu', es: 'Montca Actiu' };
 const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 ---
 
@@ -39,8 +44,11 @@ const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 
 <header class="cabecera">
 	<div class="cabecera-interior">
-		<!-- TODO: cambiar el texto por el logo cuando llegue en buena calidad (A-07). -->
-		<a class="marca" href={ruta(lang, 'inicio')}>Montca Actiu</a>
+		<!-- Logo = imagen original de Montca (DESIGN.md). Solo se ve una de las dos; la otra va con display: none. -->
+		<a class="marca" href={ruta(lang, 'inicio')}>
+			<span class="marca-simbolo"><Foto src={simbolo} alt={nombreMarca} lang={lang} inmediata ancho={52} /></span>
+			<span class="marca-linea"><Foto src={linea} alt={nombreMarca} lang={lang} inmediata ancho={232} /></span>
+		</a>
 
 		<nav class="nav-escritorio" aria-label={t(lang, 'navegacionPrincipal')}>
 			<ul>
@@ -212,12 +220,27 @@ const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 		align-items: center;
 		min-height: var(--zona-tactil);
 		margin-right: auto;
-		color: var(--color-verd-bosc);
-		font-size: 1.25rem;
-		font-weight: 800;
-		letter-spacing: -0.01em;
-		text-decoration: none;
-		white-space: nowrap;
+	}
+
+	/* En el móvil cabe el símbolo; la línea con el nombre entra desde 30rem (480 px). */
+	.marca-simbolo {
+		display: block;
+		width: 3.25rem;
+	}
+
+	.marca-linea {
+		display: none;
+		width: 14.5rem;
+	}
+
+	@media (min-width: 30rem) {
+		.marca-simbolo {
+			display: none;
+		}
+
+		.marca-linea {
+			display: block;
+		}
 	}
 
 	ul {

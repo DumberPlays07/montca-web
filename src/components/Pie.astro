@@ -3,6 +3,8 @@
  * Pie de todas las páginas: marca, contacto, todas las secciones y avisos legales.
  * Lleva todas las secciones para que la web se pueda recorrer también sin JavaScript.
  */
+import lineaBlanca from '../assets/logo/linea-texto-blanca.png';
+import Foto from './Foto.astro';
 import Icono from './Icono.astro';
 import { CORREO_CONTACTO, WHATSAPP_NUMEROS_PIE, numeroLegible, urlWhatsapp } from './contacto';
 import { type ClaveRuta, type Idioma, ruta, t } from './textos-navegacion';
@@ -12,6 +14,8 @@ interface Props {
 }
 
 const { lang } = Astro.props;
+// El nombre de la marca es el mismo en los dos idiomas: es el nombre accesible del enlace a la portada.
+const nombreMarca = { ca: 'Montca Actiu', es: 'Montca Actiu' };
 
 const secciones: ClaveRuta[] = [
 	'actividades',
@@ -31,7 +35,9 @@ const anioActual = new Date().getFullYear();
 <footer class="pie">
 	<div class="pie-interior">
 		<div class="pie-marca">
-			<a class="marca" href={ruta(lang, 'inicio')}>Montca Actiu</a>
+			<a class="marca" href={ruta(lang, 'inicio')}>
+				<span class="marca-logo"><Foto src={lineaBlanca} alt={nombreMarca} lang={lang} inmediata ancho={240} /></span>
+			</a>
 			<p class="lema">{t(lang, 'lema')}</p>
 		</div>
 
@@ -119,11 +125,11 @@ const anioActual = new Date().getFullYear();
 		display: inline-flex;
 		align-items: center;
 		min-height: var(--zona-tactil);
-		color: var(--color-blanco);
-		font-size: 1.5rem;
-		font-weight: 800;
-		letter-spacing: -0.01em;
-		text-decoration: none;
+	}
+
+	.marca-logo {
+		display: block;
+		width: min(15rem, 100%);
 	}
 
 	.lema {

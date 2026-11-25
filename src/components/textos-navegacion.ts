@@ -49,6 +49,7 @@ const textos = {
 		cookies: 'Cookies',
 		volver: 'Tornar',
 		altImagenCompartir: 'Mapa il·lustrat de la Serra de Mariola, amb Cocentaina al peu de la serra.',
+		altLogoCompartir: 'Logotip de Montca Actiu: un hexàgon amb la muntanya i la torre del castell.',
 	},
 	es: {
 		saltarAlContenido: 'Saltar al contenido',
@@ -82,6 +83,7 @@ const textos = {
 		cookies: 'Cookies',
 		volver: 'Volver',
 		altImagenCompartir: 'Mapa ilustrado de la Serra de Mariola, con Cocentaina al pie de la sierra.',
+		altLogoCompartir: 'Logotipo de Montca Actiu: un hexágono con la montaña y la torre del castillo.',
 	},
 } as const;
 
