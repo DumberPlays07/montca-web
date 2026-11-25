@@ -1,10 +1,11 @@
 /**
- * Lógica pura del mapa de Mariola (B-19): posición de los picos sobre la imagen recortada,
- * tamaño de su zona pulsable, orden y formato, y dónde se coloca la ficha.
+ * Lógica pura del mapa de Mariola como menú (B-21): posición de los siete destinos sobre la imagen
+ * recortada, geometría de sus zonas y placas, y dónde se coloca la viñeta.
  *
  * Los picos viven en `src/data/picos-mapa.json` con su posición en % de la imagen ENTERA
- * (`x`, `y`). La web enseña solo una parte de la imagen (se recorta el cielo de arriba y la franja
- * casi blanca de abajo) y estas funciones traducen esas posiciones al recorte.
+ * (`x`, `y`) y los destinos en `src/data/destinos-mapa.json`. La web enseña solo una parte de la
+ * imagen (se recorta el cielo de arriba y la franja casi blanca de abajo) y estas funciones traducen
+ * esas posiciones al recorte.
  */
 
 /**
@@ -19,16 +20,9 @@ export const RECORTE_INFERIOR = 0.05;
 
 /**
  * Ancho mínimo del mapa en rem (56rem = 896 px). Por debajo, el mapa no se encoge: se desliza dentro
- * de su marco. Con este ancho todos los picos tienen una zona de 44 px salvo el par Montcabrer /
- * Alt de la Reja (24 px); con menos, muchos picos quedarían a menos de 24 px de otro.
+ * de su marco. Con este ancho los siete botones están a más de 44 px unos de otros.
  */
 export const ANCHO_MINIMO_MAPA_REM = 56;
-
-/** La zona pulsable de un pico mide como mucho 44 px (principio V de la constitución). */
-export const LADO_MAXIMO_ZONA_PULSABLE = 44;
-
-/** ...y nunca menos de 24 px: el mínimo de WCAG 2.2 (2.5.8). */
-export const LADO_MINIMO_ZONA_PULSABLE = 24;
 
 /**
  * Dónde se centra el marco al cargar en el móvil, como fracción del ancho del mapa. Con 0,76 se ven
@@ -37,7 +31,7 @@ export const LADO_MINIMO_ZONA_PULSABLE = 24;
  */
 export const CENTRO_INICIAL_MARCO = 0.76;
 
-/** Lado de la zona pulsable del punto de un botón, el máximo y el mínimo del principio V. */
+/** Lado de la zona pulsable del punto de un botón: 44 px, el principio V de la constitución. */
 export const LADO_ZONA_BOTON = 44;
 
 /** Alto de la placa de un botón: también cumple los 44 px porque se puede pulsar. */
@@ -62,22 +56,6 @@ export interface PicoEnCrudo {
 	/** % del alto de la imagen entera. */
 	y: number;
 	visible: boolean;
-}
-
-/** Un pico listo para pintar: posición dentro del recorte y tamaño de su zona pulsable. */
-export interface PicoPreparado {
-	id: string;
-	nombre: string;
-	altura: number;
-	/** % del ancho del mapa. */
-	izquierda: number;
-	/** % del alto del mapa ya recortado. */
-	arriba: number;
-	/**
-	 * Distancia al pico más cercano como fracción del ancho del mapa. Multiplicada por el ancho
-	 * en píxeles da la distancia en píxeles, y de ella sale el lado de su zona pulsable.
-	 */
-	vecino: number;
 }
 
 export type LadoPlaca = 'arriba' | 'abajo' | 'derecha' | 'izquierda';
@@ -151,71 +129,12 @@ export function idDePico(nombre: string): string {
 		.replace(/^-+|-+$/g, '');
 }
 
-/** "1.390 m". El punto como separador de miles va igual en valenciano y en castellano. */
-export function formatoAltura(metros: number): string {
-	return `${String(metros).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} m`;
-}
-
-/** Del más alto al más bajo, sin cambiar la lista que recibe. */
-export function ordenarPorAltura<T extends { altura: number }>(picos: T[]): T[] {
-	return [...picos].sort((a, b) => b.altura - a.altura);
-}
-
-/**
- * Distancia de `pico` al pico más cercano, como fracción del ancho del mapa. Se mide sobre la
- * imagen entera (el recorte no cambia las distancias). Un pico solo no tiene vecino: devuelve 1.
- */
-export function vecinoMasCercano(
-	pico: { x: number; y: number },
-	todos: { x: number; y: number }[],
-	anchoImagen: number,
-	altoImagen: number,
-): number {
-	const proporcionAlto = altoImagen / anchoImagen;
-	let minimo = Number.POSITIVE_INFINITY;
-	for (const otro of todos) {
-		if (otro === pico) {
-			continue;
-		}
-		const dx = (otro.x - pico.x) / 100;
-		const dy = ((otro.y - pico.y) / 100) * proporcionAlto;
-		minimo = Math.min(minimo, Math.hypot(dx, dy));
-	}
-	return Number.isFinite(minimo) ? minimo : 1;
-}
-
-/**
- * Lado en píxeles de la zona pulsable de un pico con el mapa a `anchoMapa` px: 44 px, o menos si el
- * vecino está más cerca (para que las zonas no se tapen), pero nunca menos de 24 px.
- */
-export function zonaPulsable(vecino: number, anchoMapa: number): number {
-	return Math.min(LADO_MAXIMO_ZONA_PULSABLE, Math.max(LADO_MINIMO_ZONA_PULSABLE, vecino * anchoMapa));
-}
-
-/** Los picos visibles, con su posición en el recorte y su vecino, por orden de altura. */
-export function preparar(
-	picos: PicoEnCrudo[],
-	anchoImagen: number,
-	altoImagen: number,
-	recorte: Recorte = RECORTE_POR_DEFECTO,
-): PicoPreparado[] {
-	const visibles = picos.filter((pico) => pico.visible);
-	return ordenarPorAltura(visibles).map((pico) => ({
-		id: idDePico(pico.nombre),
-		nombre: pico.nombre,
-		altura: pico.altura,
-		izquierda: pico.x,
-		arriba: Number(yEnRecorte(pico.y, recorte).toFixed(3)),
-		vecino: Number(vecinoMasCercano(pico, visibles, anchoImagen, altoImagen).toFixed(5)),
-	}));
-}
-
 /** Lo que aparta el piquito de la viñeta de sus esquinas, para que no quede en el borde redondeado. */
 const MARGEN_COLA_PX = 16;
 
 /**
- * Dónde pone la ficha, en píxeles dentro de la caja del mapa (solo escritorio): a la derecha del
- * pico, o a la izquierda si a la derecha se saldría; centrada en vertical con el pico y sin salirse
+ * Dónde pone la viñeta, en píxeles dentro de la caja del mapa (solo escritorio): a la derecha del
+ * botón, o a la izquierda si a la derecha se saldría; centrada en vertical con el pico y sin salirse
  * por arriba ni por abajo. Devuelve también de qué lado queda respecto al pico y a qué altura de la
  * tarjeta está el pico (`colaY`), para que el piquito de la viñeta siga apuntando a él aunque la
  * tarjeta se haya subido o bajado.

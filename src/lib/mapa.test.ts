@@ -1,33 +1,18 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import picosEnCrudo from '../data/picos-mapa.json' with { type: 'json' };
 import {
-	ANCHO_MINIMO_MAPA_REM,
-	LADO_MAXIMO_ZONA_PULSABLE,
-	LADO_MINIMO_ZONA_PULSABLE,
+	CENTRO_INICIAL_MARCO,
 	RECORTE_INFERIOR,
 	RECORTE_SUPERIOR,
 	colocarFicha,
-	formatoAltura,
 	idDePico,
-	ordenarPorAltura,
-	preparar,
 	proporcionRecortada,
-	vecinoMasCercano,
 	yEnRecorte,
-	zonaPulsable,
 } from './mapa.ts';
 
 /** Medidas de `src/assets/mapa/mapa-mariola.webp`. */
 const ANCHO_IMAGEN = 2560;
 const ALTO_IMAGEN = 1430;
-
-const picos = preparar(picosEnCrudo, ANCHO_IMAGEN, ALTO_IMAGEN);
-const porNombre = (nombre: string) => {
-	const pico = picos.find((p) => p.nombre === nombre);
-	assert.ok(pico, nombre);
-	return pico;
-};
 
 describe('recorte de la imagen', () => {
 	it('el recorte deja una parte visible y está entre 0 y 1', () => {
@@ -63,6 +48,19 @@ describe('recorte de la imagen', () => {
 	});
 });
 
+describe('marco del móvil', () => {
+	it('empieza centrado en el 76 % del ancho del mapa', () => {
+		assert.equal(CENTRO_INICIAL_MARCO, 0.76);
+	});
+
+	it('a 320 px de pantalla se ve de 521 a 841 px de un mapa de 896 px', () => {
+		const ancho = 896;
+		const izquierda = CENTRO_INICIAL_MARCO * ancho - 320 / 2;
+		assert.equal(Math.round(izquierda), 521);
+		assert.equal(Math.round(izquierda + 320), 841);
+	});
+});
+
 describe('idDePico', () => {
 	it('quita mayúsculas, tildes y signos', () => {
 		assert.equal(idDePico('Montcabrer'), 'montcabrer');
@@ -75,112 +73,6 @@ describe('idDePico', () => {
 		assert.equal(idDePico('  Mola -- Alta!  '), 'mola-alta');
 	});
 
-	it('los 11 picos tienen un id distinto', () => {
-		assert.equal(new Set(picos.map((p) => p.id)).size, picos.length);
-	});
-});
-
-describe('formatoAltura', () => {
-	it('separa los miles con un punto y añade la unidad', () => {
-		assert.equal(formatoAltura(1390), '1.390 m');
-		assert.equal(formatoAltura(987), '987 m');
-		assert.equal(formatoAltura(914), '914 m');
-	});
-});
-
-describe('ordenarPorAltura', () => {
-	it('va del más alto al más bajo y no cambia la lista original', () => {
-		const original = [{ altura: 900 }, { altura: 1200 }, { altura: 1000 }];
-		assert.deepEqual(ordenarPorAltura(original).map((p) => p.altura), [1200, 1000, 900]);
-		assert.deepEqual(original.map((p) => p.altura), [900, 1200, 1000]);
-	});
-
-	it('con los picos reales, Montcabrer es el primero', () => {
-		assert.equal(ordenarPorAltura(picos)[0].nombre, 'Montcabrer');
-	});
-});
-
-describe('preparar los picos', () => {
-	it('solo quedan los picos visibles', () => {
-		const mezcla = [
-			{ nombre: 'A', altura: 1000, x: 10, y: 60, visible: true },
-			{ nombre: 'B', altura: 900, x: 20, y: 60, visible: false },
-		];
-		assert.deepEqual(preparar(mezcla, ANCHO_IMAGEN, ALTO_IMAGEN).map((p) => p.nombre), ['A']);
-	});
-
-	it('los 11 picos reales caen dentro del recorte', () => {
-		assert.equal(picos.length, 11);
-		for (const pico of picos) {
-			assert.ok(pico.arriba > 0 && pico.arriba < 100, `${pico.nombre} arriba=${pico.arriba}`);
-			assert.ok(pico.izquierda > 0 && pico.izquierda < 100, `${pico.nombre} izquierda=${pico.izquierda}`);
-		}
-	});
-
-	it('la izquierda es la x de los datos y no depende del recorte', () => {
-		assert.equal(porNombre('Montcabrer').izquierda, 66.7);
-	});
-
-	it('cada pico lleva su zona pulsable en proporción del ancho del mapa', () => {
-		for (const pico of picos) {
-			assert.ok(pico.vecino > 0 && pico.vecino < 1, pico.nombre);
-		}
-	});
-});
-
-describe('vecinoMasCercano', () => {
-	it('Montcabrer y Alt de la Reja son los más cercanos entre sí (≈31 px a 1152 px de mapa)', () => {
-		const montcabrer = porNombre('Montcabrer');
-		const reja = porNombre('Alt de la Reja');
-		assert.equal(Math.round(montcabrer.vecino * 1152), 31);
-		assert.equal(Math.round(reja.vecino * 1152), 31);
-	});
-
-	it('a 375 px de ancho serían 10 px', () => {
-		assert.equal(Math.round(porNombre('Montcabrer').vecino * 375), 10);
-	});
-
-	it('es la distancia al otro pico más cercano, no al primero de la lista', () => {
-		const lista = [
-			{ x: 10, y: 50 },
-			{ x: 90, y: 50 },
-			{ x: 12, y: 50 },
-		];
-		const vecino = vecinoMasCercano(lista[0], lista, ANCHO_IMAGEN, ALTO_IMAGEN);
-		assert.equal(Number(vecino.toFixed(4)), 0.02);
-	});
-
-	it('un solo pico no tiene vecino: no limita su zona', () => {
-		const solo = [{ x: 10, y: 50 }];
-		assert.equal(vecinoMasCercano(solo[0], solo, ANCHO_IMAGEN, ALTO_IMAGEN), 1);
-	});
-});
-
-describe('zonaPulsable', () => {
-	it('mide 44 px si el vecino está lejos', () => {
-		assert.equal(zonaPulsable(0.1, 900), LADO_MAXIMO_ZONA_PULSABLE);
-	});
-
-	it('se encoge hasta la distancia al vecino', () => {
-		assert.equal(zonaPulsable(31 / 1152, 1152), 31);
-	});
-
-	it('nunca baja de 24 px (WCAG 2.2, 2.5.8)', () => {
-		assert.equal(zonaPulsable(10 / 375, 375), LADO_MINIMO_ZONA_PULSABLE);
-		assert.equal(LADO_MINIMO_ZONA_PULSABLE, 24);
-	});
-
-	it('con el mapa a 900 px, solo el par Montcabrer / Alt de la Reja queda por debajo de 44 px', () => {
-		const menores = picos.filter((p) => zonaPulsable(p.vecino, 900) < LADO_MAXIMO_ZONA_PULSABLE).map((p) => p.nombre);
-		assert.deepEqual(menores.sort(), ['Alt de la Reja', 'Montcabrer']);
-	});
-
-	it('con el mapa a 900 px, todas las zonas miden 24 px o más y ninguna pasa de 44 px', () => {
-		for (const pico of picos) {
-			const lado = zonaPulsable(pico.vecino, 900);
-			assert.ok(lado >= 24 && lado <= 44, `${pico.nombre}: ${lado}`);
-		}
-	});
 });
 
 describe('colocarFicha', () => {
@@ -228,16 +120,5 @@ describe('colocarFicha', () => {
 	it('si la ficha es más ancha que la caja, se pega a la izquierda', () => {
 		const sitio = colocarFicha({ pico: { x: 50, y: 50 }, caja: { ancho: 200, alto: 400 }, ficha, margen: 12 });
 		assert.equal(sitio.izquierda, 0);
-	});
-});
-
-describe('ancho mínimo del mapa', () => {
-	it('con el ancho mínimo, ninguna zona pulsable baja de 24 px y solo un par baja de 44 px', () => {
-		const ancho = 16 * ANCHO_MINIMO_MAPA_REM;
-		const menores = picos.filter((p) => zonaPulsable(p.vecino, ancho) < LADO_MAXIMO_ZONA_PULSABLE).map((p) => p.nombre);
-		assert.deepEqual(menores.sort(), ['Alt de la Reja', 'Montcabrer']);
-		for (const pico of picos) {
-			assert.ok(zonaPulsable(pico.vecino, ancho) >= LADO_MINIMO_ZONA_PULSABLE, pico.nombre);
-		}
 	});
 });
