@@ -10,46 +10,54 @@ import type { Idioma } from './textos-navegacion';
 import { t } from './textos-portada';
 
 export interface TextosCuentaAtras {
-	/** Solo para el lector de pantalla ("Falten"); vacío cuando el valor ya es una frase. */
-	prefijo: string;
-	/** El número grande ("32") o una palabra ("Hui", "En marxa", "Properament"). */
+	/**
+	 * Frase fija para el lector de pantalla mientras se ven las casillas ("Falten 32 dies"); solo
+	 * cambia al cambiar de día. Vacía cuando lo que se ve es una palabra.
+	 */
+	frase: string;
+	/** La palabra grande ("Hui", "En marxa", "Properament"); vacía mientras se ven las casillas. */
 	valor: string;
-	/** "dies" u "hores"; vacío cuando el valor es una palabra. */
-	unidad: string;
 	/** Una línea con la fecha de inicio; vacía sin evento. */
 	detalle: string;
 }
 
 /**
  * @param fechaInicio la primera jornada como "27/12"; no se usa con `proximament`.
+ * @param horaInicio la hora de inicio ("10:30"), si la jornada la trae.
  */
-export function textosCuentaAtras(lang: Idioma, cuenta: CuentaAtras, fechaInicio: string): TextosCuentaAtras {
+export function textosCuentaAtras(
+	lang: Idioma,
+	cuenta: CuentaAtras,
+	fechaInicio: string,
+	horaInicio?: string,
+): TextosCuentaAtras {
 	const fecha = { fecha: fechaInicio };
 	switch (cuenta.tipo) {
-		case 'dias':
+		case 'cuenta':
 			return {
-				prefijo: t(lang, 'cuentaFalten'),
-				valor: String(cuenta.dias),
-				unidad: t(lang, 'cuentaDies'),
-				detalle: rellenar(t(lang, 'cuentaComencaEl'), fecha),
-			};
-		case 'horas':
-			return {
-				prefijo: t(lang, 'cuentaFalten'),
-				valor: String(cuenta.horas),
-				unidad: t(lang, cuenta.horas === 1 ? 'cuentaUnaHora' : 'cuentaHores'),
-				detalle: rellenar(t(lang, 'cuentaComencaEl'), fecha),
+				frase: fraseFaltan(lang, cuenta.dias),
+				valor: '',
+				detalle:
+					horaInicio === undefined
+						? rellenar(t(lang, 'cuentaComencaEl'), fecha)
+						: rellenar(t(lang, 'cuentaComencaElA'), { ...fecha, hora: horaInicio }),
 			};
 		case 'hoy':
-			return { prefijo: '', valor: t(lang, 'cuentaHui'), unidad: '', detalle: t(lang, 'cuentaComencaHui') };
+			return { frase: '', valor: t(lang, 'cuentaHui'), detalle: t(lang, 'cuentaComencaHui') };
 		case 'en-curso':
-			return {
-				prefijo: '',
-				valor: t(lang, 'cuentaEnMarxa'),
-				unidad: '',
-				detalle: rellenar(t(lang, 'cuentaVaComencarEl'), fecha),
-			};
+			return { frase: '', valor: t(lang, 'cuentaEnMarxa'), detalle: rellenar(t(lang, 'cuentaVaComencarEl'), fecha) };
 		case 'proximament':
-			return { prefijo: '', valor: t(lang, 'cuentaProperament'), unidad: '', detalle: '' };
+			return { frase: '', valor: t(lang, 'cuentaProperament'), detalle: '' };
 	}
+}
+
+/** "Falten 32 dies", "Falta 1 dia" o "Falta menys d'un dia": los días enteros que quedan. */
+function fraseFaltan(lang: Idioma, dias: number): string {
+	if (dias === 0) {
+		return t(lang, 'cuentaFaltaMenysDUnDia');
+	}
+	if (dias === 1) {
+		return t(lang, 'cuentaFaltaUnDia');
+	}
+	return `${t(lang, 'cuentaFalten')} ${dias} ${t(lang, 'cuentaDies')}`;
 }

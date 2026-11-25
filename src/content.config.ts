@@ -46,7 +46,19 @@ const eventos = defineCollection({
 				nombre: texto,
 				marca: z.string().trim().min(1),
 				resumen: texto,
-				jornadas: z.array(z.object({ fecha: fechaDia, nombre: texto })).min(1),
+				jornadas: z
+					.array(
+						z.object({
+							fecha: fechaDia,
+							nombre: texto,
+							// Hora de inicio en Madrid. Opcional: sin ella la cuenta atrás de la portada cuenta hasta las 00:00.
+							hora: z
+								.string()
+								.regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'la hora va como HH:MM, por ejemplo "10:30"')
+								.optional(),
+						}),
+					)
+					.min(1),
 				lugar: z.object({
 					nombre: z.string().trim().min(1),
 					direccion: z.string().trim(),

@@ -6,11 +6,15 @@
  * lleva botón de inscripción ni el plazo, y es un enlace discreto a la página del evento.
  *
  * Al construir elige el próximo evento (`eventosProximos`) y calcula la cuenta con la hora de
- * Madrid. En el navegador, `cuenta-atras-cliente.ts` la recalcula cada minuto, sin volver a
- * publicar. Sin evento con fecha sale "Properament", sin enlace.
+ * Madrid. En el navegador, `cuenta-atras-cliente.ts` la recalcula cada segundo (cada minuto, y sin
+ * segundos, con movimiento reducido), sin volver a publicar. Sin evento con fecha sale "Properament",
+ * sin enlace.
+ *
+ * Accesibilidad: las casillas que cambian llevan `aria-hidden`; el lector de pantalla oye una frase
+ * fija ("Falten 32 dies") que solo cambia al cambiar de día. No hay `aria-live`.
  */
 import { getCollection } from 'astro:content';
-import { calcularCuentaAtras } from '../../lib/eventos/cuenta-atras';
+import { calcularCuentaAtras, casillasCuenta } from '../../lib/eventos/cuenta-atras';
 import { numeralJornada } from '../../lib/eventos/fechas';
 import { eventosProximos } from '../../lib/eventos/lista';
 import { textosCuentaAtras } from '../cuenta-atras-textos';
@@ -33,7 +37,16 @@ const hayEvento = evento !== null && cuenta.tipo !== 'proximament';
 
 const inicio = evento?.jornadas[0].fecha ?? '';
 const { dia, mes } = inicio === '' ? { dia: '', mes: '' } : numeralJornada(inicio);
-const textos = textosCuentaAtras(lang, cuenta, `${dia}/${mes}`);
+const horaInicio = evento?.jornadas[0].hora;
+const textos = textosCuentaAtras(lang, cuenta, `${dia}/${mes}`, horaInicio);
+// Con la cuenta visible, las casillas; con una palabra ("Hui"), no hay nada que pintar en ellas.
+const casillas = casillasCuenta(cuenta.tipo === 'cuenta' ? cuenta : { tipo: 'cuenta', dias: 0, horas: 0, minutos: 0, segundos: 0 });
+const unidades = [
+	{ clave: 'dias', unidad: t(lang, 'cuentaUnidadDias') },
+	{ clave: 'horas', unidad: t(lang, 'cuentaUnidadHoras') },
+	{ clave: 'minutos', unidad: t(lang, 'cuentaUnidadMinutos') },
+	{ clave: 'segundos', unidad: t(lang, 'cuentaUnidadSegundos') },
+] as const;
 
 const Etiqueta = hayEvento ? 'a' : 'div';
 ---
@@ -45,6 +58,7 @@ const Etiqueta = hayEvento ? 'a' : 'div';
 	data-tipo={cuenta.tipo}
 	data-lang={lang}
 	data-inicio={inicio}
+	data-hora={horaInicio}
 	data-fin={evento?.jornadas[evento.jornadas.length - 1].fecha ?? ''}
 >
 	<span class="datos">
@@ -62,10 +76,20 @@ const Etiqueta = hayEvento ? 'a' : 'div';
 			{hayEvento && <span data-nombre-evento>{evento.nombre[lang]}</span>}
 		</span>
 		<span class="cifra">
-			<span class="solo-lector" data-prefijo>{textos.prefijo}</span>
+			<span class="solo-lector" data-frase>{textos.frase}</span>
 			<span class="valor" data-valor>{textos.valor}</span>
-			{' '}
-			<span class="unidad" data-unidad>{textos.unidad}</span>
+			<span class="casillas" aria-hidden="true">
+				{
+					unidades.map(({ clave, unidad }) => (
+						<span class={`casilla casilla-${clave}`}>
+							<span class="numero" data-casilla={clave}>
+								{casillas[clave]}
+							</span>
+							<span class="unidad">{unidad}</span>
+						</span>
+					))
+				}
+			</span>
 		</span>
 		<span class="detalle" data-detalle>{textos.detalle}</span>
 	</span>
@@ -133,38 +157,63 @@ const Etiqueta = hayEvento ? 'a' : 'div';
 		background: currentColor;
 	}
 
-	/* Numeral (DESIGN.md) para los números; las palabras ("Hui", "Properament") van en Headline. */
-	.cifra {
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		column-gap: var(--espacio-2);
-		color: var(--color-verd-bosc);
-		font-weight: 800;
-		line-height: 1;
-		letter-spacing: -0.02em;
-	}
-
+	/* Las palabras ("Hui", "Properament") van en Headline; con la cuenta visible, las casillas. */
 	.valor {
+		color: var(--color-verd-bosc);
 		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+		font-weight: 800;
 		line-height: 1.15;
+		letter-spacing: -0.02em;
 		text-wrap: balance;
 	}
 
-	[data-tipo='dias'] .valor,
-	[data-tipo='horas'] .valor {
-		font-size: clamp(3rem, 2.4rem + 2.5vw, 4rem);
+	.valor:empty,
+	[data-tipo='cuenta'] .valor,
+	[data-tipo]:not([data-tipo='cuenta']) .casillas {
+		display: none;
+	}
+
+	/* Cuatro casillas de ancho igual: con cifras tabulares y dos cifras mínimas, nada se mueve al cambiar. */
+	.casillas {
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: minmax(min-content, 1fr);
+		color: var(--color-verd-bosc);
+	}
+
+	.casilla {
+		display: grid;
+		gap: var(--espacio-1);
+		padding-inline: var(--espacio-2);
+		border-inline-start: 1px solid var(--color-linea);
+	}
+
+	.casilla:first-child {
+		padding-inline-start: 0;
+		border-inline-start: 0;
+	}
+
+	/* Numeral (DESIGN.md), un peldaño más pequeño: cuatro números tienen que caber a 320 px. */
+	.numero {
+		font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+		font-weight: 800;
 		line-height: 1;
+		letter-spacing: -0.02em;
 		font-variant-numeric: tabular-nums;
 	}
 
 	.unidad {
-		font-size: 1.25rem;
-		letter-spacing: 0;
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: 0.02em;
 	}
 
-	.unidad:empty {
-		display: none;
+	/* Con movimiento reducido no hay segundos que cambien: la cuenta se actualiza cada minuto. */
+	@media (prefers-reduced-motion: reduce) {
+		.casilla-segundos {
+			display: none;
+		}
 	}
 
 	.detalle {
