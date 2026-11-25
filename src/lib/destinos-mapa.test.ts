@@ -4,6 +4,8 @@ import { ruta, t as tNavegacion } from '../components/textos-navegacion.ts';
 import destinosEnCrudo from '../data/destinos-mapa.json' with { type: 'json' };
 import picosEnCrudo from '../data/picos-mapa.json' with { type: 'json' };
 import {
+	ESQUINAS_DESDE,
+	ESQUINAS_HASTA,
 	FUNDIDO_INFERIOR_DESDE,
 	FUNDIDO_INFERIOR_HASTA,
 	LADO_ZONA_BOTON,
@@ -244,6 +246,16 @@ describe('los demás picos', () => {
 });
 
 describe('fundido del borde de abajo del mapa', () => {
+	it('el fundido empieza antes de que empiece el grosor del frente del bloque (83,8 % del recorte)', () => {
+		const frenteDelBloque = (84.5 - 30) / 65;
+		assert.ok(1 - FUNDIDO_INFERIOR_DESDE < frenteDelBloque);
+	});
+
+	it('las esquinas se desvanecen entre el 74 % y el 90 % del alto, antes de que acabe el fundido de abajo', () => {
+		assert.equal(ESQUINAS_DESDE, 0.74);
+		assert.ok(ESQUINAS_HASTA > ESQUINAS_DESDE && ESQUINAS_HASTA <= 1 - FUNDIDO_INFERIOR_HASTA);
+	});
+
 	it('llega a transparente antes del canto inferior del diorama (98,7 % del recorte)', () => {
 		const cantoDelDiorama = (94.13 - 30) / 65;
 		assert.ok(1 - FUNDIDO_INFERIOR_HASTA < cantoDelDiorama);

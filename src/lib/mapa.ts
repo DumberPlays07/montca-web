@@ -53,19 +53,33 @@ export const SOLAPE_PLACA = 6;
 export const FUNDIDO_SUPERIOR = 0.12;
 
 /**
- * Por abajo la máscara funde el corte frontal del diorama con el fondo. El fundido empieza a esta
- * distancia del borde de abajo del recorte (fracción de su alto)...
+ * Por abajo la máscara funde el grosor del frente del bloque del diorama con el fondo. El frente
+ * empieza al 83,8 % del alto del recorte (el 84,5 % de la imagen), así que el fundido empieza a esta
+ * distancia del borde de abajo (fracción del alto): al 82 %, justo antes, para que se disuelva entero...
  */
-export const FUNDIDO_INFERIOR_DESDE = 0.14;
+export const FUNDIDO_INFERIOR_DESDE = 0.18;
 
 /**
- * ...y llega a transparente a esta distancia del borde. El bloque del diorama acaba al 94,13 % de la
- * imagen, el 98,7 % del recorte: si el fundido llegara a transparente justo en el borde, ese canto
- * seguiría viéndose con un 9 % de opacidad y marcaría una línea. Ningún botón, placa ni pico puede caer
- * en la franja del fundido (lo comprueba `destinos-mapa.test.ts`): si hay que bajar uno, se baja
- * `FUNDIDO_INFERIOR_DESDE` o se cambia `RECORTE_INFERIOR`.
+ * ...y llega a transparente a esta distancia del borde. El bloque acaba al 94,13 % de la imagen, el
+ * 98,7 % del recorte: si el fundido llegara a transparente justo en el borde, ese canto seguiría viéndose
+ * con un 9 % de opacidad y marcaría una línea. Ningún botón, placa ni pico puede caer en la franja del
+ * fundido (lo comprueba `destinos-mapa.test.ts`): si hay que bajar uno, se baja `FUNDIDO_INFERIOR_DESDE`,
+ * se cambia el lado de su placa o se cambia `RECORTE_INFERIOR`.
  */
 export const FUNDIDO_INFERIOR_HASTA = 0.03;
+
+/**
+ * Esquinas de abajo: los bordes verticales del bloque (x ≈ 2,9 % y 97,1 %) marcarían el corte. Desde el
+ * 74 % del alto del recorte, los laterales se desvanecen hacia los lados (máscara en forma de U): en las
+ * filas de abajo solo se ve la parte central. Por encima de esa altura los laterales siguen como estaban.
+ */
+export const ESQUINAS_DESDE = 0.74;
+
+/** Altura (fracción del alto del recorte) a la que los laterales ya se han desvanecido del todo. */
+export const ESQUINAS_HASTA = 0.9;
+
+/** Anchura de cada lateral (fracción del ancho) que se desvanece en las filas de abajo. */
+export const ESQUINAS_ANCHO = 0.25;
 
 export interface Recorte {
 	superior: number;

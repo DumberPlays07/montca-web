@@ -34,6 +34,9 @@ import {
 	CENTRO_INICIAL_MARCO,
 	type DestinoEnCrudo,
 	RECORTE_SUPERIOR,
+	ESQUINAS_ANCHO,
+	ESQUINAS_DESDE,
+	ESQUINAS_HASTA,
 	FUNDIDO_INFERIOR_DESDE,
 	FUNDIDO_INFERIOR_HASTA,
 	FUNDIDO_SUPERIOR,
@@ -73,16 +76,19 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			aria-label={t(lang, 'regionMapa')}
 			style={`--ancho-minimo: ${ANCHO_MINIMO_MAPA_REM}rem`}
 		>
-			<div class="mapa" style={`--proporcion: ${proporcion}; --recorte-arriba: ${RECORTE_SUPERIOR}; --recorte-visible: ${visible}; --fundido-arriba: ${Math.round(FUNDIDO_SUPERIOR * 100)}%; --fundido-abajo-desde: ${Math.round(FUNDIDO_INFERIOR_DESDE * 100)}%; --fundido-abajo-hasta: ${Math.round(FUNDIDO_INFERIOR_HASTA * 100)}%`}>
+			<div class="mapa" style={`--proporcion: ${proporcion}; --recorte-arriba: ${RECORTE_SUPERIOR}; --recorte-visible: ${visible}; --fundido-arriba: ${Math.round(FUNDIDO_SUPERIOR * 100)}%; --fundido-abajo-desde: ${Math.round(FUNDIDO_INFERIOR_DESDE * 100)}%; --fundido-abajo-hasta: ${Math.round(FUNDIDO_INFERIOR_HASTA * 100)}%; --esquinas-desde: ${Math.round(ESQUINAS_DESDE * 100)}%; --esquinas-hasta: ${Math.round(ESQUINAS_HASTA * 100)}%; --esquinas-ancho: ${Math.round(ESQUINAS_ANCHO * 100)}%`}>
 				<div class="lienzo" data-lienzo>
 					<div class="recorte">
-						<Foto
-							src={mapa}
-							alt={textoEnLosDosIdiomas('altImagenCompartir')}
-							lang={lang}
-							principal
-							sizes={`(min-width: 72rem) 1152px, max(100vw, ${ANCHO_MINIMO_MAPA_REM}rem)`}
-						/>
+						<!-- Segunda máscara, en U: desvanece los laterales solo en las filas de abajo. -->
+						<div class="esquinas">
+							<Foto
+								src={mapa}
+								alt={textoEnLosDosIdiomas('altImagenCompartir')}
+								lang={lang}
+								principal
+								sizes={`(min-width: 72rem) 1152px, max(100vw, ${ANCHO_MINIMO_MAPA_REM}rem)`}
+							/>
+						</div>
 					</div>
 
 					<!-- Vacía en B-21: B-22 pone aquí la boira, los pájaros y los excursionistas, por debajo de los botones. -->
@@ -273,6 +279,45 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 				transparent calc(100% - var(--fundido-abajo-hasta))
 			);
 		mask-composite: intersect;
+	}
+
+	/* Esquinas de abajo: máscara en U. Es la unión (`add`) de dos capas: las filas de arriba, opacas hasta
+	   `--esquinas-desde` y transparentes a partir de `--esquinas-hasta`, y la franja central, opaca en
+	   todas las filas. Abajo solo se ve la franja central, y los bordes verticales del bloque se
+	   desvanecen hacia los lados. Se multiplica con la máscara de `.recorte`. */
+	.esquinas {
+		position: absolute;
+		inset: 0;
+		-webkit-mask-image:
+			linear-gradient(
+				to bottom,
+				var(--color-tinta),
+				var(--color-tinta) var(--esquinas-desde),
+				transparent var(--esquinas-hasta)
+			),
+			linear-gradient(
+				to right,
+				transparent,
+				var(--color-tinta) var(--esquinas-ancho),
+				var(--color-tinta) calc(100% - var(--esquinas-ancho)),
+				transparent
+			);
+		-webkit-mask-composite: source-over;
+		mask-image:
+			linear-gradient(
+				to bottom,
+				var(--color-tinta),
+				var(--color-tinta) var(--esquinas-desde),
+				transparent var(--esquinas-hasta)
+			),
+			linear-gradient(
+				to right,
+				transparent,
+				var(--color-tinta) var(--esquinas-ancho),
+				var(--color-tinta) calc(100% - var(--esquinas-ancho)),
+				transparent
+			);
+		mask-composite: add;
 	}
 
 	.recorte :global(picture) {
