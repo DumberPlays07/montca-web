@@ -84,7 +84,7 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - [X] T030 [US2] (Pablo) Completar `src/scripts/eventos-cliente.ts`: pide los equipos con la fuente elegida, rellena `PlacesIEquips` con plantillas `<template>` (textos desde el HTML, no escritos en el script), pasa a `calcularEstado` el recuento de confirmados por categoría (para `completes`) y deja la página intacta si hay error (FR-027, FR-028) (depende de T029)
 - [X] T031 [US2] (Pablo) Retirada de la lista (FR-040): con `listaRetirada` verdadero, `PlacesIEquips.astro` no renderiza nada al construir y `eventos-cliente.ts` ni pide equipos ni muestra la lista ni las plazas, también si la página se construyó antes de la fecha. La información del evento sigue (depende de T005 y T030)
 - [X] T032 [US2] (Pablo) Equipos con jugadores ocultos (FR-041): en `PlacesIEquips.astro` y `eventos-cliente.ts`, un equipo con `jugadoresOcultos: true` sale solo con su nombre (sin desplegable, sin número de jugadores, sin capitán) y cuenta para las plazas; el texto de la interfaz no dice nada del origen. Comprobarlo con los datos de prueba con el interruptor apagado y encendido (depende de T026 y T029)
-- [ ] T033 [US2] (Pablo) Comprobar [quickstart.md](quickstart.md) §3, puntos 1–8, incluida la búsqueda de apellidos y equipos pendientes en el código fuente y en la pestaña Red (SC-003), y anotarlo en el PR
+- [X] T033 [US2] (Pablo) Comprobar [quickstart.md](quickstart.md) §3, puntos 1–8, incluida la búsqueda de apellidos y equipos pendientes en el código fuente y en la pestaña Red (SC-003), y anotarlo en el PR
 
 ### Capa de datos (Saúl, cuando esté A-14)
 

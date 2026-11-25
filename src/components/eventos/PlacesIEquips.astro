@@ -236,8 +236,11 @@ if (mostrar && fuente === 'prueba') {
 		padding: var(--espacio-2) 0;
 	}
 
+	/* Con el texto muy ampliado el contador baja de línea en vez de dejar el nombre en una columna de una letra. */
 	.nombre-equipo {
-		overflow-wrap: anywhere;
+		flex: 1 1 8rem;
+		min-width: 0;
+		overflow-wrap: break-word;
 		color: var(--color-verd-bosc);
 		font-weight: 600;
 		line-height: 1.35;
@@ -248,8 +251,9 @@ if (mostrar && fuente === 'prueba') {
 		position: relative;
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 		justify-content: space-between;
-		gap: var(--espacio-3);
+		gap: 0 var(--espacio-3);
 		min-height: var(--zona-tactil);
 		padding: var(--espacio-2) var(--espacio-8) var(--espacio-2) 0;
 		list-style: none;
@@ -303,14 +307,16 @@ if (mostrar && fuente === 'prueba') {
 		padding: var(--espacio-1) 0;
 	}
 
+	/* Alineado por la línea base del número; el punto, aparte, a media altura. */
 	.dorsal {
 		display: inline-flex;
-		align-items: center;
+		align-items: baseline;
 	}
 
 	/* Punto volado dibujado con CSS: el "·" de Overpass se dibuja con un espaciado raro. */
 	.punt {
 		flex-shrink: 0;
+		align-self: center;
 		width: 0.14em;
 		height: 0.14em;
 		margin: 0 0.3em 0 0.2em;
