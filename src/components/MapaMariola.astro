@@ -34,6 +34,9 @@ import {
 	CENTRO_INICIAL_MARCO,
 	type DestinoEnCrudo,
 	RECORTE_SUPERIOR,
+	FUNDIDO_INFERIOR_DESDE,
+	FUNDIDO_INFERIOR_HASTA,
+	FUNDIDO_SUPERIOR,
 	RECORTE_INFERIOR,
 	formatoAltura,
 	prepararDestinos,
@@ -70,7 +73,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			aria-label={t(lang, 'regionMapa')}
 			style={`--ancho-minimo: ${ANCHO_MINIMO_MAPA_REM}rem`}
 		>
-			<div class="mapa" style={`--proporcion: ${proporcion}; --recorte-arriba: ${RECORTE_SUPERIOR}; --recorte-visible: ${visible}`}>
+			<div class="mapa" style={`--proporcion: ${proporcion}; --recorte-arriba: ${RECORTE_SUPERIOR}; --recorte-visible: ${visible}; --fundido-arriba: ${Math.round(FUNDIDO_SUPERIOR * 100)}%; --fundido-abajo-desde: ${Math.round(FUNDIDO_INFERIOR_DESDE * 100)}%; --fundido-abajo-hasta: ${Math.round(FUNDIDO_INFERIOR_HASTA * 100)}%`}>
 				<div class="lienzo" data-lienzo>
 					<div class="recorte">
 						<Foto
@@ -242,20 +245,33 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 	}
 
 	/* Recorte (src/lib/mapa.ts): se enseña solo una franja de la imagen. La máscara difumina el borde
-	   de arriba y los de los lados para que la ilustración se funda con el fondo Boira de la página
-	   (DESIGN.md: el fondo es el cielo del mapa); no separa zonas. No afecta a los botones. De cada color
-	   de la máscara solo cuenta que es opaco. */
+	   de arriba, el de abajo (el corte frontal del diorama) y los de los lados para que la ilustración se
+	   funda con el fondo Boira de la página (DESIGN.md: el fondo es el cielo del mapa); no separa zonas.
+	   No afecta a los botones, que están fuera del recorte, y la franja de abajo queda libre de botones,
+	   placas y picos (`FUNDIDO_INFERIOR_DESDE`). De cada color de la máscara solo cuenta que es opaco. */
 	.recorte {
 		position: relative;
 		overflow: hidden;
 		aspect-ratio: var(--proporcion);
 		-webkit-mask-image:
 			linear-gradient(to right, transparent, var(--color-tinta) 5%, var(--color-tinta) 95%, transparent),
-			linear-gradient(to bottom, transparent, var(--color-tinta) 12%);
+			linear-gradient(
+				to bottom,
+				transparent,
+				var(--color-tinta) var(--fundido-arriba),
+				var(--color-tinta) calc(100% - var(--fundido-abajo-desde)),
+				transparent calc(100% - var(--fundido-abajo-hasta))
+			);
 		-webkit-mask-composite: source-in;
 		mask-image:
 			linear-gradient(to right, transparent, var(--color-tinta) 5%, var(--color-tinta) 95%, transparent),
-			linear-gradient(to bottom, transparent, var(--color-tinta) 12%);
+			linear-gradient(
+				to bottom,
+				transparent,
+				var(--color-tinta) var(--fundido-arriba),
+				var(--color-tinta) calc(100% - var(--fundido-abajo-desde)),
+				transparent calc(100% - var(--fundido-abajo-hasta))
+			);
 		mask-composite: intersect;
 	}
 

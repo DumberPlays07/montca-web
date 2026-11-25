@@ -4,6 +4,8 @@ import { ruta, t as tNavegacion } from '../components/textos-navegacion.ts';
 import destinosEnCrudo from '../data/destinos-mapa.json' with { type: 'json' };
 import picosEnCrudo from '../data/picos-mapa.json' with { type: 'json' };
 import {
+	FUNDIDO_INFERIOR_DESDE,
+	FUNDIDO_INFERIOR_HASTA,
 	LADO_ZONA_BOTON,
 	type DestinoEnCrudo,
 	prepararDestinos,
@@ -237,6 +239,34 @@ describe('los demás picos', () => {
 					}
 				}
 			}
+		}
+	});
+});
+
+describe('fundido del borde de abajo del mapa', () => {
+	it('llega a transparente antes del canto inferior del diorama (98,7 % del recorte)', () => {
+		const cantoDelDiorama = (94.13 - 30) / 65;
+		assert.ok(1 - FUNDIDO_INFERIOR_HASTA < cantoDelDiorama);
+		assert.ok(FUNDIDO_INFERIOR_DESDE > FUNDIDO_INFERIOR_HASTA);
+	});
+
+	it('ningún botón, placa ni pico llega a la franja que difumina la máscara', () => {
+		for (const ancho of ANCHOS_MAPA) {
+			const alto = ancho / PROPORCION;
+			const limite = (1 - FUNDIDO_INFERIOR_DESDE) * alto;
+			let masBajo = 0;
+			for (const destino of destinos) {
+				masBajo = Math.max(masBajo, zonaDeBoton(centroEnPx(destino.id, ancho)).arriba + LADO_ZONA_BOTON);
+				for (const [indice] of IDIOMAS.entries()) {
+					const placa = placaDe(destino.id, indice, ancho);
+					masBajo = Math.max(masBajo, placa.arriba + placa.alto);
+				}
+			}
+			for (const pico of picos) {
+				const lado = zonaPulsable(pico.vecino, pico.vecinoBoton, ancho);
+				masBajo = Math.max(masBajo, centroPicoEnPx(pico, ancho).y + lado / 2);
+			}
+			assert.ok(masBajo <= limite, `a ${ancho} px lo más bajo llega a ${masBajo.toFixed(1)} px y el fundido empieza en ${limite.toFixed(1)} px`);
 		}
 	});
 });

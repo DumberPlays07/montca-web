@@ -49,6 +49,24 @@ export const LADO_MINIMO_ZONA_PULSABLE = 24;
 /** Cuánto se mete la placa en la zona del punto, para que quede pegada a él. */
 export const SOLAPE_PLACA = 6;
 
+/** Cuánto del alto del recorte difumina la máscara por arriba (entre 0 y 1), para fundir el cielo con Boira. */
+export const FUNDIDO_SUPERIOR = 0.12;
+
+/**
+ * Por abajo la máscara funde el corte frontal del diorama con el fondo. El fundido empieza a esta
+ * distancia del borde de abajo del recorte (fracción de su alto)...
+ */
+export const FUNDIDO_INFERIOR_DESDE = 0.14;
+
+/**
+ * ...y llega a transparente a esta distancia del borde. El bloque del diorama acaba al 94,13 % de la
+ * imagen, el 98,7 % del recorte: si el fundido llegara a transparente justo en el borde, ese canto
+ * seguiría viéndose con un 9 % de opacidad y marcaría una línea. Ningún botón, placa ni pico puede caer
+ * en la franja del fundido (lo comprueba `destinos-mapa.test.ts`): si hay que bajar uno, se baja
+ * `FUNDIDO_INFERIOR_DESDE` o se cambia `RECORTE_INFERIOR`.
+ */
+export const FUNDIDO_INFERIOR_HASTA = 0.03;
+
 export interface Recorte {
 	superior: number;
 	inferior: number;
