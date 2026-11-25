@@ -46,8 +46,8 @@ const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 	<div class="cabecera-interior">
 		<!-- Logo = imagen original de Montca (DESIGN.md). Solo se ve una de las dos; la otra va con display: none. -->
 		<a class="marca" href={ruta(lang, 'inicio')}>
-			<span class="marca-simbolo"><Foto src={simbolo} alt={nombreMarca} lang={lang} ancho={52} /></span>
-			<span class="marca-linea"><Foto src={linea} alt={nombreMarca} lang={lang} ancho={232} /></span>
+			<span class="marca-simbolo"><Foto src={simbolo} alt={nombreMarca} lang={lang} inmediata ancho={52} /></span>
+			<span class="marca-linea"><Foto src={linea} alt={nombreMarca} lang={lang} inmediata ancho={232} /></span>
 		</a>
 
 		<nav class="nav-escritorio" aria-label={t(lang, 'navegacionPrincipal')}>
