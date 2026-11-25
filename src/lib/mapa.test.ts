@@ -5,9 +5,13 @@ import {
 	RECORTE_INFERIOR,
 	RECORTE_SUPERIOR,
 	colocarFicha,
+	formatoAltura,
 	idDePico,
+	ordenarPorAltura,
 	proporcionRecortada,
+	vecinoMasCercano,
 	yEnRecorte,
+	zonaPulsable,
 } from './mapa.ts';
 
 /** Medidas de `src/assets/mapa/mapa-mariola.webp`. */
@@ -73,6 +77,58 @@ describe('idDePico', () => {
 		assert.equal(idDePico('  Mola -- Alta!  '), 'mola-alta');
 	});
 
+});
+
+describe('formatoAltura', () => {
+	it('separa los miles con un punto y añade la unidad', () => {
+		assert.equal(formatoAltura(1390), '1.390 m');
+		assert.equal(formatoAltura(987), '987 m');
+	});
+});
+
+describe('ordenarPorAltura', () => {
+	it('va del más alto al más bajo y no cambia la lista original', () => {
+		const original = [{ altura: 900 }, { altura: 1200 }, { altura: 1000 }];
+		assert.deepEqual(ordenarPorAltura(original).map((p) => p.altura), [1200, 1000, 900]);
+		assert.deepEqual(original.map((p) => p.altura), [900, 1200, 1000]);
+	});
+});
+
+describe('vecinoMasCercano', () => {
+	it('es la distancia al otro punto más cercano, no al primero de la lista', () => {
+		const lista = [
+			{ x: 10, y: 50 },
+			{ x: 90, y: 50 },
+			{ x: 12, y: 50 },
+		];
+		assert.equal(Number(vecinoMasCercano(lista[0], lista, ANCHO_IMAGEN, ALTO_IMAGEN).toFixed(4)), 0.02);
+	});
+
+	it('un punto solo no tiene vecino: no limita su zona', () => {
+		const solo = [{ x: 10, y: 50 }];
+		assert.equal(vecinoMasCercano(solo[0], solo, ANCHO_IMAGEN, ALTO_IMAGEN), 1);
+	});
+});
+
+describe('zonaPulsable', () => {
+	it('mide 44 px si los vecinos están lejos', () => {
+		assert.equal(zonaPulsable(0.1, 0.1, 900), 44);
+	});
+
+	it('se encoge hasta la distancia al pico vecino', () => {
+		assert.equal(zonaPulsable(31 / 1152, 1, 1152), 31);
+	});
+
+	it('se encoge para dejar libre la mitad de la zona de 44 px de un botón vecino', () => {
+		// A 30 px de un botón, la zona del pico puede medir 2 × (30 − 22) = 16 px... pero no baja de 24.
+		assert.equal(zonaPulsable(1, 30 / 900, 900), 24);
+		// A 40 px: 2 × (40 − 22) = 36 px.
+		assert.equal(zonaPulsable(1, 40 / 900, 900), 36);
+	});
+
+	it('nunca baja de 24 px (WCAG 2.2, 2.5.8): excepción del principio V', () => {
+		assert.equal(zonaPulsable(10 / 375, 10 / 375, 375), 24);
+	});
 });
 
 describe('colocarFicha', () => {

@@ -35,7 +35,9 @@ import {
 	type DestinoEnCrudo,
 	RECORTE_SUPERIOR,
 	RECORTE_INFERIOR,
+	formatoAltura,
 	prepararDestinos,
+	prepararPicos,
 	proporcionRecortada,
 } from '../lib/mapa';
 
@@ -45,11 +47,14 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const destinos = prepararDestinos(destinosEnCrudo as DestinoEnCrudo[], picosEnCrudo).map((destino) => ({
+const destinosPreparados = prepararDestinos(destinosEnCrudo as DestinoEnCrudo[], picosEnCrudo);
+const destinos = destinosPreparados.map((destino) => ({
 	...destino,
 	href: ruta(lang, destino.ruta as ClaveRuta),
 	texto: destino.textos[lang],
 }));
+// Los demás picos del dibujo: puntos pequeños con ficha de nombre y altura, sin placa ni apartado.
+const picos = prepararPicos(picosEnCrudo, destinosPreparados, mapa.width, mapa.height, destinosEnCrudo as DestinoEnCrudo[]);
 const proporcion = proporcionRecortada(mapa.width, mapa.height);
 const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 ---
@@ -89,20 +94,34 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 									style={`--x: ${destino.izquierda}%; --y: ${destino.arriba}%; --orden: ${destino.orden}`}
 									data-id={destino.id}
 									data-lugar={destino.texto.lugar}
+									data-altura={destino.altura !== undefined ? formatoAltura(destino.altura) : undefined}
 									data-titulo={destino.texto.titulo}
 									data-frase={destino.texto.frase}
 									data-destino={destino.ruta}
-									aria-label={`${destino.texto.placaLugar}: ${destino.texto.placaDestino}`}
+									aria-label={`${destino.texto.nombre}: ${destino.texto.placaDestino}`}
 								>
 									<span class="punto" aria-hidden="true" />
-									<span class="placa" data-lado={destino.lado} aria-hidden="true">
-										<span class="placa-lugar">{destino.texto.placaLugar}</span>
-										<span class="placa-destino">
-											<span class="marca" />
-											{destino.texto.placaDestino}
-										</span>
+									<span class="placa" data-lado={destino.lado} style={`--desplazamiento: ${destino.desplazamiento}px`} aria-hidden="true">
+										<span class="marca" />
+										{destino.texto.placaDestino}
 									</span>
 								</a>
+							))
+						}
+						{
+							picos.map((pico) => (
+								<span
+									class="pico"
+									style={`--x: ${pico.izquierda}%; --y: ${pico.arriba}%; --vecino: ${pico.vecino}; --vecino-boton: ${pico.vecinoBoton}`}
+									data-id={pico.id}
+									data-nombre={pico.nombre}
+									data-altura={formatoAltura(pico.altura)}
+								>
+									<span class="punto-pico" aria-hidden="true" />
+									<span class="etiqueta" aria-hidden="true">
+										{pico.nombre}
+									</span>
+								</span>
 							))
 						}
 					</div>
@@ -125,8 +144,13 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			data-vineta
 			hidden
 		>
-			<p class="vineta-lugar"><span class="marca" aria-hidden="true"></span><span data-vineta-lugar></span></p>
-			<h3 id="titulo-vineta" data-vineta-titulo></h3>
+			<h3 id="titulo-vineta">
+				<span data-vineta-lugar></span>
+				<span class="con-altura" data-vineta-con-altura hidden>
+					<span class="punt" aria-hidden="true"></span><span class="solo-lector">, </span><span data-vineta-altura></span>
+				</span>
+			</h3>
+			<p class="vineta-destino"><span class="marca" aria-hidden="true"></span><span data-vineta-titulo></span></p>
 			<p class="vineta-frase" data-vineta-frase></p>
 			<a class="entra" data-vineta-enlace data-destino="" href={ruta(lang, 'inicio')} data-conector={t(lang, 'entraConector')}>
 				{t(lang, 'entra')}
@@ -134,6 +158,28 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 				<span class="solo-lector" data-vineta-solo-lector></span>
 			</a>
 			<!-- Al final del DOM para que el tabulador pase primero por "Entra" y después por "Tanca". -->
+			<button type="button" class="cerrar" data-cerrar aria-label={t(lang, 'cerrarVineta')}>
+				<Icono nombre="cerrar" />
+			</button>
+		</div>
+
+		<!-- Ficha de los demás picos: nombre y altura, sin apartado al que ir. -->
+		<div
+			class="vineta ficha"
+			id="ficha-pico"
+			role="dialog"
+			aria-modal="false"
+			aria-labelledby="titulo-ficha"
+			tabindex="-1"
+			data-ficha
+			hidden
+		>
+			<h3 id="titulo-ficha">
+				<span data-ficha-nombre></span>
+				<span class="con-altura">
+					<span class="punt" aria-hidden="true"></span><span class="solo-lector">, </span><span data-ficha-altura></span>
+				</span>
+			</h3>
 			<button type="button" class="cerrar" data-cerrar aria-label={t(lang, 'cerrarVineta')}>
 				<Icono nombre="cerrar" />
 			</button>
@@ -151,7 +197,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 					<li>
 						<a class="destino" href={destino.href}>
 							<span class="nombre-destino">{destino.texto.titulo}</span>
-							<span class="lugar-destino">{destino.texto.placaLugar}</span>
+							<span class="lugar-destino">{destino.texto.nombre}</span>
 						</a>
 					</li>
 				))
@@ -245,6 +291,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		text-decoration: none;
 		cursor: pointer;
 		pointer-events: auto;
+		/* Por encima de los picos: donde sus zonas se solapan, manda el botón de destino. */
+		z-index: 2;
 		/* `translate` y no `transform`: así B-19 puede escalar y levantar el botón sin descolocarlo. */
 		translate: -50% -50%;
 	}
@@ -284,42 +332,47 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			0 0 0 6px var(--color-tinta);
 	}
 
-	/* ---- Placa de sendero: siempre visible, y pulsable como parte del botón. ---- */
+	/* ---- Placa de sendero: una línea con el destino, siempre visible y pulsable como parte del botón. ---- */
 	.placa {
 		position: absolute;
-		display: grid;
-		align-content: center;
-		min-height: var(--zona-tactil);
-		padding: 3px 10px;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		min-height: 24px;
+		padding: 2px 8px 2px 6px;
 		background: var(--color-boira);
 		border: 1px solid var(--color-linea);
 		border-radius: var(--radio-senal);
-		text-align: left;
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		line-height: 1.25;
 		white-space: nowrap;
 	}
 
 	.placa[data-lado='arriba'] {
 		bottom: calc(100% - var(--solape-placa));
 		left: 50%;
-		translate: -50% 0;
+		translate: calc(-50% + var(--desplazamiento, 0px)) 0;
 	}
 
 	.placa[data-lado='abajo'] {
 		top: calc(100% - var(--solape-placa));
 		left: 50%;
-		translate: -50% 0;
+		translate: calc(-50% + var(--desplazamiento, 0px)) 0;
 	}
 
 	.placa[data-lado='derecha'] {
 		top: 50%;
 		left: calc(100% - var(--solape-placa));
-		translate: 0 -50%;
+		translate: 0 calc(-50% + var(--desplazamiento, 0px));
 	}
 
 	.placa[data-lado='izquierda'] {
 		top: 50%;
 		right: calc(100% - var(--solape-placa));
-		translate: 0 -50%;
+		translate: 0 calc(-50% + var(--desplazamiento, 0px));
 	}
 
 	/* Con la viñeta abierta, la placa ya está en la viñeta y taparía su borde. El nombre del botón no
@@ -328,25 +381,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		visibility: hidden;
 	}
 
-	.placa-lugar {
-		color: var(--color-verd-bosc);
-		font-size: 0.8125rem;
-		font-weight: 600;
-		line-height: 1.25;
-	}
-
-	.placa-destino {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		color: var(--color-tinta);
-		font-size: 0.9375rem;
-		font-weight: 800;
-		line-height: 1.25;
-	}
-
 	@media (hover: hover) and (pointer: fine) {
-		.boton:hover .placa-destino {
+		.boton:hover .placa {
 			text-decoration: underline;
 			text-decoration-thickness: 2px;
 		}
@@ -361,6 +397,83 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		background: var(--color-groc-sender);
 		border: 2px solid var(--color-verd-bosc);
 		border-radius: 50%;
+	}
+
+	/* ---- Picos sin destino: punto pequeño con su ficha de nombre y altura. Sin placa, sin amarillo. ---- */
+	.pico {
+		position: absolute;
+		left: var(--x);
+		top: var(--y);
+		display: grid;
+		place-items: center;
+		/* Zona pulsable: 44 px, o menos si otro pico, o la mitad de la zona de un botón, está más cerca;
+		   nunca menos de 24 px (excepción del principio V, docs/decisiones.md). */
+		width: clamp(24px, min(calc(var(--vecino) * 100%), calc(2 * (var(--vecino-boton) * 100% - 22px))), 44px);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		color: var(--color-tinta);
+		cursor: pointer;
+		pointer-events: auto;
+		z-index: 1;
+		translate: -50% -50%;
+	}
+
+	.punto-pico {
+		width: 14px;
+		height: 14px;
+		background: var(--color-boira);
+		border: 2px solid var(--color-verd-bosc);
+		border-radius: 50%;
+	}
+
+	.pico:hover .punto-pico,
+	.pico[aria-expanded='true'] .punto-pico {
+		width: 18px;
+		height: 18px;
+		border-width: 3px;
+	}
+
+	.pico[aria-expanded='true'] .punto-pico {
+		background: var(--color-teula-clara);
+		border-color: var(--color-tinta);
+	}
+
+	.pico:focus-visible {
+		outline: none;
+	}
+
+	.pico:focus-visible .punto-pico {
+		box-shadow:
+			0 0 0 3px var(--color-boira),
+			0 0 0 6px var(--color-tinta);
+	}
+
+	/* El nombre del pico aparece al pasar el ratón o al enfocarlo. */
+	.etiqueta {
+		position: absolute;
+		left: 100%;
+		top: 50%;
+		display: none;
+		margin-left: var(--espacio-1);
+		padding: 0 var(--espacio-2);
+		background: var(--color-boira);
+		border-radius: var(--radio-senal);
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 1.5;
+		white-space: nowrap;
+		pointer-events: none;
+		translate: 0 -50%;
+	}
+
+	.pico:hover .etiqueta,
+	.pico:focus-visible .etiqueta {
+		display: block;
+		z-index: 3;
+	}
+
+	.pico[aria-expanded='true'] .etiqueta {
+		display: none;
 	}
 
 	/* ---- Móvil: degradados de los bordes y aviso de deslizar. ---- */
@@ -435,11 +548,12 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		outline: none;
 	}
 
-	.vineta-lugar {
+	/* El destino va debajo del nombre del sitio, más pequeño y con la marca de sendero delante. */
+	.vineta-destino {
 		display: flex;
 		align-items: center;
 		gap: 6px;
-		margin: 0 0 var(--espacio-1);
+		margin: var(--espacio-1) 0 0;
 		padding-right: var(--zona-tactil);
 		color: var(--color-verd-bosc);
 		font-size: 0.875rem;
@@ -447,8 +561,24 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		line-height: 1.4;
 	}
 
+	.vineta h3 > span {
+		white-space: nowrap;
+	}
+
+	/* Punto flotante dibujado con CSS entre el nombre y la altura (DESIGN.md, Floating Dot Rule). */
+	.punt {
+		display: inline-block;
+		width: 0.14em;
+		height: 0.14em;
+		margin: 0 0.5em;
+		background: currentColor;
+		vertical-align: middle;
+	}
+
 	.vineta h3 {
 		margin: 0;
+		/* El nombre del sitio no se parte: si no cabe con la altura, la altura baja de línea. */
+		text-wrap: balance;
 		padding-right: var(--zona-tactil);
 		color: var(--color-verd-bosc);
 		font-size: 1.25rem;
@@ -576,7 +706,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			bottom: auto;
 			left: var(--vineta-izquierda, 0);
 			z-index: 5;
-			width: 18rem;
+			/* 22rem: cabe el título más largo ('Alt de la Codolla · 1.167 m') en una línea. */
+			width: 22rem;
 			max-height: none;
 			overflow-y: visible;
 			padding: var(--espacio-4);

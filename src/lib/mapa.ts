@@ -1,6 +1,6 @@
 /**
- * Lógica pura del mapa de Mariola como menú (B-21): posición de los siete destinos sobre la imagen
- * recortada, geometría de sus zonas y placas, y dónde se coloca la viñeta.
+ * Lógica pura del mapa de Mariola como menú (B-21): posición de los destinos y de los demás picos sobre
+ * la imagen recortada, geometría de sus zonas y placas, y dónde se coloca la viñeta o la ficha.
  *
  * Los picos viven en `src/data/picos-mapa.json` con su posición en % de la imagen ENTERA
  * (`x`, `y`) y los destinos en `src/data/destinos-mapa.json`. La web enseña solo una parte de la
@@ -34,8 +34,17 @@ export const CENTRO_INICIAL_MARCO = 0.76;
 /** Lado de la zona pulsable del punto de un botón: 44 px, el principio V de la constitución. */
 export const LADO_ZONA_BOTON = 44;
 
-/** Alto de la placa de un botón: también cumple los 44 px porque se puede pulsar. */
-export const ALTO_PLACA = 44;
+/**
+ * Alto de la placa de un botón: una sola línea con el destino, en letra Label. Es pulsable, pero el
+ * botón entero (la zona de 44 px del punto más la placa) sigue cumpliendo los 44 px del principio V.
+ */
+export const ALTO_PLACA = 24;
+
+/** La zona pulsable de un pico mide como mucho 44 px (principio V de la constitución)... */
+export const LADO_MAXIMO_ZONA_PULSABLE = LADO_ZONA_BOTON;
+
+/** ...y nunca menos de 24 px: el mínimo de WCAG 2.2 (2.5.8). Excepción vigente, ver docs/decisiones.md. */
+export const LADO_MINIMO_ZONA_PULSABLE = 24;
 
 /** Cuánto se mete la placa en la zona del punto, para que quede pegada a él. */
 export const SOLAPE_PLACA = 6;
@@ -63,9 +72,9 @@ export type IdiomaDestino = 'ca' | 'es';
 
 /** Textos de un destino en un idioma (placa, viñeta y lista). */
 export interface TextosDestino {
-	/** Primera línea de la placa y nombre accesible del botón: "Montcabrer". */
-	placaLugar: string;
-	/** Segunda línea de la placa: "Repte 5 Cims". */
+	/** Nombre del sitio: va en el nombre accesible del botón y en la lista, no en la placa. "Montcabrer". */
+	nombre: string;
+	/** Lo único que dice la placa: el destino, en una línea. "Repte 5 Cims". */
 	placaDestino: string;
 	/** Lugar de la viñeta, algo más largo que el de la placa: "Castell de Cocentaina". */
 	lugar: string;
@@ -84,6 +93,11 @@ export interface DestinoEnCrudo {
 	/** % del alto de la imagen entera (solo Castell y Cocentaina). */
 	y?: number;
 	lado: LadoPlaca;
+	/**
+	 * Cuánto se desplaza la placa a lo largo de su lado, en px (negativo: a la izquierda o arriba).
+	 * Solo para separarla de la placa de un botón vecino; sin él, va centrada con el punto.
+	 */
+	desplazamiento?: number;
 	/** Clave de `ruta()` en `textos-navegacion.ts`. */
 	ruta: string;
 	textos: Record<IdiomaDestino, TextosDestino>;
@@ -98,9 +112,30 @@ export interface DestinoPreparado {
 	izquierda: number;
 	/** % del alto del mapa ya recortado. */
 	arriba: number;
+	/** Altura en metros si el destino es un pico (va en el título de su viñeta); Castell y Cocentaina no la llevan. */
+	altura?: number;
+	/** Posición en % de la imagen ENTERA, para medir distancias a los picos. */
+	xImagen: number;
+	yImagen: number;
 	lado: LadoPlaca;
+	desplazamiento: number;
 	ruta: string;
 	textos: Record<IdiomaDestino, TextosDestino>;
+}
+
+/** Un pico sin botón de destino, listo para pintar: punto pequeño con su ficha de nombre y altura. */
+export interface PicoPreparado {
+	id: string;
+	nombre: string;
+	altura: number;
+	/** % del ancho del mapa. */
+	izquierda: number;
+	/** % del alto del mapa ya recortado. */
+	arriba: number;
+	/** Distancia al pico más cercano, como fracción del ancho del mapa. */
+	vecino: number;
+	/** Distancia al botón de destino más cercano, como fracción del ancho del mapa. */
+	vecinoBoton: number;
 }
 
 /** Posición vertical (en % del alto de la imagen entera) pasada a % del alto del recorte. */
@@ -127,6 +162,78 @@ export function idDePico(nombre: string): string {
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, '-')
 		.replace(/^-+|-+$/g, '');
+}
+
+/** "1.390 m". El punto como separador de miles va igual en valenciano y en castellano. */
+export function formatoAltura(metros: number): string {
+	return `${String(metros).replace(/\B(?=(\d{3})+(?!\d))/g, '.')} m`;
+}
+
+/** Del más alto al más bajo, sin cambiar la lista que recibe. */
+export function ordenarPorAltura<T extends { altura: number }>(picos: T[]): T[] {
+	return [...picos].sort((a, b) => b.altura - a.altura);
+}
+
+/**
+ * Distancia de `punto` al más cercano de `otros`, como fracción del ancho del mapa. Se mide sobre la
+ * imagen entera (el recorte no cambia las distancias). Sin otros, devuelve 1.
+ */
+export function vecinoMasCercano(
+	punto: { x: number; y: number },
+	otros: { x: number; y: number }[],
+	anchoImagen: number,
+	altoImagen: number,
+): number {
+	const proporcionAlto = altoImagen / anchoImagen;
+	let minimo = Number.POSITIVE_INFINITY;
+	for (const otro of otros) {
+		if (otro === punto) {
+			continue;
+		}
+		const dx = (otro.x - punto.x) / 100;
+		const dy = ((otro.y - punto.y) / 100) * proporcionAlto;
+		minimo = Math.min(minimo, Math.hypot(dx, dy));
+	}
+	return Number.isFinite(minimo) ? minimo : 1;
+}
+
+/**
+ * Lado en píxeles de la zona pulsable de un pico con el mapa a `anchoMapa` px: 44 px, o menos si otro
+ * pico está más cerca (para que las dos zonas no se tapen) o si un botón de destino, que mide siempre
+ * 44 px, está más cerca de la mitad de su zona; pero nunca menos de 24 px. Ese mínimo es la excepción
+ * al principio V (docs/decisiones.md): con 24 px la zona del pico puede solapar la del botón, que
+ * queda encima y es el que prevalece.
+ */
+export function zonaPulsable(vecino: number, vecinoBoton: number, anchoMapa: number): number {
+	const hastaElBoton = 2 * (vecinoBoton * anchoMapa - LADO_ZONA_BOTON / 2);
+	const lado = Math.min(LADO_MAXIMO_ZONA_PULSABLE, vecino * anchoMapa, hastaElBoton);
+	return Math.max(LADO_MINIMO_ZONA_PULSABLE, lado);
+}
+
+/**
+ * Los picos visibles que NO son un destino, con su posición en el recorte y la distancia a su vecino,
+ * por orden de altura. Los destinos que son un pico (Montcabrer, Alt de la Codolla...) ya tienen su botón.
+ */
+export function prepararPicos(
+	picos: PicoEnCrudo[],
+	destinos: DestinoPreparado[],
+	anchoImagen: number,
+	altoImagen: number,
+	destinosEnCrudo: DestinoEnCrudo[],
+	recorte: Recorte = RECORTE_POR_DEFECTO,
+): PicoPreparado[] {
+	const conBoton = new Set(destinosEnCrudo.map((destino) => destino.pico).filter((nombre) => nombre !== undefined));
+	const sueltos = ordenarPorAltura(picos.filter((pico) => pico.visible && !conBoton.has(pico.nombre)));
+	const botones = destinos.map((destino) => ({ x: destino.xImagen, y: destino.yImagen }));
+	return sueltos.map((pico) => ({
+		id: idDePico(pico.nombre),
+		nombre: pico.nombre,
+		altura: pico.altura,
+		izquierda: pico.x,
+		arriba: Number(yEnRecorte(pico.y, recorte).toFixed(3)),
+		vecino: Number(vecinoMasCercano(pico, sueltos, anchoImagen, altoImagen).toFixed(5)),
+		vecinoBoton: Number(vecinoMasCercano(pico, botones, anchoImagen, altoImagen).toFixed(5)),
+	}));
 }
 
 /** Lo que aparta el piquito de la viñeta de sus esquinas, para que no quede en el borde redondeado. */
@@ -170,6 +277,7 @@ export function prepararDestinos(
 	return destinos.map((destino, orden) => {
 		let x = destino.x;
 		let y = destino.y;
+		let altura: number | undefined;
 		if (destino.pico !== undefined) {
 			const pico = picos.find((candidato) => candidato.nombre === destino.pico);
 			if (pico === undefined) {
@@ -177,6 +285,7 @@ export function prepararDestinos(
 			}
 			x = pico.x;
 			y = pico.y;
+			altura = pico.altura;
 		}
 		if (x === undefined || y === undefined) {
 			throw new Error(`El destino "${destino.id}" necesita un pico o una x y una y.`);
@@ -186,7 +295,11 @@ export function prepararDestinos(
 			orden,
 			izquierda: x,
 			arriba: Number(yEnRecorte(y, recorte).toFixed(3)),
+			altura,
+			xImagen: x,
+			yImagen: y,
 			lado: destino.lado,
+			desplazamiento: destino.desplazamiento ?? 0,
 			ruta: destino.ruta,
 			textos: destino.textos,
 		};
@@ -213,20 +326,25 @@ export function zonaDeBoton(centro: { x: number; y: number }): Rectangulo {
 
 /**
  * Dónde cae la placa de un botón: pegada al punto por su lado, metida `SOLAPE_PLACA` px en su zona y
- * centrada con él. `anchoPlaca` es lo que mide el texto. Sirve para comprobar que las placas no se pisan.
+ * centrada con él (o desplazada `desplazamiento` px a lo largo de su lado). `anchoPlaca` es lo que mide el texto. Sirve para comprobar que las placas no se pisan.
  */
-export function rectanguloPlaca(lado: LadoPlaca, centro: { x: number; y: number }, anchoPlaca: number): Rectangulo {
+export function rectanguloPlaca(
+	lado: LadoPlaca,
+	centro: { x: number; y: number },
+	anchoPlaca: number,
+	desplazamiento = 0,
+): Rectangulo {
 	const zona = zonaDeBoton(centro);
 	const hueco = LADO_ZONA_BOTON / 2 - SOLAPE_PLACA;
 	switch (lado) {
 		case 'arriba':
-			return { izquierda: centro.x - anchoPlaca / 2, arriba: centro.y - hueco - ALTO_PLACA, ancho: anchoPlaca, alto: ALTO_PLACA };
+			return { izquierda: centro.x - anchoPlaca / 2 + desplazamiento, arriba: centro.y - hueco - ALTO_PLACA, ancho: anchoPlaca, alto: ALTO_PLACA };
 		case 'abajo':
-			return { izquierda: centro.x - anchoPlaca / 2, arriba: centro.y + hueco, ancho: anchoPlaca, alto: ALTO_PLACA };
+			return { izquierda: centro.x - anchoPlaca / 2 + desplazamiento, arriba: centro.y + hueco, ancho: anchoPlaca, alto: ALTO_PLACA };
 		case 'derecha':
-			return { izquierda: zona.izquierda + zona.ancho - SOLAPE_PLACA, arriba: centro.y - ALTO_PLACA / 2, ancho: anchoPlaca, alto: ALTO_PLACA };
+			return { izquierda: zona.izquierda + zona.ancho - SOLAPE_PLACA, arriba: centro.y - ALTO_PLACA / 2 + desplazamiento, ancho: anchoPlaca, alto: ALTO_PLACA };
 		case 'izquierda':
-			return { izquierda: zona.izquierda + SOLAPE_PLACA - anchoPlaca, arriba: centro.y - ALTO_PLACA / 2, ancho: anchoPlaca, alto: ALTO_PLACA };
+			return { izquierda: zona.izquierda + SOLAPE_PLACA - anchoPlaca, arriba: centro.y - ALTO_PLACA / 2 + desplazamiento, ancho: anchoPlaca, alto: ALTO_PLACA };
 	}
 }
 
