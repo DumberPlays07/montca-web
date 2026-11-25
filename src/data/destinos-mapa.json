@@ -70,7 +70,7 @@
   {
     "id": "morro-del-porc",
     "pico": "Morro del Porc",
-    "lado": "derecha",
+    "lado": "izquierda",
     "ruta": "rutas",
     "textos": {
       "ca": {
@@ -86,6 +86,28 @@
         "lugar": "Morro del Porc",
         "titulo": "Montca Rutes",
         "frase": "Rutas con un tema especial (nocturna con estrellas, geocaching, histórica o de plantas para licores caseros), con animación todo el camino y comida o bebida para todos."
+      }
+    }
+  },
+  {
+    "id": "alt-de-sant-jaume",
+    "pico": "Alt de Sant Jaume",
+    "lado": "abajo",
+    "ruta": "galeria",
+    "textos": {
+      "ca": {
+        "placaLugar": "Alt de Sant Jaume",
+        "placaDestino": "Galeria",
+        "lugar": "Alt de Sant Jaume",
+        "titulo": "Galeria",
+        "frase": "Aviat hi haurà fotos de les nostres activitats."
+      },
+      "es": {
+        "placaLugar": "Alt de Sant Jaume",
+        "placaDestino": "Galería",
+        "lugar": "Alt de Sant Jaume",
+        "titulo": "Galería",
+        "frase": "Pronto habrá fotos de nuestras actividades."
       }
     }
   },

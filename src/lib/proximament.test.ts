@@ -52,6 +52,14 @@ describe('páginas Pròximament', () => {
 		assert.equal(tNavegacion('es', 'rutas'), 'Montca Rutes');
 	});
 
+	it('Galeria tiene su página en /galeria/ y /es/galeria/, y va en el pie', () => {
+		assert.ok(SECCIONES_PROXIMAMENT.includes('galeria'));
+		assert.equal(ruta('ca', 'galeria'), '/galeria/');
+		assert.equal(ruta('es', 'galeria'), '/es/galeria/');
+		assert.equal(tNavegacion('ca', 'galeria'), 'Galeria');
+		assert.equal(tNavegacion('es', 'galeria'), 'Galería');
+	});
+
 	it('no hay secciones repetidas', () => {
 		assert.equal(new Set(SECCIONES_PROXIMAMENT).size, SECCIONES_PROXIMAMENT.length);
 	});
