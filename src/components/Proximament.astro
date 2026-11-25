@@ -4,7 +4,8 @@
  * lleven a un 404). Una sola pieza para todas: cada página de `src/pages` solo dice qué sección es.
  *
  * Lleva el título de la sección, una frase de qué habrá, "Pròximament", el botón de WhatsApp y
- * un enlace a Esdeveniments, que es lo que ya está hecho. El `title`, la `description` y la imagen
+ * un enlace a Esdeveniments, que es lo que ya está hecho. Para los textos legales, la frase es
+ * siempre "este texto legal está en revisión". El `title`, la `description` y la imagen
  * para compartir se pasan al layout desde aquí, como en las demás páginas.
  *
  * Cuando una sección tenga su página de verdad, se borra su archivo de `src/pages` y la clave de
@@ -15,7 +16,7 @@ import Icono from './Icono.astro';
 import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
 import { IMAGEN_COMPARTIR_POR_DEFECTO } from './imagen-compartir';
 import { type Idioma, ruta, t as tNavegacion } from './textos-navegacion';
-import { type SeccionProximament, t } from './textos-proximament';
+import { type SeccionProximament, fraseDe, t } from './textos-proximament';
 
 interface Props {
 	lang: Idioma;
@@ -25,7 +26,7 @@ interface Props {
 const { lang, seccion } = Astro.props;
 
 const titulo = tNavegacion(lang, seccion);
-const frase = t(lang, seccion);
+const frase = fraseDe(lang, seccion);
 
 // Sin número de WhatsApp, el contacto cae al correo, como en el resto de la web.
 const enlaceWhatsapp = urlWhatsapp(lang);

@@ -8,6 +8,9 @@
  * **Montca tiene que revisar estos textos antes de publicar**, igual que el castellano: lo que
  * dicen de cada sección es una promesa de qué habrá, no un dato. No inventan fechas, precios ni
  * actividades.
+ *
+ * Las páginas legales (aviso legal, privacidad y cookies) usan la misma pieza con un texto fijo,
+ * "en revisión": sus textos reales los hace B-08 y los borradores de `docs/legal/` no se publican.
  */
 import type { Idioma } from './textos-navegacion';
 
@@ -19,7 +22,13 @@ export const SECCIONES_PROXIMAMENT = [
 	'escuelas',
 	'quienesSomos',
 	'contacto',
+	'avisoLegal',
+	'privacidad',
+	'cookies',
 ] as const;
+
+/** Las que son textos legales: dicen "en revisión" en vez de qué habrá. */
+export const SECCIONES_LEGALES = ['avisoLegal', 'privacidad', 'cookies'] as const;
 
 export type SeccionProximament = (typeof SECCIONES_PROXIMAMENT)[number];
 
@@ -29,6 +38,7 @@ const textos = {
 		escribenosWhatsapp: 'Escriu-nos per WhatsApp',
 		nuevaPestana: "s'obri en una pestanya nova",
 		verEventos: 'Mira els esdeveniments',
+		enRevision: 'Aquest text legal està en revisió.',
 		actividades:
 			'Ací trobaràs les activitats de Montca a la Serra de Mariola, cadascuna amb la seua fitxa i com apuntar-te.',
 		agenda: 'Les pròximes dates de les activitats de Montca, amb les places lliures per a apuntar-te.',
@@ -42,6 +52,7 @@ const textos = {
 		escribenosWhatsapp: 'Escríbenos por WhatsApp',
 		nuevaPestana: 'se abre en una pestaña nueva',
 		verEventos: 'Mira los eventos',
+		enRevision: 'Este texto legal está en revisión.',
 		actividades:
 			'Aquí encontrarás las actividades de Montca en la Serra de Mariola, cada una con su ficha y cómo apuntarte.',
 		agenda: 'Las próximas fechas de las actividades de Montca, con las plazas libres para apuntarte.',
@@ -57,4 +68,12 @@ export type ClaveTextoProximament = keyof (typeof textos)['ca'];
 /** Devuelve el texto de `clave` en el idioma pedido. */
 export function t(lang: Idioma, clave: ClaveTextoProximament): string {
 	return textos[lang][clave];
+}
+
+/** La frase de una sección: qué habrá, o "en revisión" si es un texto legal. */
+export function fraseDe(lang: Idioma, seccion: SeccionProximament): string {
+	if ((SECCIONES_LEGALES as readonly string[]).includes(seccion)) {
+		return t(lang, 'enRevision');
+	}
+	return t(lang, seccion as Exclude<SeccionProximament, (typeof SECCIONES_LEGALES)[number]>);
 }
