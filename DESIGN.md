@@ -12,6 +12,7 @@ colors:
   teula: "#9c5530"
   teula-fosca: "#743d21"
   teula-clara: "#f0b890"
+  groc-sender: "#ddb03c"
   blanco: "#ffffff"
   linea: "rgb(55 86 57 / 0.18)"
   linea-sobre-verde: "rgb(241 246 239 / 0.16)"
@@ -153,7 +154,7 @@ components:
 
 # Design System: Montca Actiu
 
-> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
+> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos; y el mismo día, con el Groc sender de los botones del mapa-menú (B-21). Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
 
 ## Overview
 
@@ -192,6 +193,10 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 
 - **Pedra de la torre** (#f3e6c8): la crema, sacada de la piedra de la torre (#dcc291) y aclarada. Se usa en superficies cálidas puntuales: tarjetas destacadas, avisos de "Properament", franjas de confianza, el plano de deportes y precio del cartel de un evento y la tarjeta de un evento con las inscripciones abiertas. No es el fondo general.
 
+### Mapa-menú
+
+- **Groc sender** (#ddb03c): los botones del mapa-menú (B-21). Es el amarillo de las marcas de los senderos PR, que se pintan en blanco y amarillo; no sale del mapa, pero está medido sobre él. Es el relleno del punto de cada botón, con anillo Verd bosc (4.05:1 junto al amarillo) y un halo Blanco de 2 px por fuera: sobre las zonas del mapa donde caen los botones el amarillo solo mide 1.1–4.6:1, así que el contraste del borde lo dan el anillo o el halo (3.2:1 como mínimo). También es la marca de sendero (un punto de 10 px con anillo Verd bosc de 2 px) delante del destino en las placas del mapa y del lugar en su viñeta; sobre Boira mide 1.8:1, por eso lleva siempre anillo. Se distingue de la Teula (ΔE00 34.1), de la Teula clara (16.7) y de los torsos de los excursionistas del mapa (rojo #c42a3c, azul #2b66b0 y naranja #e0621c: ΔE00 28.4 o más). Nunca lleva texto.
+
 ### Neutral
 
 - **Boira de Mariola** (#f1f6ef): el fondo de toda la web, que es el cielo del mapa. Se elige en lugar de un blanco o una crema para que la ilustración se funda con la página.
@@ -206,6 +211,8 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 **The Dark Ground Rule.** La teula (#9c5530) nunca va sobre Verd bosc ni sobre otro verde oscuro: el contraste se queda en 1.5:1 y la marca desaparece. Sobre fondos verdes oscuros (barra inferior, pie), la marca de pintura y el anillo de foco son siempre Teula clara (#f0b890, 4.7:1).
 
 **The Mist Ground Rule.** El fondo es siempre Boira de Mariola (#f1f6ef), nunca blanco puro ni crema. La crema se reserva para superficies puntuales.
+
+**The Trail Mark Rule.** El Groc sender (#ddb03c) es la marca de sendero del mapa-menú: solo va en el punto de los botones del mapa y en la marca de sendero de sus placas y de su viñeta. Nunca en texto, fondos, botones fuera del mapa, acciones (eso es la teja) ni avisos, y siempre con su anillo Verd bosc, porque solo no llega al contraste ni sobre Boira ni sobre el mapa.
 
 **The Contrast Floor Rule.** El texto pequeño mide al menos 4.5:1 y los iconos, bordes funcionales y anillos de foco, al menos 3:1. Verd prat y la teja original del mapa (#ae7349) no llevan texto.
 
@@ -290,7 +297,7 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 
 | Momento | ¿Se anima? | Para qué | Cómo |
 | --- | --- | --- | --- |
-| Aparición de los picos | Sí, una vez por visita | Enseñar que el mapa es interactivo | `opacity` y `scale` desde `--escala-entrada`, `--duracion-media`, `--curva-salida`, `--escalon` entre picos (11 picos, el último a 400 ms) |
+| Aparición de los picos | Sí, una vez por visita | Enseñar que el mapa es interactivo | `opacity` y `scale` desde `--escala-entrada`, `--duracion-media`, `--curva-salida`, `--escalon` entre picos (8 botones y 5 picos, con el escalonado total sin pasar de 400 ms) |
 | Pico: hover | Sí, solo con ratón | Feedback | `scale` pequeño, `--duracion-base`, `--curva-salida` |
 | Pico: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
 | Pico: pulsar | Sí | Confirmar que la web te ha oído | `scale` a `--escala-pulsado`, `--duracion-rapida` |
@@ -364,6 +371,7 @@ Las piezas de la sección Eventos y de la página de cada evento (C-04). Todo te
 - **Tarjeta de evento:** Herba clara, o Pedra si el evento tiene las inscripciones abiertas (cambia con el estado). Marca en Verd bosc, nombre en Headline, jornadas, lugar con su icono y la línea de estado. Toda la tarjeta es un enlace: el del nombre se estira por encima (`::after`), así el lector oye solo el nombre y el foco rodea la tarjeta entera. Por eso no lleva otros enlaces dentro.
 - **Lista de eventos:** rejilla de tarjetas por orden de la primera jornada, sin los eventos ya pasados. Sin ninguno, un mensaje y el botón secundario (verde) "Escriu-nos" a WhatsApp o al correo.
 - **Franja de evento (portada):** banda a todo el ancho en Verd bosc con el nombre (1.125rem, peso 800) y la línea de estado con su marca, todo en Boira; la marca, la flecha y el foco van en Teula clara (Dark Ground). Toda la banda es un enlace de al menos 44 px, no es fija y en `hover` pasa a Tinta con el nombre subrayado. El foco se dibuja por dentro de la banda. Solo sale con las inscripciones abiertas y la oculta el script cuando dejan de estarlo.
+- **Mapa-menú (portada, B-21):** la ilustración con ocho botones de destino, uno por apartado, y los demás picos como puntos con ficha. **Botón:** zona de 44 × 44 px con un punto de 20 px en Groc sender, anillo Verd bosc de 3 px y halo Blanco de 2 px; seleccionado, el anillo pasa a Tinta. **Placa de sendero** siempre visible y pulsable, de **una sola línea con solo el destino** (el nombre del sitio no va en ella): marca de sendero de 10 px delante, texto en Label (0.875rem, 600, Verd bosc), plano Boira con borde de 1 px `linea`, radio de 4 px, unos 24 px de alto y relleno mínimo, sin sombra ni franja lateral. Va pegada al punto por el lado que dice `destinos-mapa.json` (`lado`, y `desplazamiento` si hay que apartarla de la placa vecina); los lados están comprobados a todos los anchos del mapa (896 a 1088 px). **Viñeta:** una sola para todos los destinos; oculta la placa del botón abierto. De arriba abajo: el **nombre del sitio como `h3`** (1.25rem, 800, Verd bosc; con la altura detrás si es un pico, "Montcabrer · 1.390 m", y sin ella en Castell y Cocentaina), el destino con la marca de sendero delante y más pequeño (Label), una frase y el enlace "Entra" (botón secundario verde, nunca teja). En el móvil es un panel fijo sobre la barra inferior con sombra suave hacia arriba (`--sombra-panel`); en escritorio, una tarjeta de 22rem junto al botón con un piquito de 8 px que apunta al punto y sin sombra. Se cierra con Escape, clic fuera o "Tanca". **Los demás picos** (Alt de la Reja, Mola Alta de Serelles, el Portell de Just d'Alfafara, Tossal Redó y Tossal del Mas de Miró): punto de 14 px en Boira con anillo Verd bosc de 2 px, sin placa ni amarillo; al pulsarlos abren una ficha con el mismo título (nombre y altura) y no llevan a ningún apartado. Su zona pulsable es de 44 px, salvo Alt de la Reja, que mide 24 px (excepción del principio V en `docs/decisiones.md`). Orden del tabulador: primero los 8 destinos y luego los picos. Bajo el mapa, un `<nav>` con los mismos ocho enlaces directos. Sin JavaScript, cada botón de destino es un enlace directo a su apartado. El marco del móvil empieza centrado en el 76 % del ancho del mapa. **Fundido de la ilustración:** una máscara (no un degradado de color) funde la imagen con el fondo Boira por arriba (el 12 % del alto), por los lados (el 5 % del ancho) y por abajo, donde disuelve el grosor del frente del bloque del diorama desde el 82 % del alto (justo antes de que empiece, al 83,8 %) hasta el 97 %: llega a transparente antes del canto del bloque (98,7 %) para que no quede una línea. En las esquinas de abajo una segunda máscara en U desvanece los laterales hacia los lados entre el 74 % y el 90 % del alto (franja central opaca del 25 % de ancho en cada lado) para que no queden los bordes verticales del bloque; por encima del 74 % los laterales siguen como estaban. Es la misma excepción a "no separar zonas con degradados" en los tres bordes: no separa nada, une la ilustración con la página. Ningún botón, placa ni pico cae en la franja de abajo (los más bajos llegan al 81,4 %) y la máscara solo afecta a la imagen, no a ellos; lo comprueba `src/lib/destinos-mapa.test.ts` y las constantes están en `src/lib/mapa.ts`.
 - **Cuenta atrás (portada):** plano Pedra con radio de 6 px, entre el mapa y los accesos, sin sombra. Lleva "Montca Sports · nombre del evento" en Label (Verd bosc) y **cuatro casillas** de ancho igual (días, horas, minutos y segundos) separadas por una línea de 1 px: cada número en 2–3rem, peso 800 y cifras tabulares con dos cifras mínimas, y debajo la unidad (`d`, `h`, `min`, `s`) en Label. Así nada se mueve al cambiar. Debajo, "Comença el 27/12" (con "a les 10:30" si la jornada trae hora). Cuando no es una cuenta ("Hui", "En marxa", "Properament") la palabra va en Headline y no hay casillas. La franja habla de las inscripciones; esta pieza, de cuándo empieza, así que no lleva botón ni plazo. Toda la pieza es un enlace de al menos 44 px a la página del evento, con flecha y `hover` en Herba clara; sin evento con fecha sale "Properament", sin enlace ni flecha. Cuenta el tiempo real hasta las 00:00 de Madrid de la primera jornada (o su hora) y el script la recalcula cada segundo. Con `prefers-reduced-motion` no hay segundos y se actualiza cada minuto. Las casillas llevan `aria-hidden`; el lector oye una frase fija ("Falten 32 dies") que solo cambia con el día, y no hay `aria-live`.
 - **Contenido de un evento:** "Què cal saber" (tabla de categorías que se desplaza dentro de su caja si no cabe), "Preguntes freqüents" (desplegables de 44 px) y "Com arribar".
 
@@ -414,7 +422,7 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 ### Don't:
 
 - **Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.
-- **Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.
+- **Don't** usar el Groc sender (#ddb03c) fuera del mapa-menú ni sin su anillo Verd bosc (Trail Mark Rule).
 - **Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).
 - **Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.
 - **Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.

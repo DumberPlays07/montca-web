@@ -154,6 +154,21 @@
           "#ffe8d4"
         ]
       },
+      "groc-sender": {
+        "role": "tertiary",
+        "displayName": "Groc sender",
+        "canonical": "oklch(77.8% 0.138 86.8)",
+        "tonalRamp": [
+          "#110a00",
+          "#302300",
+          "#543f01",
+          "#7a5c00",
+          "#a37c00",
+          "#c2a04f",
+          "#e2c686",
+          "#f9e9c5"
+        ]
+      },
       "blanco": {
         "role": "neutral",
         "displayName": "Blanco",
@@ -426,6 +441,11 @@
         "section": "colors"
       },
       {
+        "name": "The Trail Mark Rule",
+        "body": "El Groc sender (#ddb03c) es la marca de sendero del mapa-menú: solo va en el punto de los botones del mapa y en la marca de sendero de sus placas y de su viñeta. Nunca en texto, fondos, botones fuera del mapa, acciones (eso es la teja) ni avisos, y siempre con su anillo Verd bosc, porque solo no llega al contraste ni sobre Boira ni sobre el mapa.",
+        "section": "colors"
+      },
+      {
         "name": "The Contrast Floor Rule",
         "body": "El texto pequeño mide al menos 4.5:1 y los iconos, bordes funcionales y anillos de foco, al menos 3:1. Verd prat y la teja original del mapa (#ae7349) no llevan texto.",
         "section": "colors"
@@ -462,7 +482,7 @@
     ],
     "donts": [
       "**Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.",
-      "**Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.",
+      "**Don't** usar el Groc sender (#ddb03c) fuera del mapa-menú ni sin su anillo Verd bosc (Trail Mark Rule).",
       "**Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).",
       "**Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.",
       "**Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.",

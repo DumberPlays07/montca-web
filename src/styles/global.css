@@ -12,6 +12,8 @@
 	--color-teula: #9c5530;
 	--color-teula-fosca: #743d21;
 	--color-teula-clara: #f0b890;
+	/* Amarillo de las marcas PR: solo en los botones del mapa-menú (DESIGN.md, Trail Mark Rule). */
+	--color-groc-sender: #ddb03c;
 	--color-blanco: #ffffff;
 	--color-linea: rgb(55 86 57 / 0.18);
 	--color-linea-sobre-verde: rgb(241 246 239 / 0.16);
@@ -27,6 +29,9 @@
 	--espacio-6: 1.5rem;
 	--espacio-8: 2rem;
 	--espacio-12: 3rem;
+
+	/* La única sombra de la web: el panel de la viñeta del mapa en el móvil (DESIGN.md, Elevation). */
+	--sombra-panel: 0 -4px 16px rgb(31 51 36 / 0.12);
 
 	--radio-senal: 4px;
 	--radio-boton: 6px;
