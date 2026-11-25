@@ -31,13 +31,17 @@ export const CORREO_CONTACTO = 'montcaadventure@gmail.com';
 /**
  * Devuelve el enlace `wa.me` con el mensaje por defecto ya escrito en el idioma
  * pedido, o `null` si no hay número. Todos los enlaces de WhatsApp salen de aquí.
- * Por defecto usa el número principal.
+ * Por defecto usa el número principal y el mensaje general; quien necesite otro mensaje
+ * (por ejemplo, la inscripción a un evento) lo pasa ya escrito en el idioma de la página.
  */
-export function urlWhatsapp(lang: Idioma, numero: string = WHATSAPP_NUMERO): string | null {
+export function urlWhatsapp(
+	lang: Idioma,
+	numero: string = WHATSAPP_NUMERO,
+	mensaje: string = t(lang, 'mensajeWhatsapp'),
+): string | null {
 	if (numero === '') {
 		return null;
 	}
-	const mensaje = t(lang, 'mensajeWhatsapp');
 	return `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
 }
 

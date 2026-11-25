@@ -1,0 +1,107 @@
+---
+/**
+ * Página de un evento (C-04, diseno.md §2). La usan las rutas en valenciano y en
+ * castellano, que solo le pasan el evento y el idioma.
+ *
+ * El estado de las inscripciones sale calculado al construir la web; en el navegador,
+ * `eventos-cliente.ts` lo vuelve a calcular con la hora del momento (FR-012) a partir de
+ * los `data-*` de la página.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EnlaceVolver from '../EnlaceVolver.astro';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../imagen-compartir';
+import { type Idioma, ruta } from '../textos-navegacion';
+import { t } from '../textos-eventos';
+import { calcularEstado } from '../../lib/eventos/estado';
+import { eventoJsonLd, jsonLdComoTexto } from '../../lib/eventos/json-ld';
+import CartellEvento from './CartellEvento.astro';
+import ComArribar from './ComArribar.astro';
+import PreguntesFrequents from './PreguntesFrequents.astro';
+import QueCalSaber from './QueCalSaber.astro';
+import type { DatosEvento } from './tipos';
+
+interface Props {
+	lang: Idioma;
+	evento: DatosEvento;
+}
+
+const { lang, evento } = Astro.props;
+const { inscripcion } = evento;
+
+// Sin fuente de equipos (antes de A-14) el estado solo depende de las fechas y del cierre a mano.
+const estado = calcularEstado(evento, new Date());
+
+const jsonLd = jsonLdComoTexto(
+	eventoJsonLd({
+		nombre: evento.nombre[lang],
+		resumen: evento.resumen[lang],
+		jornadas: evento.jornadas.map((jornada) => ({ fecha: jornada.fecha, nombre: jornada.nombre[lang] })),
+		lugar: evento.lugar,
+		precio: evento.precio,
+	}),
+);
+
+const imagen = evento.imagenCompartir
+	? { src: evento.imagenCompartir, alt: IMAGEN_COMPARTIR_POR_DEFECTO.alt }
+	: IMAGEN_COMPARTIR_POR_DEFECTO;
+---
+
+<BaseLayout
+	title={`${evento.nombre[lang]} · ${evento.marca}`}
+	description={evento.resumen[lang]}
+	image={imagen.src}
+	imageAlt={imagen.alt}
+	lang={lang}
+>
+	<script slot="head" type="application/ld+json" set:html={jsonLd} />
+
+	<main
+		class="pagina-evento"
+		data-evento
+		data-apertura={inscripcion.apertura}
+		data-cierre={inscripcion.cierre}
+		data-cerrada-a-mano={String(inscripcion.cerradaAMano)}
+	>
+		<EnlaceVolver lang={lang} href={ruta(lang, 'eventos')} />
+
+		<CartellEvento lang={lang} evento={evento} estado={estado} />
+
+		<!--
+			Places i equips y el segundo Inscriure's van aquí (T029, fase 4). El segundo botón
+			solo tiene sentido debajo de las plazas: sin ellas quedaría pegado al primero.
+		-->
+
+		<div class="debajo">
+			<QueCalSaber lang={lang} evento={evento} />
+			<PreguntesFrequents lang={lang} preguntas={evento.preguntas} />
+			<section class="com-arribar" aria-labelledby="titol-com-arribar">
+				<h2 id="titol-com-arribar">{t(lang, 'comArribar')}</h2>
+				<ComArribar lang={lang} lugar={evento.lugar} />
+			</section>
+		</div>
+	</main>
+</BaseLayout>
+
+<script>
+	import '../../scripts/eventos-cliente';
+</script>
+
+<style>
+	.pagina-evento {
+		max-width: var(--ancho-maximo);
+		margin: 0 auto;
+		padding: var(--espacio-1) var(--margen-lateral) var(--espacio-8);
+	}
+
+	.debajo {
+		display: grid;
+		gap: var(--espacio-12);
+		max-width: 44rem;
+		margin-top: var(--espacio-12);
+	}
+
+	.com-arribar h2 {
+		margin: 0 0 var(--espacio-2);
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+	}
+</style>

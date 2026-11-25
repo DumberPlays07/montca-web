@@ -1,0 +1,73 @@
+---
+/**
+ * Sección Eventos (C-04). Versión mínima de la T021: título y un enlace por evento, para
+ * que "← Tornar" y el menú no lleven a un 404. Las tarjetas, el estado y el mensaje sin
+ * eventos llegan con la historia 4 (T043–T044).
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../imagen-compartir';
+import type { Idioma } from '../textos-navegacion';
+import { ruta } from '../textos-navegacion';
+import { t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+}
+
+const { lang } = Astro.props;
+const eventos = (await getCollection('eventos')).sort((a, b) =>
+	a.data.jornadas[0].fecha.localeCompare(b.data.jornadas[0].fecha),
+);
+---
+
+<BaseLayout
+	title={`${t(lang, 'esdeveniments')} · Montca Actiu`}
+	description={t(lang, 'descripcionEsdeveniments')}
+	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
+	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
+	lang={lang}
+>
+	<main class="pagina-eventos">
+		<h1>{t(lang, 'esdeveniments')}</h1>
+		<ul class="llista-eventos">
+			{
+				eventos.map((evento) => (
+					<li>
+						<a class="enlace-evento" href={`${ruta(lang, 'eventos')}${evento.id}/`}>
+							{evento.data.nombre[lang]}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</main>
+</BaseLayout>
+
+<style>
+	.pagina-eventos {
+		max-width: var(--ancho-maximo);
+		margin: 0 auto;
+		padding: var(--espacio-6) var(--margen-lateral) var(--espacio-8);
+	}
+
+	h1 {
+		margin: 0 0 var(--espacio-4);
+		font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+		line-height: 1.05;
+	}
+
+	.llista-eventos {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.enlace-evento {
+		display: inline-flex;
+		align-items: center;
+		min-height: var(--zona-tactil);
+		font-size: 1.125rem;
+		font-weight: 600;
+	}
+</style>

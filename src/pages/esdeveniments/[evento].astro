@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import PaginaEvento from '../../components/eventos/PaginaEvento.astro';
+
+export const getStaticPaths = (async () => {
+	const eventos = await getCollection('eventos');
+	return eventos.map((evento) => ({ params: { evento: evento.id }, props: { evento: evento.data } }));
+}) satisfies GetStaticPaths;
+
+const { evento } = Astro.props;
+---
+
+<PaginaEvento lang="ca" evento={evento} />

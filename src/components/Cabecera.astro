@@ -20,12 +20,14 @@ interface Props {
 const { lang } = Astro.props;
 const rutaActual = Astro.url.pathname;
 
-const secciones: ClaveRuta[] = ['actividades', 'agenda', 'repte', 'sports', 'escuelas', 'contacto'];
+// En escritorio, "Esdeveniments" ocupa el lugar de "Montca Sports" (C-04, decisión del shape del 24/11).
+const secciones: ClaveRuta[] = ['actividades', 'agenda', 'repte', 'eventos', 'escuelas', 'contacto'];
 const seccionesMenuMovil: ClaveRuta[] = [
 	'actividades',
 	'agenda',
 	'repte',
 	'sports',
+	'eventos',
 	'escuelas',
 	'quienesSomos',
 	'contacto',

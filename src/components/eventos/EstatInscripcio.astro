@@ -1,0 +1,65 @@
+---
+/**
+ * Línea de estado de las inscripciones (C-04, diseno.md §2). Sale con el estado calculado
+ * al construir la web; `eventos-cliente.ts` lo vuelve a calcular en el navegador y cambia
+ * `data-estado` y el texto, que toma de los `data-texto-*` (los textos no van en el script).
+ * La marca de pintura teja solo se ve con las inscripciones abiertas.
+ */
+import type { EstadoInscripcion } from '../../lib/eventos/estado';
+import { diaMes } from '../../lib/eventos/fechas';
+import type { Idioma } from '../textos-navegacion';
+import { rellenar, t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	estado: EstadoInscripcion;
+	apertura: string;
+	cierre: string;
+}
+
+const { lang, estado, apertura, cierre } = Astro.props;
+
+const textoPorEstado: Record<EstadoInscripcion, string> = {
+	proximament: rellenar(t(lang, 'estadoProximament'), { fecha: diaMes(apertura) }),
+	obertes: rellenar(t(lang, 'estadoObertes'), { fecha: diaMes(cierre) }),
+	completes: t(lang, 'estadoCompletes'),
+	tancades: t(lang, 'estadoTancades'),
+};
+---
+
+<p
+	class="estat"
+	data-estat
+	data-estado={estado}
+	data-texto-proximament={textoPorEstado.proximament}
+	data-texto-obertes={textoPorEstado.obertes}
+	data-texto-completes={textoPorEstado.completes}
+	data-texto-tancades={textoPorEstado.tancades}
+>
+	<span class="pintura" aria-hidden="true"></span>
+	<span data-texto-estat>{textoPorEstado[estado]}</span>
+</p>
+
+<style>
+	.estat {
+		display: flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		margin: 0;
+		color: var(--color-tinta);
+		font-weight: 600;
+	}
+
+	/* Marca de pintura (DESIGN.md, Shapes): franja corta y gruesa en teja. */
+	.pintura {
+		display: none;
+		flex-shrink: 0;
+		width: 1.25rem;
+		height: 0.375rem;
+		background: var(--color-teula);
+	}
+
+	.estat[data-estado='obertes'] .pintura {
+		display: block;
+	}
+</style>

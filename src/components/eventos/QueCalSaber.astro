@@ -1,0 +1,159 @@
+---
+/**
+ * "Què cal saber" de un evento (C-04, FR-005 y FR-006): categorías con sus límites,
+ * precio, plazo de inscripción y normas. Las normas solo salen si Montca las ha pasado.
+ *
+ * La tabla va con las categorías en columnas: en 375 px caben mejor dos o tres columnas
+ * estrechas que cuatro. Si un evento tuviera muchas categorías, la tabla se desplaza
+ * dentro de su caja sin mover la página.
+ */
+import type { DatosEvento } from './tipos';
+import { diaMesAnio } from '../../lib/eventos/fechas';
+import type { Idioma } from '../textos-navegacion';
+import { rellenar, t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	evento: DatosEvento;
+}
+
+const { lang, evento } = Astro.props;
+const { categorias, precio, inscripcion, normas } = evento;
+const filas = [
+	{ titulo: t(lang, 'nascuts'), valor: (cat: (typeof categorias)[number]) => cat.nacidos[lang] },
+	{ titulo: t(lang, 'equiposMaximo'), valor: (cat: (typeof categorias)[number]) => String(cat.maxEquipos) },
+	{
+		titulo: t(lang, 'jugadoresPorEquipo'),
+		valor: (cat: (typeof categorias)[number]) =>
+			rellenar(t(lang, 'rangoJugadores'), { min: cat.minJugadores, max: cat.maxJugadores }),
+	},
+];
+---
+
+<section class="que-cal-saber" aria-labelledby="titol-que-cal-saber">
+	<h2 id="titol-que-cal-saber">{t(lang, 'queCalSaber')}</h2>
+
+	<div class="caja-tabla" role="region" aria-labelledby="titol-categories" tabindex="0">
+		<table>
+			<caption id="titol-categories">{t(lang, 'categories')}</caption>
+			<thead>
+				<tr>
+					<td></td>
+					{categorias.map((cat) => <th scope="col">{cat.nombre[lang]}</th>)}
+				</tr>
+			</thead>
+			<tbody>
+				{
+					filas.map((fila) => (
+						<tr>
+							<th scope="row">{fila.titulo}</th>
+							{categorias.map((cat) => (
+								<td>{fila.valor(cat)}</td>
+							))}
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<dl class="datos">
+		<div>
+			<dt>{t(lang, 'preu')}</dt>
+			<dd>
+				{precio.texto[lang]}{!precio.confirmado && ` (${t(lang, 'precioPendiente')})`}
+			</dd>
+		</div>
+		<div>
+			<dt>{t(lang, 'terminiInscripcio')}</dt>
+			<dd>
+				{rellenar(t(lang, 'plazoInscripcion'), {
+					apertura: diaMesAnio(inscripcion.apertura),
+					cierre: diaMesAnio(inscripcion.cierre),
+				})}
+			</dd>
+		</div>
+		{
+			normas && normas.length > 0 && (
+				<div>
+					<dt>{t(lang, 'normes')}</dt>
+					<dd>
+						<ul class="normes">
+							{normas.map((norma) => (
+								<li>{norma[lang]}</li>
+							))}
+						</ul>
+					</dd>
+				</div>
+			)
+		}
+	</dl>
+</section>
+
+<style>
+	h2 {
+		margin: 0 0 var(--espacio-4);
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+	}
+
+	.caja-tabla {
+		overflow-x: auto;
+		background: var(--color-herba-clara);
+		border-radius: var(--radio-senal);
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		text-align: left;
+	}
+
+	caption {
+		padding: var(--espacio-3) var(--espacio-3) 0;
+		color: var(--color-verd-bosc);
+		font-weight: 800;
+		text-align: left;
+	}
+
+	th,
+	td {
+		padding: var(--espacio-2) var(--espacio-3);
+		vertical-align: top;
+	}
+
+	thead th {
+		color: var(--color-verd-bosc);
+		font-weight: 800;
+	}
+
+	tbody th {
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+	}
+
+	tbody tr + tr > * {
+		border-top: 1px solid var(--color-linea);
+	}
+
+	.datos {
+		display: grid;
+		gap: var(--espacio-4);
+		margin: var(--espacio-6) 0 0;
+	}
+
+	dt {
+		color: var(--color-verd-bosc);
+		font-weight: 800;
+	}
+
+	dd {
+		margin: 0;
+		max-width: 65ch;
+	}
+
+	.normes {
+		margin: 0;
+		padding-left: var(--espacio-6);
+	}
+</style>
