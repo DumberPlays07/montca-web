@@ -44,6 +44,14 @@ describe('páginas Pròximament', () => {
 		assert.equal(fraseDe('es', 'agenda'), t('es', 'agenda'));
 	});
 
+	it('Montca Rutes tiene su propia página en /rutes/ y /es/rutes/', () => {
+		assert.ok(SECCIONES_PROXIMAMENT.includes('rutas'));
+		assert.equal(ruta('ca', 'rutas'), '/rutes/');
+		assert.equal(ruta('es', 'rutas'), '/es/rutes/');
+		assert.equal(tNavegacion('ca', 'rutas'), 'Montca Rutes');
+		assert.equal(tNavegacion('es', 'rutas'), 'Montca Rutes');
+	});
+
 	it('no hay secciones repetidas', () => {
 		assert.equal(new Set(SECCIONES_PROXIMAMENT).size, SECCIONES_PROXIMAMENT.length);
 	});

@@ -18,6 +18,7 @@ import type { Idioma } from './textos-navegacion';
 export const SECCIONES_PROXIMAMENT = [
 	'actividades',
 	'agenda',
+	'rutas',
 	'repte',
 	'escuelas',
 	'quienesSomos',
@@ -42,6 +43,7 @@ const textos = {
 		actividades:
 			'Ací trobaràs les activitats de Montca a la Serra de Mariola, cadascuna amb la seua fitxa i com apuntar-te.',
 		agenda: 'Les pròximes dates de les activitats de Montca, amb les places lliures per a apuntar-te.',
+		rutas: 'Les rutes temàtiques de Montca per la Serra de Mariola, cadascuna amb la seua fitxa i com apuntar-te.',
 		repte: 'El Repte 5 Cims i el seu Passaport de segells.',
 		escuelas: 'Activitats a mida per a escoles, AMPA i grups: ací podràs demanar-nos pressupost.',
 		quienesSomos: "Qui hi ha darrere de Montca Actiu, l'associació juvenil i esportiva de Cocentaina.",
@@ -56,6 +58,7 @@ const textos = {
 		actividades:
 			'Aquí encontrarás las actividades de Montca en la Serra de Mariola, cada una con su ficha y cómo apuntarte.',
 		agenda: 'Las próximas fechas de las actividades de Montca, con las plazas libres para apuntarte.',
+		rutas: 'Las rutas temáticas de Montca por la Serra de Mariola, cada una con su ficha y cómo apuntarte.',
 		repte: 'El Repte 5 Cims y su Pasaporte de sellos.',
 		escuelas: 'Actividades a medida para escuelas, AMPA y grupos: aquí podrás pedirnos presupuesto.',
 		quienesSomos: 'Quién está detrás de Montca Actiu, la asociación juvenil y deportiva de Cocentaina.',
