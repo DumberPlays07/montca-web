@@ -1,0 +1,158 @@
+[
+  {
+    "id": "cocentaina",
+    "x": 81.8,
+    "y": 74.5,
+    "lado": "abajo",
+    "ruta": "quienesSomos",
+    "textos": {
+      "ca": {
+        "placaLugar": "Cocentaina",
+        "placaDestino": "Qui som",
+        "lugar": "Cocentaina",
+        "titulo": "Qui som",
+        "frase": "Som una associació juvenil i esportiva de Cocentaina, i la Serra de Mariola és casa nostra. Coneix qui hi ha darrere de Montca."
+      },
+      "es": {
+        "placaLugar": "Cocentaina",
+        "placaDestino": "Quiénes somos",
+        "lugar": "Cocentaina",
+        "titulo": "Quiénes somos",
+        "frase": "Somos una asociación juvenil y deportiva de Cocentaina, y la Serra de Mariola es nuestra casa. Conoce quién hay detrás de Montca."
+      }
+    }
+  },
+  {
+    "id": "castell",
+    "x": 77.9,
+    "y": 59.2,
+    "lado": "derecha",
+    "ruta": "actividades",
+    "textos": {
+      "ca": {
+        "placaLugar": "Castell",
+        "placaDestino": "Activitats",
+        "lugar": "Castell de Cocentaina",
+        "titulo": "Activitats Montca",
+        "frase": "Scape room, gimcanes de supervivència i dies de campament per a famílies i xiquets. La Scape Room Castell acaba ací, al castell."
+      },
+      "es": {
+        "placaLugar": "Castillo",
+        "placaDestino": "Actividades",
+        "lugar": "Castillo de Cocentaina",
+        "titulo": "Actividades Montca",
+        "frase": "Scape room, gymkanas de supervivencia y días de campamento para familias y niños. La Scape Room Castell termina aquí, en el castillo."
+      }
+    }
+  },
+  {
+    "id": "alt-de-la-replana",
+    "pico": "Alt de la Replana",
+    "lado": "abajo",
+    "ruta": "escuelas",
+    "textos": {
+      "ca": {
+        "placaLugar": "Alt de la Replana",
+        "placaDestino": "Escoles i AMPA",
+        "lugar": "Alt de la Replana",
+        "titulo": "Escoles i AMPA",
+        "frase": "Totes les activitats es poden demanar per a un grup: escoles, AMPA i ajuntaments les contracten per als seus."
+      },
+      "es": {
+        "placaLugar": "Alt de la Replana",
+        "placaDestino": "Escuelas y AMPA",
+        "lugar": "Alt de la Replana",
+        "titulo": "Escuelas y AMPA",
+        "frase": "Todas las actividades se pueden pedir para un grupo: colegios, AMPA y ayuntamientos las contratan para los suyos."
+      }
+    }
+  },
+  {
+    "id": "morro-del-porc",
+    "pico": "Morro del Porc",
+    "lado": "derecha",
+    "ruta": "rutas",
+    "textos": {
+      "ca": {
+        "placaLugar": "Morro del Porc",
+        "placaDestino": "Montca Rutes",
+        "lugar": "Morro del Porc",
+        "titulo": "Montca Rutes",
+        "frase": "Rutes amb un tema especial (nocturna amb estreles, geocaching, històrica o de plantes per a licors casolans), amb animació tot el camí i menjar o beure per a tots."
+      },
+      "es": {
+        "placaLugar": "Morro del Porc",
+        "placaDestino": "Montca Rutes",
+        "lugar": "Morro del Porc",
+        "titulo": "Montca Rutes",
+        "frase": "Rutas con un tema especial (nocturna con estrellas, geocaching, histórica o de plantas para licores caseros), con animación todo el camino y comida o bebida para todos."
+      }
+    }
+  },
+  {
+    "id": "alt-de-santa-maria",
+    "pico": "Alt de Santa Maria",
+    "lado": "arriba",
+    "ruta": "agenda",
+    "textos": {
+      "ca": {
+        "placaLugar": "Alt de Santa Maria",
+        "placaDestino": "Agenda",
+        "lugar": "Alt de Santa Maria",
+        "titulo": "Agenda",
+        "frase": "Les pròximes eixides i activitats obertes, ordenades per data, perquè tries quan t'apuntes."
+      },
+      "es": {
+        "placaLugar": "Alt de Santa Maria",
+        "placaDestino": "Agenda",
+        "lugar": "Alt de Santa Maria",
+        "titulo": "Agenda",
+        "frase": "Las próximas salidas y actividades abiertas, ordenadas por fecha, para que elijas cuándo apuntarte."
+      }
+    }
+  },
+  {
+    "id": "alt-de-la-codolla",
+    "pico": "Alt de la Codolla",
+    "lado": "abajo",
+    "ruta": "eventos",
+    "textos": {
+      "ca": {
+        "placaLugar": "Alt de la Codolla",
+        "placaDestino": "Montca Sports",
+        "lugar": "Alt de la Codolla",
+        "titulo": "Montca Sports",
+        "frase": "Tornejos i jornades esportives per equips, amb versions per a xiquets i per a joves i adults."
+      },
+      "es": {
+        "placaLugar": "Alt de la Codolla",
+        "placaDestino": "Montca Sports",
+        "lugar": "Alt de la Codolla",
+        "titulo": "Montca Sports",
+        "frase": "Torneos y jornadas deportivas por equipos, con versiones para niños y para jóvenes y adultos."
+      }
+    }
+  },
+  {
+    "id": "montcabrer",
+    "pico": "Montcabrer",
+    "lado": "arriba",
+    "ruta": "repte",
+    "textos": {
+      "ca": {
+        "placaLugar": "Montcabrer",
+        "placaDestino": "Repte 5 Cims",
+        "lugar": "Montcabrer",
+        "titulo": "Repte 5 Cims",
+        "frase": "Descobreix el Comtat, cim a cim. Puja cinc cims a ton ritme, per lliure o amb eixides guiades, i completa el Passaport amb el segell de cadascun."
+      },
+      "es": {
+        "placaLugar": "Montcabrer",
+        "placaDestino": "Repte 5 Cims",
+        "lugar": "Montcabrer",
+        "titulo": "Repte 5 Cims",
+        "frase": "Descubre el Comtat, cima a cima. Sube cinco cimas a tu ritmo, por libre o con salidas guiadas, y completa el Passaport con el sello de cada una."
+      }
+    }
+  }
+]

@@ -209,6 +209,22 @@ describe('colocarFicha', () => {
 		assert.equal(abajo.arriba, 400 - 150);
 	});
 
+	it('dice de qué lado queda respecto al pico', () => {
+		assert.equal(colocarFicha({ pico: { x: 300, y: 200 }, caja, ficha, margen: 12 }).lado, 'derecha');
+		assert.equal(colocarFicha({ pico: { x: 900, y: 200 }, caja, ficha, margen: 12 }).lado, 'izquierda');
+	});
+
+	it('el piquito apunta a la altura del pico dentro de la tarjeta', () => {
+		const centrada = colocarFicha({ pico: { x: 300, y: 200 }, caja, ficha, margen: 12 });
+		assert.equal(centrada.colaY, 75);
+		// La tarjeta se ha subido a 0 para no salirse: el pico queda a 10 px del borde, pero el piquito no baja de 16.
+		const arriba = colocarFicha({ pico: { x: 300, y: 10 }, caja, ficha, margen: 12 });
+		assert.equal(arriba.colaY, 16);
+		// Más abajo del límite: la tarjeta queda a 250 px y el pico a 145 px dentro de ella.
+		const abajo = colocarFicha({ pico: { x: 300, y: 395 }, caja, ficha, margen: 12 });
+		assert.equal(abajo.colaY, 134);
+	});
+
 	it('si la ficha es más ancha que la caja, se pega a la izquierda', () => {
 		const sitio = colocarFicha({ pico: { x: 50, y: 50 }, caja: { ancho: 200, alto: 400 }, ficha, margen: 12 });
 		assert.equal(sitio.izquierda, 0);
