@@ -3,6 +3,7 @@ import { describe, it } from 'node:test';
 import {
 	type EventoParaEstado,
 	calcularEstado,
+	confirmadosPorCategoria,
 	esEventoPasado,
 	listaRetirada,
 	plazasCategoria,
@@ -146,5 +147,38 @@ describe('listaRetirada', () => {
 		const finDeMes: EventoParaEstado = { ...torneo(), jornadas: [{ fecha: '2027-01-28' }] };
 		assert.equal(listaRetirada(finDeMes, new Date('2027-02-03T23:59:00+01:00')), false);
 		assert.equal(listaRetirada(finDeMes, new Date('2027-02-04T00:00:00+01:00')), true);
+	});
+});
+
+describe('confirmadosPorCategoria', () => {
+	const categorias = ['infantil-cadet', 'juvenil-senior'];
+
+	it('cuenta los equipos de cada categoría', () => {
+		const equipos = [{ categoria: 'infantil-cadet' }, { categoria: 'juvenil-senior' }, { categoria: 'infantil-cadet' }];
+		assert.deepEqual(confirmadosPorCategoria(equipos, categorias), { 'infantil-cadet': 2, 'juvenil-senior': 1 });
+	});
+
+	it('una categoría sin equipos cuenta cero, no falta', () => {
+		assert.deepEqual(confirmadosPorCategoria([], categorias), { 'infantil-cadet': 0, 'juvenil-senior': 0 });
+	});
+
+	it('ignora las categorías que el evento no tiene', () => {
+		const equipos = [{ categoria: 'veterans' }, { categoria: 'infantil-cadet' }];
+		assert.deepEqual(confirmadosPorCategoria(equipos, categorias), { 'infantil-cadet': 1, 'juvenil-senior': 0 });
+	});
+
+	it('con todas las categorías llenas, el estado pasa a completes', () => {
+		const equipos = [
+			...Array.from({ length: 8 }, () => ({ categoria: 'infantil-cadet' })),
+			...Array.from({ length: 6 }, () => ({ categoria: 'juvenil-senior' })),
+		];
+		const recuento = confirmadosPorCategoria(equipos, categorias);
+		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, recuento), 'completes');
+	});
+
+	it('con una sola categoría llena, el estado sigue siendo obertes', () => {
+		const equipos = Array.from({ length: 8 }, () => ({ categoria: 'infantil-cadet' }));
+		const recuento = confirmadosPorCategoria(equipos, categorias);
+		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, recuento), 'obertes');
 	});
 });
