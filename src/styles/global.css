@@ -37,7 +37,20 @@
 	--ancho-maximo: 72rem;
 	--margen-lateral: 1rem;
 
-	--transicion: 160ms ease-out;
+	/* Movimiento (DESIGN.md, sección Movimiento). */
+	--duracion-rapida: 100ms;
+	--duracion-base: 160ms;
+	--duracion-media: 240ms;
+	--escalon: 40ms; /* entre picos; el último empieza como mucho a los 400 ms */
+	--curva-salida: cubic-bezier(0.23, 1, 0.32, 1);
+	--curva-panel: cubic-bezier(0.32, 0.72, 0, 1);
+	--escala-entrada: 0.95;
+	--escala-pulsado: 0.97;
+	--desplazamiento-panel: 0.5rem;
+	--desplazamiento-flecha: 3px;
+
+	/* Transición de color de los controles; los componentes actuales la usan tal cual. */
+	--transicion: var(--duracion-base) var(--curva-salida);
 }
 
 /* Desde tableta el margen lateral crece. */
@@ -125,6 +138,15 @@ svg {
 	border: 0;
 }
 
-/* Movimiento reducido: de momento solo hay transiciones de color, que no mueven nada en
-   pantalla. Cada componente que añada desplazamientos o animaciones ofrece su alternativa
-   con @media (prefers-reduced-motion: reduce). */
+/* Movimiento reducido: sin escalas ni desplazamientos. Los componentes que usan estas variables
+   se quedan en un fundido de opacidad; los que mueven algo más (la ficha que sube desde abajo)
+   ofrecen su alternativa con @media (prefers-reduced-motion: reduce). */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--escalon: 0ms;
+		--escala-entrada: 1;
+		--escala-pulsado: 1;
+		--desplazamiento-panel: 0;
+		--desplazamiento-flecha: 0px;
+	}
+}
