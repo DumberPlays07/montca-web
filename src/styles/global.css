@@ -12,6 +12,8 @@
 	--color-teula: #9c5530;
 	--color-teula-fosca: #743d21;
 	--color-teula-clara: #f0b890;
+	/* Amarillo de las marcas PR: solo en los botones del mapa-menú (DESIGN.md, Trail Mark Rule). */
+	--color-groc-sender: #ddb03c;
 	--color-blanco: #ffffff;
 	--color-linea: rgb(55 86 57 / 0.18);
 	--color-linea-sobre-verde: rgb(241 246 239 / 0.16);

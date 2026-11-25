@@ -12,6 +12,7 @@ colors:
   teula: "#9c5530"
   teula-fosca: "#743d21"
   teula-clara: "#f0b890"
+  groc-sender: "#ddb03c"
   blanco: "#ffffff"
   linea: "rgb(55 86 57 / 0.18)"
   linea-sobre-verde: "rgb(241 246 239 / 0.16)"
@@ -153,7 +154,7 @@ components:
 
 # Design System: Montca Actiu
 
-> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos. Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
+> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos; y el mismo día, con el Groc sender de los botones del mapa-menú (B-21). Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
 
 ## Overview
 
@@ -192,6 +193,10 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 
 - **Pedra de la torre** (#f3e6c8): la crema, sacada de la piedra de la torre (#dcc291) y aclarada. Se usa en superficies cálidas puntuales: tarjetas destacadas, avisos de "Properament", franjas de confianza, el plano de deportes y precio del cartel de un evento y la tarjeta de un evento con las inscripciones abiertas. No es el fondo general.
 
+### Mapa-menú
+
+- **Groc sender** (#ddb03c): los botones del mapa-menú (B-21). Es el amarillo de las marcas de los senderos PR, que se pintan en blanco y amarillo; no sale del mapa, pero está medido sobre él. Es el relleno del punto de cada botón, con anillo Verd bosc (4.05:1 junto al amarillo) y un halo Blanco de 2 px por fuera: sobre las zonas del mapa donde caen los botones el amarillo solo mide 1.1–4.6:1, así que el contraste del borde lo dan el anillo o el halo (3.2:1 como mínimo). También es la marca de sendero (un punto de 10 px con anillo Verd bosc de 2 px) delante del destino en las placas del mapa y del lugar en su viñeta; sobre Boira mide 1.8:1, por eso lleva siempre anillo. Se distingue de la Teula (ΔE00 34.1), de la Teula clara (16.7) y de los torsos de los excursionistas del mapa (rojo #c42a3c, azul #2b66b0 y naranja #e0621c: ΔE00 28.4 o más). Nunca lleva texto.
+
 ### Neutral
 
 - **Boira de Mariola** (#f1f6ef): el fondo de toda la web, que es el cielo del mapa. Se elige en lugar de un blanco o una crema para que la ilustración se funda con la página.
@@ -206,6 +211,8 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 **The Dark Ground Rule.** La teula (#9c5530) nunca va sobre Verd bosc ni sobre otro verde oscuro: el contraste se queda en 1.5:1 y la marca desaparece. Sobre fondos verdes oscuros (barra inferior, pie), la marca de pintura y el anillo de foco son siempre Teula clara (#f0b890, 4.7:1).
 
 **The Mist Ground Rule.** El fondo es siempre Boira de Mariola (#f1f6ef), nunca blanco puro ni crema. La crema se reserva para superficies puntuales.
+
+**The Trail Mark Rule.** El Groc sender (#ddb03c) es la marca de sendero del mapa-menú: solo va en el punto de los botones del mapa y en la marca de sendero de sus placas y de su viñeta. Nunca en texto, fondos, botones fuera del mapa, acciones (eso es la teja) ni avisos, y siempre con su anillo Verd bosc, porque solo no llega al contraste ni sobre Boira ni sobre el mapa.
 
 **The Contrast Floor Rule.** El texto pequeño mide al menos 4.5:1 y los iconos, bordes funcionales y anillos de foco, al menos 3:1. Verd prat y la teja original del mapa (#ae7349) no llevan texto.
 
@@ -414,7 +421,7 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 ### Don't:
 
 - **Don't** poner fotos en `public/`, ni con `<img>` a mano, ni subir originales con metadatos de ubicación.
-- **Don't** usar el amarillo del wireframe: era un color de boceto y no forma parte de la paleta.
+- **Don't** usar el Groc sender (#ddb03c) fuera del mapa-menú ni sin su anillo Verd bosc (Trail Mark Rule).
 - **Don't** poner la teula (#9c5530) sobre Verd bosc u otro verde oscuro, ni como marca ni como foco: ahí va Teula clara (#f0b890).
 - **Don't** marcar el `hover` de un botón teja solo con el cambio de color: va con subrayado.
 - **Don't** poner texto en Verd prat (#99b561) ni en la teja original del mapa (#ae7349); no llegan al contraste mínimo.
