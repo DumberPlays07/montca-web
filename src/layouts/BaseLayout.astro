@@ -74,8 +74,8 @@ const imageUrl = new URL(imagenCompartir.src, Astro.site ?? Astro.url).href;
 		<!-- viewport-fit=cover: la barra inferior respeta la zona segura del móvil con env(). -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<Font cssVariable="--font-overpass" preload />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<meta name="description" content={description} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
