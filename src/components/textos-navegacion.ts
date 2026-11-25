@@ -123,8 +123,17 @@ export function ruta(lang: Idioma, clave: ClaveRuta): string {
 	return lang === 'ca' ? rutaValenciano : `${PREFIJO_CASTELLANO}${rutaValenciano}`;
 }
 
-/** Devuelve la misma página en el otro idioma (para el selector VAL / CAST). */
+/** La página de error: ya es bilingüe, así que no tiene "la misma página" en el otro idioma. */
+const RUTA_404 = /^\/404(\.html|\/)?$/;
+
+/**
+ * Devuelve la misma página en el otro idioma (para el selector VAL / CAST). La 404 no tiene
+ * traducción: su selector lleva a la portada del otro idioma, en vez de a otro 404.
+ */
 export function rutaEnOtroIdioma(lang: Idioma, rutaActual: string): string {
+	if (RUTA_404.test(rutaActual)) {
+		return lang === 'ca' ? `${PREFIJO_CASTELLANO}/` : '/';
+	}
 	if (lang === 'es') {
 		const sinPrefijo = rutaActual.slice(PREFIJO_CASTELLANO.length);
 		return sinPrefijo === '' ? '/' : sinPrefijo;
