@@ -1,0 +1,147 @@
+---
+/**
+ * Tarjeta de un evento en la sección Eventos (C-04, historia 4, diseno.md §3): nombre, jornadas,
+ * lugar y la línea de estado de las inscripciones. Toda la tarjeta es un enlace a la página del
+ * evento (mínimo 44 px).
+ *
+ * El enlace es el del nombre y se estira por encima de toda la tarjeta (`::after`), así el lector
+ * de pantalla oye solo el nombre del evento y no todo el texto de la tarjeta. Por eso la tarjeta
+ * no lleva otros enlaces dentro ("Com arribar" solo está en la página del evento).
+ *
+ * El plano es Pedra con las inscripciones abiertas y Herba clara en los demás casos; sigue el
+ * `data-estado` de la línea de estado, que `eventos-cliente.ts` cambia sin recargar (FR-012).
+ */
+import Icono from '../Icono.astro';
+import EstatInscripcio from './EstatInscripcio.astro';
+import type { DatosEvento } from './tipos';
+import { type EstadoInscripcion } from '../../lib/eventos/estado';
+import { diaDeLaSemana, numeralJornada } from '../../lib/eventos/fechas';
+import { type Idioma, ruta } from '../textos-navegacion';
+import { t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	evento: DatosEvento & { id: string };
+	estado: EstadoInscripcion;
+}
+
+const { lang, evento, estado } = Astro.props;
+const { inscripcion } = evento;
+---
+
+<article
+	class="tarjeta"
+	data-evento
+	data-apertura={inscripcion.apertura}
+	data-cierre={inscripcion.cierre}
+	data-cerrada-a-mano={String(inscripcion.cerradaAMano)}
+>
+	<p class="marca">{evento.marca}</p>
+	<h2>
+		<a class="enlace" href={`${ruta(lang, 'eventos')}${evento.id}/`}>{evento.nombre[lang]}</a>
+	</h2>
+
+	<ul class="jornadas">
+		{
+			evento.jornadas.map((jornada) => {
+				const { dia, mes } = numeralJornada(jornada.fecha);
+				return (
+					<li>
+						<time datetime={jornada.fecha}>
+							{diaDeLaSemana(jornada.fecha, lang)} {dia}/{mes}
+						</time>
+					</li>
+				);
+			})
+		}
+	</ul>
+
+	<p class="lugar">
+		<Icono nombre="lugar" />
+		<span><span class="solo-lector">{t(lang, 'lloc')}: </span>{evento.lugar.nombre}</span>
+	</p>
+
+	<EstatInscripcio lang={lang} estado={estado} apertura={inscripcion.apertura} cierre={inscripcion.cierre} />
+</article>
+
+<style>
+	/* Plano de color en vez de sombra (DESIGN.md, Terrace Rule). */
+	.tarjeta {
+		position: relative;
+		display: grid;
+		gap: var(--espacio-2);
+		height: 100%;
+		box-sizing: border-box;
+		padding: var(--espacio-4);
+		background: var(--color-herba-clara);
+		border-radius: var(--radio-boton);
+	}
+
+	.tarjeta:has([data-estat][data-estado='obertes']) {
+		background: var(--color-pedra);
+	}
+
+	/* Verd bosc y no Verd fulla: sobre Pedra y Herba clara el texto pequeño en Verd fulla no llega a 4,5:1. */
+	.marca {
+		margin: 0;
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+	}
+
+	.enlace {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	/* El enlace cubre toda la tarjeta: la zona pulsable es la tarjeta entera. */
+	.enlace::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radio-boton);
+	}
+
+	.tarjeta:hover .enlace {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.15em;
+	}
+
+	/* El contorno va en la tarjeta entera, no solo en el nombre. */
+	.enlace:focus-visible {
+		outline: none;
+	}
+
+	.enlace:focus-visible::after {
+		outline: 3px solid var(--color-teula);
+		outline-offset: 2px;
+	}
+
+	.jornadas {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 var(--espacio-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-weight: 600;
+	}
+
+	.lugar {
+		display: flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		margin: 0;
+	}
+
+	.lugar :global(.icono) {
+		color: var(--color-verd-fulla);
+	}
+</style>

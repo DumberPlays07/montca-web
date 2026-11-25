@@ -1,5 +1,5 @@
 /**
- * Script de la página de un evento y de la franja de la portada (C-04). La web es estática:
+ * Script de la página de un evento, de la sección Eventos y de la franja de la portada (C-04). La web es estática:
  * la página trae el estado del día en que se construyó, y este script lo vuelve a calcular
  * con la hora del momento para que cambie en su fecha sin volver a publicar (FR-012, research R1).
  *
@@ -226,10 +226,8 @@ function iniciarPaginaEvento(raiz: HTMLElement): void {
 	});
 }
 
-const paginaEvento = document.querySelector<HTMLElement>('[data-evento]');
-if (paginaEvento) {
-	iniciarPaginaEvento(paginaEvento);
-}
+// Una página de evento o, en la sección Eventos, una tarjeta por evento.
+document.querySelectorAll<HTMLElement>('[data-evento]').forEach(iniciarPaginaEvento);
 
 const franja = document.querySelector<HTMLElement>('[data-franja-evento]');
 if (franja) {

@@ -91,6 +91,8 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - [ ] T034 [US2] (Saúl) Crear en Supabase (UE) las tablas `eventos` (con `ultima_jornada` = la última jornada del YAML y `jugadores_forms_publicables` por defecto `false`, FR-041), `equipos`, `jugadores` y `autorizaciones` (aparte de `jugadores`, con `jugador_id` `on delete set null` y borrado un año después de la última jornada, T4) de [data-model.md](data-model.md) §3, incluidos `estado` `pendiente` | `confirmado` | `espera` (por defecto `pendiente`), `origen` `forms` | `web`, `autorizaciones.forma` `casilla_web` | `firma_digital` | `papel`, `dorsal` "del 1 al 99, sin repetir dentro del equipo", obligatorio si `origen = web` y opcional si `origen = forms`, y la unicidad de `(evento, categoria, nombre_normalizado)`, con RLS activada y sin políticas para `anon`. Guardar el SQL (sin datos) en el repo, en la carpeta que decida Saúl
 - [ ] T035 [US2] (Saúl) Crear la vista `equipos_publicos`, que deja de devolver un evento desde última jornada + 7 días en hora de Madrid (FR-040) y que, con `jugadores_forms_publicables = false`, devuelve los equipos `forms` sin jugadores y sin ningún jugador `forms` (FR-041), y dar `select` solo sobre ella a `anon`, según [contracts/vista-publica.md](contracts/vista-publica.md). Pasar sus comprobaciones y los once casos (depende de T034)
 - [ ] T036 [US2] (Saúl) Implementar `src/lib/eventos/fuente-supabase.ts`: `fetch` a `{PUBLIC_SUPABASE_URL}/rest/v1/equipos_publicos?evento=eq.<id>` con `apikey` y `Authorization`, tiempo máximo de 8 s, conversión a `EquipoPublico` y `{ tipo: 'error' }` ante cualquier fallo. Sin `supabase-js` (depende de T028 y T035)
+- [ ] T050 [US2] (Pablo, después de T036) Reservar el espacio del bloque "Places i equips" en `src/components/eventos/PlacesIEquips.astro` para que no empuje el contenido de debajo cuando aparece al cargar (P2 del `/impeccable audit` del #86). Con la fuente de datos reales la respuesta tarda más que con la de prueba (hasta 8 s) y el desplazamiento se nota. Comprobar con la red limitada que "Què cal saber" no se mueve, y que con `sin-fuente` o con la lista retirada el espacio se libera sin dejar un hueco
+- [ ] T051 [US2] (Pablo, después de T036) Que el aviso de error de "Places i equips" sea una región `role="status"` (P3 del `/impeccable audit` del #86): tiene que estar ya en el HTML al construir, vacía, y rellenarse cuando falle la fuente, para que los lectores de pantalla lo anuncien. Comprobarlo con una fuente que falle
 - [ ] T037 [US2] (Saúl) Decidir en A-30 (issue #70) la forma de importar, opción (a) Apps Script + Netlify Function con secreto (recomendada) u opción (b) desde un ordenador si antes se cambia el registro, y construirla según [contracts/importacion-forms.md](contracts/importacion-forms.md): ningún dato por un ordenador personal y la clave de servicio solo en Netlify (salvo la opción b aprobada); modo simular; un jugador por fila; agrupa por nombre normalizado y categoría; capitán marcado o primera respuesta; duplicados por DNI; repetible; nunca cambia `estado`; dorsal opcional (1–99, sin repetir; si no, vacío y al informe); autorización en `autorizaciones` con `forma` `firma_digital` o `papel` (según la respuesta o Montca) y `recibida = false`; informe sin datos personales completos; columnas leídas por un mapa de nombres (depende de T034)
 - [ ] T038 [US2] (Saúl) Comprobar que lo que muestra la vista coincide con `docs/legal/tratamientos.md` (T7) y `docs/legal/privacidad.md` (2.7), ya en `main`, y que A-30 (issue #70) está hecha antes de activar los equipos reales (FR-039)
 - [ ] T039 [US2] (Saúl) Primera importación real (primero en modo simular y después en serio), configurar en Netlify `PUBLIC_FUENTE_EQUIPOS=supabase`, `PUBLIC_SUPABASE_URL` y `PUBLIC_SUPABASE_ANON_KEY`, y comprobar [quickstart.md](quickstart.md) §6 (depende de T036, T037 y T038)
@@ -117,9 +119,9 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 
 **Independent Test**: [quickstart.md](quickstart.md) §5.
 
-- [ ] T043 [P] [US4] (Pablo) Crear `src/components/eventos/TargetaEsdeveniment.astro`: nombre, jornadas, lugar y `EstatInscripcio`; toda la tarjeta es un enlace de al menos 44 px; plano Pedra si el evento está `obertes` y Herba clara si no
-- [ ] T044 [US4] (Pablo) Completar `src/components/eventos/PaginaEventos.astro`: tarjetas de los eventos no pasados (`esEventoPasado`), ordenadas por primera jornada, y mensaje sin eventos con contacto (FR-003, FR-004) (depende de T043)
-- [ ] T045 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
+- [X] T043 [P] [US4] (Pablo) Crear `src/components/eventos/TargetaEsdeveniment.astro`: nombre, jornadas, lugar y `EstatInscripcio`; toda la tarjeta es un enlace de al menos 44 px; plano Pedra si el evento está `obertes` y Herba clara si no
+- [X] T044 [US4] (Pablo) Completar `src/components/eventos/PaginaEventos.astro`: tarjetas de los eventos no pasados (`esEventoPasado`), ordenadas por primera jornada, y mensaje sin eventos con contacto (FR-003, FR-004) (depende de T043)
+- [X] T045 [US4] (Pablo) Comprobar [quickstart.md](quickstart.md) §5 con un segundo YAML local (no se sube): aparece con su página, su estado y sus plazas, y `git diff -- src/lib src/components src/pages` sale vacío (SC-006)
 
 ---
 
@@ -139,6 +141,7 @@ description: "Tareas de C-04 · Eventos y torneo de Navidad"
 - **US1 (T011–T024)**: depende de Setup y Foundational. Es la **entrega 1**.
 - **US2 UI (T025–T033)**: depende de Foundational y de que exista `PaginaEvento` (T019). Se puede empezar en cuanto esté T019.
 - **US2 datos (T034–T040)**: depende de A-14 y de la interfaz T028. Va en paralelo con todo lo de Pablo.
+- **US2, después de Supabase (T050–T051)**: dependen de T036 (con la fuente real hay tiempo de carga); son de Pablo y se hacen cuando Saúl la tenga.
 - **US3 (T041–T042)**: depende de Foundational y de la parte de estado de `eventos-cliente.ts` (T022).
 - **US4 (T043–T045)**: depende de T021.
 - **Polish**: al final de cada entrega que se publique (T046), o al terminar todo.
@@ -167,5 +170,5 @@ T011 enlaces.ts · T012 json-ld.ts · T013 EstatInscripcio · T014 BotoInscripci
 4. **US3** y **US4**, y el acabado.
 
 **Issues por zona** (después del PR de la spec):
-- **Pablo**: Foundational + US1; US2 UI; US3; US4 + acabado.
+- **Pablo**: Foundational + US1; US2 UI; US3; US4 + acabado; T050–T051 después de T036.
 - **Saúl**: T002–T003 y T024; US2 datos (T034–T040); T049.

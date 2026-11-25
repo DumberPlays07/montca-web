@@ -56,6 +56,7 @@ const textos = {
 		errorCargaEquipos: "Ara mateix no podem mostrar els equips inscrits. Torna-ho a provar més tard.",
 		sinEventos: "Ara mateix no hi ha cap esdeveniment programat. Prompte n'hi haurà més.",
 		preguntanos: 'Si vols saber què preparem, escriu-nos.',
+		escribenos: 'Escriu-nos',
 	},
 	es: {
 		esdeveniments: 'Eventos',
@@ -99,6 +100,7 @@ const textos = {
 		errorCargaEquipos: 'Ahora mismo no podemos mostrar los equipos inscritos. Vuelve a probar más tarde.',
 		sinEventos: 'Ahora mismo no hay ningún evento programado. Pronto habrá más.',
 		preguntanos: 'Si quieres saber qué preparamos, escríbenos.',
+		escribenos: 'Escríbenos',
 	},
 } as const;
 
