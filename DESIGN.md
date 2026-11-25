@@ -263,6 +263,50 @@ El menú desplegable del móvil tampoco lleva sombra: ocupa toda la pantalla ent
 
 Formas de señal de sendero: rectángulos con esquinas ligeramente suavizadas (4–6 px), nunca píldoras ni círculos en los controles principales. La **marca de pintura** es la forma propia de la web: una franja rectangular corta y gruesa en teja (o teja clara sobre verde), como las marcas pintadas en las rocas de los senderos. Marca la página actual en el menú y en la barra inferior. Los iconos son de trazo, de 24 px, con los extremos redondeados para que hagan juego con Overpass. En el cartel de un evento, una raya Verd bosc de 5 px sobre cada fecha hace de "bancal" del mapa.
 
+## Movimiento
+
+La web se mueve poco y con motivo: cada animación confirma una acción, explica de dónde viene algo o hace legible un cambio de estado. Lo que no tiene un porqué claro se queda quieto. Esta sección sustituye a la antigua regla de "solo 160 ms de color u opacidad" (B-18, 2026-11-25).
+
+**Duraciones** (tres, con nombre; nada pasa de 240 ms). Salir siempre es más rápido que entrar.
+- `--duracion-rapida` · 100 ms: pulsar.
+- `--duracion-base` · 160 ms: hover, color, cerrar y el giro del chevron.
+- `--duracion-media` · 240 ms: abrir la ficha y el menú, aparición de los picos.
+- `--escalon` · 40 ms entre picos: el último empieza como mucho a los 400 ms.
+
+**Curvas** (dos):
+- `--curva-salida`: `cubic-bezier(0.23, 1, 0.32, 1)`, ease-out fuerte. Vale para todo: entrar, salir, hover y pulsar.
+- `--curva-panel`: `cubic-bezier(0.32, 0.72, 0, 1)`. Solo para los paneles que se deslizan: la ficha en el móvil y el menú móvil.
+- Nunca `ease-in`, nunca `linear` y nunca los `ease` de CSS por defecto en un movimiento.
+
+**Qué se anima.** Todo lo que se mueve usa solo `transform` y `opacity`. **Excepción explícita:** `color` y `background-color` en hover y pulsado, a `--duracion-base`, porque no mueven nada. Prohibido: `transition: all`, `width`, `height`, `margin`, `top`, `left`, `clip-path`, `filter` y sombras. Nada empieza desde `scale(0)`: las entradas parten de `scale(0.95)` y `opacity: 0`.
+
+**Nada en bucle.** Sin animaciones infinitas, sin pulsos, sin autoplay: una animación ocurre y se acaba.
+
+**Contenido e interrupción.** El contenido se ve por defecto; la animación lo añade, no lo esconde (sin JavaScript todo sigue visible). En lo que se pulsa rápido (menú, ficha) se usan transiciones y no keyframes, para que se puedan interrumpir. Los efectos de hover van solo con `@media (hover: hover) and (pointer: fine)`.
+
+**`prefers-reduced-motion: reduce`.** Menos y más suave, no cero: se quitan los desplazamientos, las escalas y el escalonado, y se mantienen los fundidos de opacidad y el color a `--duracion-base`. Con este fin hay tres variables que en movimiento reducido valen `1` y `0` (`--escala-entrada: 0.95`, `--escala-pulsado: 0.97` y `--desplazamiento-panel: 0.5rem`), y `--desplazamiento-flecha` (3 px) que pasa a `0`. Un componente que las usa se queda en un fundido sin escribir una segunda regla; los que mueven algo más (la ficha que sube desde abajo) ofrecen su alternativa aparte.
+
+**Cómo se aplica a cada momento:**
+
+| Momento | ¿Se anima? | Para qué | Cómo |
+| --- | --- | --- | --- |
+| Aparición de los picos | Sí, una vez por visita | Enseñar que el mapa es interactivo | `opacity` y `scale` desde `--escala-entrada`, `--duracion-media`, `--curva-salida`, `--escalon` entre picos (11 picos, el último a 400 ms) |
+| Pico: hover | Sí, solo con ratón | Feedback | `scale` pequeño, `--duracion-base`, `--curva-salida` |
+| Pico: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
+| Pico: pulsar | Sí | Confirmar que la web te ha oído | `scale` a `--escala-pulsado`, `--duracion-rapida` |
+| Pico: seleccionado | Sí | Hacer legible el cambio de estado | `scale` y color del anillo, `--duracion-base` |
+| Ficha: abrir y cerrar | Sí | Continuidad espacial | Móvil: `translateY` y `opacity` con `--curva-panel`; escritorio: `opacity` y `scale` desde su pico (`transform-origin` en el pico). Abre en `--duracion-media` y cierra en `--duracion-base` |
+| Marco del mapa que se desliza | No | El deslizamiento es el dedo del usuario | Solo el aviso "Llisca…" se desvanece (`opacity`, `--duracion-base`) al primer deslizamiento |
+| Menú móvil | Sí | El panel sale de la cabecera | `translateY` de `--desplazamiento-panel` y `opacity` con `--curva-panel`; abre en `--duracion-media`, cierra en `--duracion-base` |
+| Preguntas frecuentes | Solo el chevron y un fundido | Marcar el estado abierto | `rotate` de 90° en `--duracion-base`; el contenido entra con `opacity`, sin animar la altura |
+| Botones | Color y pulsar | Feedback | Color en `--duracion-base`; los principales, además, `scale` a `--escala-pulsado` en `--duracion-rapida` |
+| Flecha de la franja y de la cuenta atrás | Sí, solo con ratón | Reforzar que la banda lleva a otra página | `translateX` de `--desplazamiento-flecha` (3 px) a la derecha al hover, `--duracion-base`, `--curva-salida`; solo con `@media (hover: hover) and (pointer: fine)`. Sin desplazamiento en movimiento reducido |
+| Cuenta atrás | No | Ya cambia cada segundo; animar cada dígito sería movimiento constante | — |
+| Selector de idioma, enlaces de menú, estado de la franja | Solo el color actual | — | Color en `--duracion-base` |
+| Entradas de sección al hacer scroll, carga de página | No | No tienen porqué | — |
+
+**Cómo se trabaja el movimiento.** Se instalan dos skills de Emil Kowalski en `.claude/skills/`: `animate` y `review-animations`. `/impeccable animate` sirve para **decidir qué se mueve** y `/animate` (Emil) para **construirlo**; `/review-animations` lo revisa, y solo se lanza escribiéndolo. Las recetas de Emil que usan Motion o Base UI no aplican (la web es Astro sin React y sin librerías): se traducen a CSS, `@starting-style` o la API de animaciones del navegador (WAAPI).
+
 ## Components
 
 Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `src/components/` y se montan en `src/layouts/BaseLayout.astro`.
@@ -271,7 +315,7 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 
 - **Shape:** rectángulo con esquinas suaves: 6 px en los botones de acción y 4 px en los controles de señal.
 - **Primary (teja):** fondo Teula, texto blanco en peso 600, 44 px de alto y 24 px de relleno lateral. Es el botón Reserva de la cabecera y del menú móvil, y será Apunta't y Demana pressupost.
-- **Hover / Active:** fondo Teula fosca (#743d21) **y** texto subrayado de 2 px. Transición de color de 160 ms.
+- **Hover / Active:** fondo Teula fosca (#743d21) **y** texto subrayado de 2 px. Transición de color en `--duracion-base` (ver Movimiento), y los botones principales se encogen un poco al pulsar.
 - **Secundario (verde):** fondo Verd bosc, texto Boira en peso 600 (7.5:1), 6 px de radio, 44 px de alto y 24 px de relleno lateral. Para acciones que importan pero no son la principal de la pantalla, así que nunca lleva teja. En `hover` y `active` el fondo pasa a Tinta (12.3:1) y el texto se subraya 2 px. Es el botón de WhatsApp.
 - **Señal:** fondo transparente sobre Boira, texto Verd bosc en peso 600, borde de 1 px `linea` y 44 px de alto. Son el selector VAL / CAST y el botón Menú. En `hover` y con el menú abierto el fondo pasa a Herba clara.
 - **Focus:** contorno de 3 px a 2 px de distancia, en Teula sobre fondos claros y en Teula clara sobre Verd bosc.
@@ -365,7 +409,7 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 - **Do** poner en Verd bosc el texto pequeño sobre Pedra y Herba clara.
 - **Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.
 - **Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.
-- **Do** mantener las transiciones cortas (160 ms) y solo de color u opacidad; si un componente añade desplazamientos o animaciones, ofrece su alternativa con `prefers-reduced-motion`.
+- **Do** seguir la sección Movimiento: tres duraciones, dos curvas, solo `transform` y `opacity` (más el color de hover y pulsado), nada en bucle y una alternativa con `prefers-reduced-motion`.
 
 ### Don't:
 
