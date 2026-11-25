@@ -80,9 +80,18 @@ function iniciar(raiz: HTMLElement): void {
 		marcarAbierto(id);
 		abierto = { id, origen: desde };
 
-		// Desde la lista, el pico puede quedar fuera del trozo de mapa que se ve.
-		raiz.querySelector<HTMLElement>(`.pico[data-pico="${id}"]`)?.scrollIntoView({ inline: 'center', block: 'nearest' });
+		const pico = raiz.querySelector<HTMLElement>(`.pico[data-pico="${id}"]`);
+		const desdeLaLista = !desde.classList.contains('pico');
+		// Desde la lista, el pico puede quedar fuera del trozo de mapa que se ve: se centra en el marco
+		// (solo en horizontal; la página no se mueve).
+		if (desdeLaLista && pico !== null && desliza()) {
+			marco.scrollLeft = pico.offsetLeft - marco.clientWidth / 2;
+		}
 		colocar(id);
+		// En escritorio la ficha sale junto al pico, que puede estar muy arriba de la lista: se trae a la vista.
+		if (desdeLaLista && escritorio.matches) {
+			ficha.scrollIntoView({ block: 'center', inline: 'nearest' });
+		}
 		ficha.focus({ preventScroll: true });
 	}
 
@@ -95,7 +104,8 @@ function iniciar(raiz: HTMLElement): void {
 		ficha.hidden = true;
 		marcarAbierto(null);
 		abierto = null;
-		origen.focus({ preventScroll: true });
+		// Un pico ya está a la vista; un botón de la lista puede haber quedado lejos y se vuelve a él.
+		origen.focus({ preventScroll: origen.classList.contains('pico') });
 	}
 
 	for (const boton of botones) {
@@ -116,8 +126,10 @@ function iniciar(raiz: HTMLElement): void {
 		}
 	});
 
-	// Un clic fuera la cierra. Los botones de pico y de la lista se encargan de sí mismos.
-	document.addEventListener('pointerdown', (evento) => {
+	// Un clic fuera la cierra y el foco vuelve al botón que la abrió. Se hace al terminar el clic y no
+	// al empezarlo: así el foco que el navegador mueve al pulsar no se lo lleva otro elemento.
+	// Los botones de pico y de la lista se encargan de sí mismos. Deslizar el mapa no cierra la ficha.
+	document.addEventListener('click', (evento) => {
 		if (abierto === null || !(evento.target instanceof Node)) {
 			return;
 		}

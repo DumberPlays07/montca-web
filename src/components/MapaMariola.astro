@@ -144,6 +144,9 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 		</div>
 	</div>
 
+	<!-- Entre el mapa y la lista: los accesos de la portada. -->
+	<slot />
+
 	<section class="cims" aria-labelledby="titol-cims">
 		<h2 id="titol-cims">{t(lang, 'cimsTitulo')}</h2>
 		<p class="ayuda">{t(lang, 'cimsAyuda')}</p>
@@ -199,11 +202,21 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 		width: max(100%, var(--ancho-minimo));
 	}
 
-	/* Recorte (src/lib/mapa.ts): se enseña solo una franja de la imagen. */
+	/* Recorte (src/lib/mapa.ts): se enseña solo una franja de la imagen. La máscara difumina el borde
+	   de arriba y los de los lados para que la ilustración se funda con el fondo Boira de la página
+	   (DESIGN.md: el fondo es el cielo del mapa); no separa zonas. No afecta a los picos. */
 	.recorte {
 		position: relative;
 		overflow: hidden;
 		aspect-ratio: var(--proporcion);
+		-webkit-mask-image:
+			linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+			linear-gradient(to bottom, transparent, #000 12%);
+		-webkit-mask-composite: source-in;
+		mask-image:
+			linear-gradient(to right, transparent, #000 5%, #000 95%, transparent),
+			linear-gradient(to bottom, transparent, #000 12%);
+		mask-composite: intersect;
 	}
 
 	.recorte :global(picture) {
@@ -285,6 +298,11 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 		z-index: 2;
 	}
 
+	/* Con la ficha abierta, el nombre ya está en la ficha y la etiqueta taparía su borde. */
+	.pico[aria-expanded='true'] .etiqueta {
+		display: none;
+	}
+
 	/* ---- Móvil: degradados de los bordes y aviso de deslizar. ---- */
 	.borde {
 		position: absolute;
@@ -313,7 +331,8 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 	.pista {
 		position: absolute;
 		left: 50%;
-		bottom: var(--espacio-3);
+		/* Arriba y no abajo: en móviles bajos la barra inferior taparía el aviso. */
+		top: var(--espacio-3);
 		margin: 0;
 		padding: var(--espacio-1) var(--espacio-3);
 		background: var(--color-boira);
@@ -498,7 +517,7 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 			bottom: auto;
 			left: var(--ficha-izquierda, 0);
 			z-index: 5;
-			width: 16rem;
+			width: 18rem;
 			max-height: none;
 			padding: var(--espacio-4);
 			border: 1px solid var(--color-linea);
@@ -508,9 +527,19 @@ const enlacesExternos = urlWhatsapp(lang) !== null;
 		.cerrar {
 			right: var(--espacio-2);
 		}
+
+		/* La ficha es estrecha: menos relleno para que el texto no se parta en dos líneas. */
+		.ficha .boton-whatsapp {
+			padding: 0 var(--espacio-4);
+		}
 	}
 
 	@media (min-width: 64rem) {
+		/* Más estrecha que el mapa: el botón flotante de WhatsApp no pisa la última columna. */
+		.cims {
+			max-width: 56rem;
+		}
+
 		.lista-cims {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
