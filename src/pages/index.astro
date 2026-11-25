@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FranjaEsdeveniment from '../components/eventos/FranjaEsdeveniment.astro';
 import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../components/imagen-compartir';
 ---
 
@@ -10,6 +11,7 @@ import { IMAGEN_COMPARTIR_POR_DEFECTO } from '../components/imagen-compartir';
 	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
 >
 	<main>
+		<FranjaEsdeveniment lang="ca" />
 		<h1>Montca Actiu</h1>
 	</main>
 </BaseLayout>
