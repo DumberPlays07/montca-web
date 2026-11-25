@@ -1,9 +1,9 @@
 /**
- * Script de la página de un evento (C-04). La web es estática: la página trae el estado
- * del día en que se construyó, y este script lo vuelve a calcular con la hora del momento
- * para que cambie en su fecha sin volver a publicar (FR-012, research R1).
+ * Script de la página de un evento y de la franja de la portada (C-04). La web es estática:
+ * la página trae el estado del día en que se construyó, y este script lo vuelve a calcular
+ * con la hora del momento para que cambie en su fecha sin volver a publicar (FR-012, research R1).
  *
- * Por ahora solo hace el estado (T022). La parte de los equipos llega con la fase 4 (T030).
+ * Por ahora solo hace el estado (T022, T041). La parte de los equipos llega con la fase 4 (T030).
  */
 import { type EstadoInscripcion, type EventoParaEstado, calcularEstado } from '../lib/eventos/estado';
 
@@ -43,11 +43,28 @@ function pintarEstado(raiz: HTMLElement, estado: EstadoInscripcion): void {
 	});
 }
 
-const raiz = document.querySelector<HTMLElement>('[data-evento]');
-const evento = raiz ? leerEvento(raiz) : null;
+/** La franja de la portada solo se ve con las inscripciones abiertas (FR-029). */
+function pintarFranja(franja: HTMLElement, estado: EstadoInscripcion): void {
+	franja.hidden = estado !== 'obertes';
+}
 
-if (raiz && evento) {
-	const actualizar = () => pintarEstado(raiz, calcularEstado(evento, new Date()));
+/** Recalcula el estado de `raiz` ahora y cada minuto, y lo pinta con `pintar`. */
+function vigilarEstado(raiz: HTMLElement, pintar: (raiz: HTMLElement, estado: EstadoInscripcion) => void): void {
+	const evento = leerEvento(raiz);
+	if (evento === null) {
+		return;
+	}
+	const actualizar = () => pintar(raiz, calcularEstado(evento, new Date()));
 	actualizar();
 	window.setInterval(actualizar, INTERVALO_COMPROBACION_MS);
+}
+
+const paginaEvento = document.querySelector<HTMLElement>('[data-evento]');
+if (paginaEvento) {
+	vigilarEstado(paginaEvento, pintarEstado);
+}
+
+const franja = document.querySelector<HTMLElement>('[data-franja-evento]');
+if (franja) {
+	vigilarEstado(franja, pintarFranja);
 }
