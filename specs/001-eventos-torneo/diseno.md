@@ -39,7 +39,7 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 ```
 
 - Las fechas son el gancho: numerales grandes, una columna por jornada, con la raya Verd bosc encima (el "bancal").
-- Teja solo en "Inscriure's" y en la marca de pintura del estado (regla "Paint Mark": como mucho dos elementos teja por pantalla).
+- Teja solo en "Inscriure's" (regla "Paint Mark": la teja es la acción y el "estás aquí"). La marca de pintura de la línea de estado va en Verd bosc: informa, no es una acción (decidido en el audit de la fase 7, T046).
 - Sin foto: no hay fotos de Montca Sports todavía (PRODUCT.md). Cuando lleguen, la foto va **debajo** de la primera pantalla, nunca en lugar de las fechas.
 
 ### Debajo del pliegue, en este orden
