@@ -45,7 +45,9 @@ function iniciar(raiz: HTMLElement): void {
 	const picos = Array.from(raiz.querySelectorAll<HTMLElement>('.pico'));
 	// Primero los 8 destinos y después los picos: es también el orden del tabulador.
 	const controles: HTMLElement[] = [...botones, ...picos];
-	const escritorio = window.matchMedia('(min-width: 48rem)');
+	// Tarjeta junto al punto (escritorio, tableta y móvil apaisado) o panel fijo (móvil en vertical).
+	// Tiene que coincidir con la media query de `.vineta` en MapaMariola.astro.
+	const escritorio = window.matchMedia('(min-width: 48rem), (max-height: 30rem) and (orientation: landscape)');
 
 	let abierto: HTMLElement | null = null;
 

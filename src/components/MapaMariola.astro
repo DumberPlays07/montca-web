@@ -696,8 +696,12 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		.lista-destinos {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
+	}
 
-		/* Escritorio: tarjeta junto al botón con un piquito que apunta al punto. El script le pone
+	/* Tarjeta junto al botón (escritorio, tableta y móvil apaisado): el panel fijo del móvil ocuparía casi
+	   toda la altura de una pantalla apaisada y taparía el botón. */
+	@media (min-width: 48rem), (max-height: 30rem) and (orientation: landscape) {
+		/* Tarjeta junto al botón con un piquito que apunta al punto. El script le pone
 		   `left`, `top` y la altura del piquito (`--cola-y`) en píxeles. Sin sombra. */
 		.vineta {
 			position: absolute;
@@ -706,8 +710,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			bottom: auto;
 			left: var(--vineta-izquierda, 0);
 			z-index: 5;
-			/* 22rem: cabe el título más largo ('Alt de la Codolla · 1.167 m') en una línea. */
-			width: 22rem;
+			/* 18rem: en tableta, a 22rem la tarjeta no cabe a ningún lado del botón y lo taparía. */
+			width: 18rem;
 			max-height: none;
 			overflow-y: visible;
 			padding: var(--espacio-4);
@@ -752,6 +756,11 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 	}
 
 	@media (min-width: 64rem) {
+		/* 22rem: cabe el título más largo ('Alt de la Codolla · 1.167 m') en una línea. */
+		.vineta {
+			width: 22rem;
+		}
+
 		/* Más estrecha que el mapa: el botón flotante de WhatsApp no pisa la última columna. */
 		.destinos {
 			max-width: 56rem;
