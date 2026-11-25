@@ -1,0 +1,167 @@
+---
+/**
+ * Página "Pròximament" de una sección del menú que aún no existe (para que el menú y el pie no
+ * lleven a un 404). Una sola pieza para todas: cada página de `src/pages` solo dice qué sección es.
+ *
+ * Lleva el título de la sección, una frase de qué habrá, "Pròximament", el botón de WhatsApp y
+ * un enlace a Esdeveniments, que es lo que ya está hecho. El `title`, la `description` y la imagen
+ * para compartir se pasan al layout desde aquí, como en las demás páginas.
+ *
+ * Cuando una sección tenga su página de verdad, se borra su archivo de `src/pages` y la clave de
+ * `SECCIONES_PROXIMAMENT`; el resto no cambia.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icono from './Icono.astro';
+import { CORREO_CONTACTO, urlWhatsapp } from './contacto';
+import { IMAGEN_COMPARTIR_POR_DEFECTO } from './imagen-compartir';
+import { type Idioma, ruta, t as tNavegacion } from './textos-navegacion';
+import { type SeccionProximament, t } from './textos-proximament';
+
+interface Props {
+	lang: Idioma;
+	seccion: SeccionProximament;
+}
+
+const { lang, seccion } = Astro.props;
+
+const titulo = tNavegacion(lang, seccion);
+const frase = t(lang, seccion);
+
+// Sin número de WhatsApp, el contacto cae al correo, como en el resto de la web.
+const enlaceWhatsapp = urlWhatsapp(lang);
+const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
+---
+
+<BaseLayout
+	title={`${titulo} · Montca Actiu`}
+	description={frase}
+	image={IMAGEN_COMPARTIR_POR_DEFECTO.src}
+	imageAlt={IMAGEN_COMPARTIR_POR_DEFECTO.alt}
+	lang={lang}
+>
+	<main class="proximament">
+		<h1>{titulo}</h1>
+
+		<div class="aviso">
+			<p class="estado">
+				<span class="pintura" aria-hidden="true"></span>
+				{t(lang, 'proximament')}
+			</p>
+			<p class="frase">{frase}</p>
+		</div>
+
+		<div class="acciones">
+			<a
+				class="boton-contacto"
+				href={enlaceContacto}
+				target={enlaceWhatsapp !== null ? '_blank' : undefined}
+				rel={enlaceWhatsapp !== null ? 'noopener' : undefined}
+			>
+				<Icono nombre={enlaceWhatsapp !== null ? 'whatsapp' : 'correo'} />
+				{t(lang, 'escribenosWhatsapp')}
+				{enlaceWhatsapp !== null && <span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>}
+			</a>
+			<a class="boton-eventos" href={ruta(lang, 'eventos')}>
+				{t(lang, 'verEventos')}
+				<Icono nombre="seguir" />
+			</a>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	.proximament {
+		max-width: var(--ancho-maximo);
+		margin: 0 auto;
+		padding: var(--espacio-6) var(--margen-lateral) var(--espacio-12);
+	}
+
+	/* Display (DESIGN.md). */
+	h1 {
+		margin: 0 0 var(--espacio-6);
+		font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+		line-height: 1.05;
+		letter-spacing: -0.01em;
+	}
+
+	/* Pedra: el plano de los avisos de "Properament" (DESIGN.md, Tertiary). */
+	.aviso {
+		max-width: 40rem;
+		box-sizing: border-box;
+		padding: var(--espacio-4);
+		background: var(--color-pedra);
+		border-radius: var(--radio-boton);
+	}
+
+	.estado {
+		display: flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		margin: 0 0 var(--espacio-2);
+		color: var(--color-verd-bosc);
+		font-size: 0.875rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+	}
+
+	/* Marca de pintura en Verd bosc: informa, no es una acción (Paint Mark Rule). */
+	.pintura {
+		flex-shrink: 0;
+		width: 1.25rem;
+		height: 0.375rem;
+		background: var(--color-verd-bosc);
+	}
+
+	.frase {
+		margin: 0;
+		font-size: 1.125rem;
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+
+	.acciones {
+		max-width: 40rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--espacio-3);
+		margin-top: var(--espacio-6);
+	}
+
+	.boton-contacto,
+	.boton-eventos {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--espacio-2);
+		min-height: var(--zona-tactil);
+		font-weight: 600;
+		text-decoration: none;
+		transition: background-color var(--transicion);
+	}
+
+	/* Botón secundario (verde) de DESIGN.md: aquí no hay ninguna acción principal en teja. */
+	.boton-contacto {
+		padding: 0 var(--espacio-6);
+		background: var(--color-verd-bosc);
+		color: var(--color-boira);
+		border-radius: var(--radio-boton);
+	}
+
+	.boton-contacto:hover,
+	.boton-contacto:active {
+		background: var(--color-tinta);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	/* Botón de señal: transparente con borde de 1 px, como el selector de idioma. */
+	.boton-eventos {
+		padding: 0 var(--espacio-4);
+		color: var(--color-verd-bosc);
+		border: 1px solid var(--color-linea);
+		border-radius: var(--radio-senal);
+	}
+
+	.boton-eventos:hover {
+		background: var(--color-herba-clara);
+	}
+</style>
