@@ -41,3 +41,35 @@ Texto de Montca, tal como lo enviaron. La traducción al castellano se hace con 
 - **Què passa si el meu equip no arriba al mínim de jugadors?** La inscripció quedarà pendent fins que complete el nombre mínim de jugadors.
 - **Quan se celebra el torneig?** Els dies 27 de desembre de 2026 i 3 de gener de 2027.
 - **On se celebra?** Al Poliesportiu Municipal de Cocentaina.
+
+
+## Catálogo de actividades · curso 2026-27
+
+Resumen público del catálogo que pasó Montca el 25/11/2026 (el PDF es un documento interno del plan de marketing y no se sube al repo). **Sin precios ni fechas**, salvo lo que se indica: Montca los comunicará cuando estén cerrados.
+
+Cada actividad puede ser **propia** (abierta al público, con inscripción) o **contratada** por un colegio, un AMPA o un ayuntamiento para su grupo. Las inscripciones de las actividades propias van por un Google Forms de cada actividad.
+
+| Formato | Actividad | A quién va | Aforo | Qué es |
+| --- | --- | --- | --- | --- |
+| F1 · Activitats Montca | Scape Room Castell | Familias y niños | 10–30 | Pruebas por el recorrido que dan recompensas; en el castillo hay que resolver un misterio con todo lo conseguido |
+| F1 · Activitats Montca | Últim Refugi | Familias y niños | 10–30 | Gimcana de pruebas de supervivencia en montaña: te llevas técnicas aprendidas |
+| F1 · Activitats Montca | Dia de Campament | Niños de 8 a 16 años | 10–40 | Un día de campamento condensado, con historia que hila la jornada; se adapta a cada grupo |
+| F2 · Montca Rutes | Nocturna con estrellas, geocaching, histórica y de plantas para licores caseros | Niños, jóvenes o adultos (cada ruta, a una franja de edad) | 5–20 | Rutas con un tema especial, animación toda la ruta y comida o bebida para todos |
+| F3 · Montca Sports | Torneos y jornadas deportivas | Niños, o jóvenes y adultos (versiones separadas) | Equipos de 5–12, mínimo 4 equipos | Se compite por equipos; las Nits Actives de julio 2026 fueron la primera edición |
+| F4 · Montca Repte | Passaport dels 5 Cims | Jóvenes y adultos | Sin máximo de pasaportes; máximo por salida | Ver la sección siguiente |
+| F5 · Montca Camp | Acampada de Semana Santa | Niños de 8 a 16 años | 10–50 | **Pròximament**: sin fechas, lugar, precio ni programa |
+| F6 · Intermediació | Barranquismo, vías ferratas, escalada… con empresas acreditadas | — | — | **Pròximament**: sin confirmar |
+
+Única fecha cerrada del curso: sábado 26/09/2026, Scape Room Castell para familias (ya celebrada).
+
+## Montca Repte · Passaport dels 5 Cims
+
+Resumen del documento descriptivo de Montca (25/11/2026).
+
+- **Qué es**: un reto para conocer cinco de las cimas más emblemáticas del Comtat y completar un pasaporte con el sello de cada una. No es una competición: sin orden ni fecha, a tu ritmo.
+- **El pasaporte**: se compra aparte; no hace falta apuntarse a ninguna salida guiada.
+- **Dos formas**: *por libre* (en cada cima hay un punto de sellado tipo geocaching; se sella el pasaporte y se hace una foto en la cima) o *con salidas guiadas* (cada cima se sube dos veces al año, 10 salidas en total, publicadas en un calendario con inscripción).
+- **Al completar las cinco cimas**: acción especial para quien termine (sorteo, encuentro especial o las dos cosas; por confirmar).
+- **A quién va**: personas que quieran descubrir las montañas del Comtat, solas, en familia o con amistades.
+- **Lema**: "Descobreix el Comtat, cim a cim."
+- **Pendiente**: los nombres de las 5 cimas, las fechas de las salidas y el precio del pasaporte.
