@@ -41,6 +41,6 @@ El script (Pillow, numpy y scipy, con metadatos PEP 723 como los de `scripts/map
 | `simbolo-blanco.png` | símbolo del JPG blanco sobre negro | sin uso por ahora |
 | `imagen-compartir.png` | logo completo sobre blanco, 1200 × 630 | imagen para compartir por defecto |
 
-El favicon se escribe en `public/` (`favicon.png` de 192 px y `favicon.ico`). Las fuentes miden
+El favicon se escribe en `public/` (`favicon.png` de 192 px y `favicon.ico`): el símbolo sobre un cuadrado Boira con esquinas redondeadas, para que se vea en pestañas claras y oscuras. Las fuentes miden
 1536 px: sirven para la web, pero se pixelan si se amplían. **Cuando Montca pase el vectorial,
 se sustituyen las piezas y este script deja de hacer falta.**

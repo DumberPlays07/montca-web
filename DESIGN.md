@@ -295,7 +295,7 @@ Señales del camino: pocas, claras y siempre en el mismo sitio. Todas viven en `
 ### Logo, favicon e imagen para compartir
 
 - **Mientras no haya vectorial:** el logo es la imagen original de Montca, de 1536 px, con el fondo quitado y recortada (`scripts/logo/`). No se redibuja, no se recolorea y no se hace un SVG que solo envuelva el PNG. Cuando Montca pase el original (SVG, AI o PDF) se sustituyen las piezas y se retira esta nota.
-- **Favicon:** el símbolo en PNG (`public/favicon.png`, 192 px, y `public/favicon.ico`), enlazados desde `BaseLayout`.
+- **Favicon:** el símbolo sobre un cuadrado Boira de esquinas redondeadas (20 %), en PNG (`public/favicon.png`, 192 px) y `public/favicon.ico`, enlazados desde `BaseLayout`. El fondo claro hace que se vea también en las pestañas en modo oscuro.
 - **Imagen para compartir por defecto:** el logo completo centrado sobre blanco, de 1200 × 630 (`src/assets/logo/imagen-compartir.png`). Una página con imagen propia, como un evento, la sustituye.
 
 ### Pie

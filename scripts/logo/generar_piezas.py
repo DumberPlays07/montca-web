@@ -17,7 +17,7 @@ Uso:  uv run scripts/logo/generar_piezas.py
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 from scipy import ndimage
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -37,6 +37,9 @@ ANCHO_COMPARTIR = 1200
 ALTO_COMPARTIR = 630
 PROPORCION_LOGO_COMPARTIR = 0.62  # el logo ocupa este % del alto de la imagen para compartir
 LADO_FAVICON = 512
+COLOR_FONDO_FAVICON = "#f1f6ef"  # Boira (DESIGN.md): se ve igual en pestañas claras y oscuras
+RADIO_FAVICON = 0.2  # esquinas redondeadas, como fracción del lado
+RELLENO_FAVICON = 0.1  # aire entre el símbolo y el borde del cuadrado, como fracción del lado
 
 
 def quitar_fondo_blanco(imagen: Image.Image) -> Image.Image:
@@ -133,10 +136,21 @@ def imagen_compartir(logo: Image.Image) -> Image.Image:
 
 
 def favicon(simbolo: Image.Image) -> Image.Image:
-    """Símbolo centrado en un cuadrado transparente, con aire para que no toque el borde."""
-    lado = max(simbolo.size)
+    """Símbolo sobre un cuadrado claro de esquinas redondeadas.
+
+    El verde oscuro del símbolo sobre transparente casi no se ve en las pestañas del
+    navegador en modo oscuro; sobre Boira se lee en los dos modos.
+    """
+    # Se dibuja al doble y se reduce para que las esquinas no salgan con dientes.
+    lado = LADO_FAVICON * 2
     cuadrado = Image.new("RGBA", (lado, lado), (0, 0, 0, 0))
-    cuadrado.paste(simbolo, ((lado - simbolo.width) // 2, (lado - simbolo.height) // 2))
+    ImageDraw.Draw(cuadrado).rounded_rectangle(
+        (0, 0, lado - 1, lado - 1), radius=round(lado * RADIO_FAVICON), fill=COLOR_FONDO_FAVICON
+    )
+    hueco = round(lado * (1 - 2 * RELLENO_FAVICON))
+    escala = min(hueco / simbolo.width, hueco / simbolo.height)
+    pieza = simbolo.resize((round(simbolo.width * escala), round(simbolo.height * escala)), Image.LANCZOS)
+    cuadrado.alpha_composite(pieza, ((lado - pieza.width) // 2, (lado - pieza.height) // 2))
     return cuadrado.resize((LADO_FAVICON, LADO_FAVICON), Image.LANCZOS)
 
 
