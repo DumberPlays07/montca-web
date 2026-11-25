@@ -1,13 +1,20 @@
 /**
- * Script del mapa de Mariola (B-19): abre y cierra la ficha de un pico, coloca el mapa al empezar y
+ * Script del mapa de Mariola (B-21): abre y cierra la viñeta de un botón, coloca el mapa al empezar y
  * enseña el aviso y los degradados de deslizar en el móvil. Sin animaciones.
  *
- * Los picos y los botones de la lista comparten `data-pico`: los dos abren la misma ficha.
+ * Los botones del mapa llevan en `data-*` lo que la viñeta enseña (lugar, título, frase y enlace). La
+ * viñeta es una sola: al pulsar otro botón se rellena con el suyo.
  */
 import { colocarFicha } from '../lib/mapa';
 
-/** Hueco entre el pico y la ficha en escritorio: la mitad de la zona pulsable más un margen. */
-const HUECO_FICHA_PX = 30;
+/** Hueco entre el punto y la viñeta en escritorio: la mitad de la zona pulsable más un margen. */
+const HUECO_VINETA_PX = 30;
+
+/** Aire entre el botón elegido y el panel de la viñeta en el móvil. */
+const BOTON_SOBRE_PANEL_PX = 16;
+
+/** Alto de la cabecera fija (3,5rem): el botón no debe subir por debajo de ella. */
+const ALTO_CABECERA_PX = 56;
 
 /** Lo que hay que deslizar para dar el aviso por visto y quitarlo. */
 const UMBRAL_DESLIZAMIENTO_PX = 8;
@@ -26,91 +33,95 @@ function elemento<T extends Element>(raiz: ParentNode, selector: string): T {
 function iniciar(raiz: HTMLElement): void {
 	const caja = elemento<HTMLElement>(raiz, '[data-caja]');
 	const marco = elemento<HTMLElement>(raiz, '[data-marco]');
-	const ficha = elemento<HTMLElement>(raiz, '[data-ficha]');
+	const vineta = elemento<HTMLElement>(raiz, '[data-vineta]');
 	const pista = elemento<HTMLElement>(raiz, '[data-pista]');
-	const botones = Array.from(raiz.querySelectorAll<HTMLButtonElement>('button[data-pico]'));
+	const enlace = elemento<HTMLAnchorElement>(vineta, '[data-vineta-enlace]');
+	const botones = Array.from(raiz.querySelectorAll<HTMLButtonElement>('button.boton'));
 	const escritorio = window.matchMedia('(min-width: 48rem)');
 
-	let abierto: { id: string; origen: HTMLElement } | null = null;
+	let abierto: HTMLButtonElement | null = null;
 
-	// ---- Ficha ----
+	// ---- Viñeta ----
 
-	function marcarAbierto(id: string | null): void {
-		for (const boton of botones) {
-			boton.setAttribute('aria-expanded', String(boton.dataset.pico === id));
+	function marcarAbierto(boton: HTMLButtonElement | null): void {
+		for (const otro of botones) {
+			otro.setAttribute('aria-expanded', String(otro === boton));
 		}
 	}
 
-	/** Pone la ficha junto al pico (escritorio). En el móvil es un panel fijo y no se coloca. */
-	function colocar(id: string): void {
+	/** Pone la viñeta junto al botón (escritorio). En el móvil es un panel fijo y no se coloca. */
+	function colocar(boton: HTMLButtonElement): void {
 		if (!escritorio.matches) {
 			return;
 		}
-		const pico = raiz.querySelector<HTMLElement>(`.pico[data-pico="${id}"]`);
-		if (pico === null) {
-			return;
-		}
 		const cajaRect = caja.getBoundingClientRect();
-		const picoRect = pico.getBoundingClientRect();
+		const botonRect = boton.getBoundingClientRect();
 		const sitio = colocarFicha({
 			pico: {
-				x: picoRect.left + picoRect.width / 2 - cajaRect.left,
-				y: picoRect.top + picoRect.height / 2 - cajaRect.top,
+				x: botonRect.left + botonRect.width / 2 - cajaRect.left,
+				y: botonRect.top + botonRect.height / 2 - cajaRect.top,
 			},
 			caja: { ancho: cajaRect.width, alto: cajaRect.height },
-			ficha: { ancho: ficha.offsetWidth, alto: ficha.offsetHeight },
-			margen: HUECO_FICHA_PX,
+			ficha: { ancho: vineta.offsetWidth, alto: vineta.offsetHeight },
+			margen: HUECO_VINETA_PX,
 		});
-		ficha.style.setProperty('--ficha-izquierda', `${sitio.izquierda}px`);
-		ficha.style.setProperty('--ficha-arriba', `${sitio.arriba}px`);
+		vineta.style.setProperty('--vineta-izquierda', `${sitio.izquierda}px`);
+		vineta.style.setProperty('--vineta-arriba', `${sitio.arriba}px`);
+		vineta.style.setProperty('--cola-y', `${sitio.colaY}px`);
+		vineta.dataset.lado = sitio.lado;
+	}
+
+	/**
+	 * En el móvil el panel es fijo y puede tapar el botón elegido: si es así, sube la página lo justo
+	 * para dejarlo a la vista encima del panel, sin pasarse de la cabecera (sin animación).
+	 */
+	function dejarBotonALaVista(boton: HTMLButtonElement): void {
+		if (escritorio.matches) {
+			return;
+		}
+		const botonRect = boton.getBoundingClientRect();
+		const hueco = vineta.getBoundingClientRect().top - botonRect.bottom - BOTON_SOBRE_PANEL_PX;
+		const margenCabecera = botonRect.top - ALTO_CABECERA_PX - BOTON_SOBRE_PANEL_PX;
+		if (hueco < 0) {
+			window.scrollBy({ top: Math.min(-hueco, Math.max(0, margenCabecera)), behavior: 'instant' });
+		}
 	}
 
 	function abrir(desde: HTMLButtonElement): void {
-		const id = desde.dataset.pico ?? '';
-		elemento<HTMLElement>(ficha, '[data-ficha-nombre]').textContent = desde.dataset.nombre ?? '';
-		elemento<HTMLElement>(ficha, '[data-ficha-altura]').textContent = desde.dataset.altura ?? '';
-		const enlace = elemento<HTMLAnchorElement>(ficha, '[data-ficha-whatsapp]');
-		if (desde.dataset.whatsapp) {
-			enlace.href = desde.dataset.whatsapp;
-		}
-		// C-01 leerá este id para enseñar las actividades de la cima.
-		ficha.dataset.picoAbierto = id;
+		const titulo = desde.dataset.titulo ?? '';
+		elemento<HTMLElement>(vineta, '[data-vineta-lugar]').textContent = desde.dataset.lugar ?? '';
+		elemento<HTMLElement>(vineta, '[data-vineta-titulo]').textContent = titulo;
+		elemento<HTMLElement>(vineta, '[data-vineta-frase]').textContent = desde.dataset.frase ?? '';
+		enlace.href = desde.dataset.href ?? enlace.href;
+		// B-19 lee este atributo para saber a qué apartado va el enlace e interceptar el clic.
+		enlace.dataset.destino = desde.dataset.destino ?? '';
+		// Para el lector de pantalla el enlace dice "Entra a Repte 5 Cims", no solo "Entra".
+		elemento<HTMLElement>(enlace, '[data-vineta-solo-lector]').textContent =
+			` ${enlace.dataset.conector ?? ''} ${titulo}`;
 
-		ficha.hidden = false;
-		marcarAbierto(id);
-		abierto = { id, origen: desde };
-
-		const pico = raiz.querySelector<HTMLElement>(`.pico[data-pico="${id}"]`);
-		const desdeLaLista = !desde.classList.contains('pico');
-		// Desde la lista, el pico puede quedar fuera del trozo de mapa que se ve: se centra en el marco
-		// (solo en horizontal; la página no se mueve).
-		if (desdeLaLista && pico !== null && desliza()) {
-			marco.scrollLeft = pico.offsetLeft - marco.clientWidth / 2;
-		}
-		colocar(id);
-		// En escritorio la ficha sale junto al pico, que puede estar muy arriba de la lista: se trae a la vista.
-		if (desdeLaLista && escritorio.matches) {
-			ficha.scrollIntoView({ block: 'center', inline: 'nearest' });
-		}
-		ficha.focus({ preventScroll: true });
+		vineta.hidden = false;
+		marcarAbierto(desde);
+		abierto = desde;
+		colocar(desde);
+		dejarBotonALaVista(desde);
+		vineta.focus({ preventScroll: true });
 	}
 
-	/** Cierra la ficha y devuelve el foco al botón que la abrió. */
+	/** Cierra la viñeta y devuelve el foco al botón que la abrió. */
 	function cerrar(): void {
 		if (abierto === null) {
 			return;
 		}
-		const { origen } = abierto;
-		ficha.hidden = true;
+		const origen = abierto;
+		vineta.hidden = true;
 		marcarAbierto(null);
 		abierto = null;
-		// Un pico ya está a la vista; un botón de la lista puede haber quedado lejos y se vuelve a él.
-		origen.focus({ preventScroll: origen.classList.contains('pico') });
+		origen.focus({ preventScroll: true });
 	}
 
 	for (const boton of botones) {
 		boton.addEventListener('click', () => {
-			if (abierto !== null && abierto.id === boton.dataset.pico && abierto.origen === boton) {
+			if (abierto === boton) {
 				cerrar();
 				return;
 			}
@@ -118,7 +129,7 @@ function iniciar(raiz: HTMLElement): void {
 		});
 	}
 
-	elemento<HTMLElement>(ficha, '[data-cerrar]').addEventListener('click', cerrar);
+	elemento<HTMLElement>(vineta, '[data-cerrar]').addEventListener('click', cerrar);
 
 	document.addEventListener('keydown', (evento) => {
 		if (evento.key === 'Escape' && abierto !== null) {
@@ -128,23 +139,23 @@ function iniciar(raiz: HTMLElement): void {
 
 	// Un clic fuera la cierra y el foco vuelve al botón que la abrió. Se hace al terminar el clic y no
 	// al empezarlo: así el foco que el navegador mueve al pulsar no se lo lleva otro elemento.
-	// Los botones de pico y de la lista se encargan de sí mismos. Deslizar el mapa no cierra la ficha.
+	// Los botones se encargan de sí mismos. Deslizar el mapa no cierra la viñeta.
 	document.addEventListener('click', (evento) => {
 		if (abierto === null || !(evento.target instanceof Node)) {
 			return;
 		}
-		const dentro = ficha.contains(evento.target);
-		const enUnPico = botones.some((boton) => boton.contains(evento.target as Node));
-		if (!dentro && !enUnPico) {
+		const dentro = vineta.contains(evento.target);
+		const enUnBoton = botones.some((boton) => boton.contains(evento.target as Node));
+		if (!dentro && !enUnBoton) {
 			cerrar();
 		}
 	});
 
-	// Al cambiar el tamaño, la ficha ya no estaría bien colocada.
+	// Al cambiar el tamaño, la viñeta ya no estaría bien colocada.
 	escritorio.addEventListener('change', cerrar);
 	window.addEventListener('resize', () => {
 		if (abierto !== null) {
-			colocar(abierto.id);
+			colocar(abierto);
 		}
 	});
 
@@ -159,7 +170,7 @@ function iniciar(raiz: HTMLElement): void {
 		caja.dataset.bordeDerecho = marco.scrollLeft < maximo - MARGEN_BORDE_PX ? 'si' : 'no';
 	}
 
-	// Empieza centrado en los picos, no en el borde izquierdo del mapa.
+	// Empieza en el 76 % del ancho (CENTRO_INICIAL_MARCO), no en el borde izquierdo del mapa.
 	let inicial = 0;
 	if (desliza()) {
 		const centro = Number(marco.dataset.centroX) / 100;
@@ -193,7 +204,7 @@ if (raiz) {
 	try {
 		iniciar(raiz);
 	} catch (error) {
-		// Si algo falla, el mapa y la lista siguen a la vista; solo falta la ficha.
+		// Si algo falla, el mapa y la lista siguen a la vista; solo falta la viñeta.
 		console.error('No se ha podido iniciar el mapa de Mariola.', error);
 	}
 }
