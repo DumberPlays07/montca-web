@@ -278,7 +278,7 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 - `--duracion-rapida` · 100 ms: pulsar.
 - `--duracion-base` · 160 ms: hover, color, cerrar y el giro del chevron.
 - `--duracion-media` · 240 ms: abrir la ficha y el menú, aparición de los picos.
-- `--escalon` · 40 ms entre picos: el último empieza como mucho a los 400 ms.
+- `--escalon` · 40 ms entre botones del mapa: el último empieza como mucho a los 400 ms (con 8 botones, a los 280 ms).
 
 **Curvas** (dos):
 - `--curva-salida`: `cubic-bezier(0.23, 1, 0.32, 1)`, ease-out fuerte. Vale para todo: entrar, salir, hover y pulsar.
@@ -291,14 +291,16 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 
 **Contenido e interrupción.** El contenido se ve por defecto; la animación lo añade, no lo esconde (sin JavaScript todo sigue visible). En lo que se pulsa rápido (menú, ficha) se usan transiciones y no keyframes, para que se puedan interrumpir. Los efectos de hover van solo con `@media (hover: hover) and (pointer: fine)`.
 
-**`prefers-reduced-motion: reduce`.** Menos y más suave, no cero: se quitan los desplazamientos, las escalas y el escalonado, y se mantienen los fundidos de opacidad y el color a `--duracion-base`. Con este fin hay tres variables que en movimiento reducido valen `1` y `0` (`--escala-entrada: 0.95`, `--escala-pulsado: 0.97` y `--desplazamiento-panel: 0.5rem`), y `--desplazamiento-flecha` (3 px) que pasa a `0`. Un componente que las usa se queda en un fundido sin escribir una segunda regla; los que mueven algo más (la ficha que sube desde abajo) ofrecen su alternativa aparte.
+**`prefers-reduced-motion: reduce`.** Menos y más suave, no cero: se quitan los desplazamientos, las escalas y el escalonado, y se mantienen los fundidos de opacidad y el color a `--duracion-base`. Con este fin hay tres variables que en movimiento reducido valen `1` y `0` (`--escala-entrada: 0.95`, `--escala-pulsado: 0.97` y `--desplazamiento-panel: 0.5rem`), `--desplazamiento-flecha` (3 px) y `--elevacion-hover` (−2 px, lo que sube un botón del mapa al pasar el ratón), que pasan a `0`, y `--escala-pico-activo` (1.33), que pasa a `1`. `--escalon` también pasa a `0`. Un componente que las usa se queda en un fundido sin escribir una segunda regla; los que mueven algo más (la ficha que sube desde abajo) ofrecen su alternativa aparte.
 
 **Cómo se aplica a cada momento:**
 
 | Momento | ¿Se anima? | Para qué | Cómo |
 | --- | --- | --- | --- |
-| Aparición de los picos | Sí, una vez por visita | Enseñar que el mapa es interactivo | `opacity` y `scale` desde `--escala-entrada`, `--duracion-media`, `--curva-salida`, `--escalon` entre picos (8 botones y 5 picos, con el escalonado total sin pasar de 400 ms) |
-| Pico: hover | Sí, solo con ratón | Feedback | `scale` pequeño, `--duracion-base`, `--curva-salida` |
+| Aparición del mapa | Sí, una vez por visita | Enseñar que el mapa es interactivo | Los 8 botones brotan de abajo arriba: `opacity` y `scale` desde `--escala-entrada` en `--duracion-media` con `--curva-salida`, y `--escalon` × su orden de retraso (el último, a los 280 ms). Se anima el punto y la placa, no la zona pulsable. Los 5 picos sin botón solo funden `opacity`, todos a la vez cuando empieza el último botón: no son una acción y a 14 px una escala no se ve |
+| Botón de destino: hover | Sí, solo con ratón | Feedback | El punto y la placa suben `--elevacion-hover` (2 px) con `translateY`: entran en `--duracion-base` y salen en `--duracion-rapida`, con `--curva-salida`. La zona pulsable de 44 px no se mueve. **Montcabrer no sube**: su punto toca ya el de la Alt de la Reja y subir lo haría taparla más |
+| Botón de destino: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
+| Pico: hover | Sí, solo con ratón | Feedback | `scale` a `--escala-pico-activo` (1.33), `--duracion-base`, `--curva-salida`; la zona pulsable no cambia (antes crecía con `width` y `height`) |
 | Pico: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
 | Pico: pulsar | Sí | Confirmar que la web te ha oído | `scale` a `--escala-pulsado`, `--duracion-rapida` |
 | Pico: seleccionado | Sí | Hacer legible el cambio de estado | `scale` y color del anillo, `--duracion-base` |
@@ -311,6 +313,7 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 | Cuenta atrás | No | Ya cambia cada segundo; animar cada dígito sería movimiento constante | — |
 | Selector de idioma, enlaces de menú, estado de la franja | Solo el color actual | — | Color en `--duracion-base` |
 | Entradas de sección al hacer scroll, carga de página | No | No tienen porqué | — |
+| Vuelo del mapa a su apartado | Sí, solo al pulsar «Entra» en la viñeta | Continuidad espacial: de dónde viene la página | View Transition nativa entre páginas (sin `<ClientRouter />` ni librerías). El punto del botón seleccionado vuela hasta una marca invisible al principio del `<h1>` de la página nueva y se funde encima (`--duracion-media`, `--curva-salida`; se funde en el último tramo) mientras la página nueva aparece con un fundido de `--duracion-base`. Cualquier otra navegación, con el mapa o sin él, no se anima. Con movimiento reducido no hay transición; en navegadores sin soporte, navegación normal. Reglas en `global.css`; la lógica que decide si es un vuelo (con la Navigation API, sin guardar nada en el navegador), en `src/lib/vuelo.ts` |
 
 **Cómo se trabaja el movimiento.** Se instalan dos skills de Emil Kowalski en `.claude/skills/`: `animate` y `review-animations`. `/impeccable animate` sirve para **decidir qué se mueve** y `/animate` (Emil) para **construirlo**; `/review-animations` lo revisa, y solo se lanza escribiéndolo. Las recetas de Emil que usan Motion o Base UI no aplican (la web es Astro sin React y sin librerías): se traducen a CSS, `@starting-style` o la API de animaciones del navegador (WAAPI).
 

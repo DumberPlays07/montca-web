@@ -53,6 +53,8 @@
 	--escala-pulsado: 0.97;
 	--desplazamiento-panel: 0.5rem;
 	--desplazamiento-flecha: 3px;
+	--elevacion-hover: -2px; /* los botones del mapa suben al pasar el ratón */
+	--escala-pico-activo: 1.33; /* picos pequeños del mapa, al pasar el ratón o abrir su ficha: 18 → 24 px */
 
 	/* Transición de color de los controles; los componentes actuales la usan tal cual. */
 	--transicion: var(--duracion-base) var(--curva-salida);
@@ -153,5 +155,77 @@ svg {
 		--escala-pulsado: 1;
 		--desplazamiento-panel: 0;
 		--desplazamiento-flecha: 0px;
+		--elevacion-hover: 0px;
+		--escala-pico-activo: 1;
+	}
+}
+
+/* ---- Navegación desde el mapa (B-19): el punto del botón vuela hasta el título del apartado ----
+   View Transition nativa entre páginas (sin `<ClientRouter />`, que obligaría a reiniciar los scripts
+   de cada componente). Solo con movimiento permitido: con `reduce` no hay transición aunque falle el
+   script. El script de `src/lib/vuelo.ts` (publicado en la cabecera de `BaseLayout.astro`) nombra el punto al
+   pulsar "Entra" en la viñeta y pone el tipo `vuelo` en la página nueva; cualquier otra navegación se
+   cancela allí y, si el script falla, las reglas de abajo la dejan sin animación. */
+@media (prefers-reduced-motion: no-preference) {
+	@view-transition {
+		navigation: auto;
+	}
+}
+
+/* El resto de la página no se anima, salvo la nueva, que aparece con un fundido bajo el vuelo. Sin
+   `mix-blend-mode: normal` el navegador sumaría la página vieja y la nueva (más claro a mitad). */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
+}
+
+:root:active-view-transition-type(vuelo)::view-transition-new(root) {
+	animation: pagina-entra var(--duracion-base) var(--curva-salida);
+}
+
+@keyframes pagina-entra {
+	from {
+		opacity: 0;
+	}
+}
+
+/* Aterrizaje: una marca invisible al principio del título de la página nueva, del tamaño del punto
+   (20 px de relleno y 3 px de anillo a cada lado, como `.punto` de MapaMariola). El punto vuela hasta ella y
+   se funde encima de la primera letra; el título no se mueve (nombrarlo a él lo haría viajar y estirarse).
+   Solo en un vuelo. El tipo lo pone `src/lib/vuelo.ts` en la página nueva (`pagereveal`), no en la que se
+   abandona: si estuviera en las dos, el `h1` de la portada también tendría marca y se llamaría igual. */
+:root:active-view-transition-type(vuelo) #contenido h1 {
+	position: relative;
+}
+
+:root:active-view-transition-type(vuelo) #contenido h1::before {
+	content: '';
+	position: absolute;
+	top: calc(0.5lh - 13px);
+	left: 0;
+	width: 26px;
+	height: 26px;
+	view-transition-name: vuelo;
+}
+
+::view-transition-group(vuelo) {
+	animation-duration: var(--duracion-media);
+	animation-timing-function: var(--curva-salida);
+}
+
+/* El punto no se estira y llega entero: se funde en el último tramo, cuando ya está sobre el título. */
+::view-transition-old(vuelo) {
+	object-fit: none;
+	animation-name: punto-se-funde;
+}
+
+@keyframes punto-se-funde {
+	60% {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
 	}
 }
