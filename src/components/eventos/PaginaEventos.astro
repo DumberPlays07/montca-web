@@ -119,7 +119,9 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		font-weight: 600;
 		text-decoration: none;
 		border-radius: var(--radio-boton);
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	.boton-contacto:hover,
@@ -127,6 +129,10 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		background: var(--color-tinta);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.boton-contacto:active {
+		transform: scale(var(--escala-pulsado));
 	}
 
 	.boton-contacto:focus-visible {

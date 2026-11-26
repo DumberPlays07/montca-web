@@ -69,7 +69,9 @@ const enlaceWhatsapp = urlWhatsapp(lang);
 		color: var(--color-boira);
 		font-weight: 600;
 		text-decoration: none;
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	.boton-whatsapp:hover,
@@ -77,5 +79,9 @@ const enlaceWhatsapp = urlWhatsapp(lang);
 		background: var(--color-tinta);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.boton-whatsapp:active {
+		transform: scale(var(--escala-pulsado));
 	}
 </style>

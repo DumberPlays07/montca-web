@@ -123,7 +123,9 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		font-weight: 600;
 		text-decoration: none;
 		border-radius: var(--radio-boton);
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	/* Botón primario (teja): la única acción principal de la portada. */
@@ -139,6 +141,10 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		text-decoration-thickness: 2px;
 	}
 
+	.boton-eventos:active {
+		transform: scale(var(--escala-pulsado));
+	}
+
 	/* Botón secundario (verde). */
 	.boton-whatsapp {
 		background: var(--color-verd-bosc);
@@ -150,6 +156,10 @@ const enlaceContacto = enlaceWhatsapp ?? `mailto:${CORREO_CONTACTO}`;
 		background: var(--color-tinta);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.boton-whatsapp:active {
+		transform: scale(var(--escala-pulsado));
 	}
 
 	@media (max-width: 47.99rem) {

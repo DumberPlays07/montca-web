@@ -317,13 +317,13 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 | Botón de destino: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
 | Pico: hover | Sí, solo con ratón | Feedback | `scale` a `--escala-pico-activo` (1.33), `--duracion-base`, `--curva-salida`; la zona pulsable no cambia (antes crecía con `width` y `height`) |
 | Pico: foco con teclado | No | Acción de teclado: el anillo aparece al instante | — |
-| Pico: pulsar | Sí | Confirmar que la web te ha oído | `scale` a `--escala-pulsado`, `--duracion-rapida` |
+| Pico: pulsar | Sí | Confirmar que la web te ha oído | `scale` a `--escala-pulsado`, `--duracion-rapida`. Multiplica la escala del estado (hover o seleccionado, 1,33 × 0,97 ≈ 1,29; en reposo, 0,97) en vez de sustituirla. Al soltar vuelve en `--duracion-base`, la del hover y la del seleccionado |
 | Pico: seleccionado | Sí | Hacer legible el cambio de estado | `scale` y color del anillo, `--duracion-base` |
 | Ficha: abrir y cerrar | Sí | Continuidad espacial | Móvil: `translateY` y `opacity` con `--curva-panel`; escritorio: `opacity` y `scale` desde su pico (`transform-origin` en el pico). Abre en `--duracion-media` y cierra en `--duracion-base` |
 | Marco del mapa que se desliza | No | El deslizamiento es el dedo del usuario | Solo el aviso "Llisca…" se desvanece (`opacity`, `--duracion-base`) al primer deslizamiento |
 | Menú móvil | Sí | El panel sale de la cabecera | `translateY` de `--desplazamiento-panel` y `opacity` con `--curva-panel`; abre en `--duracion-media`, cierra en `--duracion-base` |
 | Preguntas frecuentes | Solo el chevron y un fundido | Marcar el estado abierto | `rotate` de 90° en `--duracion-base`; el contenido entra con `opacity`, sin animar la altura |
-| Botones | Color y pulsar | Feedback | Color en `--duracion-base`; los principales, además, `scale` a `--escala-pulsado` en `--duracion-rapida` |
+| Botones | Color y pulsar | Feedback | Color en `--duracion-base`; los principales, además, `scale` a `--escala-pulsado` en `--duracion-rapida` (entrada y salida). **Principal** = botón con fondo sólido (teja o verde) que lleva a apuntarse, a pedir una actividad o a entrar a un apartado: Inscriure's, Reserva (cabecera y menú móvil), el botón de eventos y el de WhatsApp de la portada, Entra de la viñeta, Contacto y WhatsApp flotante. No lo son los botones de icono (Tanca, Menú), los secundarios con borde y los que ya tienen su propia respuesta (botones de destino, franja, cuenta atrás). Solo con `:active`: el teclado (Intro, espacio) no lo activa en enlaces y no encoge nada |
 | Flecha de la franja y de la cuenta atrás | Sí, solo con ratón | Reforzar que la banda lleva a otra página | `translateX` de `--desplazamiento-flecha` (3 px) a la derecha al hover, `--duracion-base`, `--curva-salida`; solo con `@media (hover: hover) and (pointer: fine)`. Sin desplazamiento en movimiento reducido |
 | Cuenta atrás | No | Ya cambia cada segundo; animar cada dígito sería movimiento constante | — |
 | Selector de idioma, enlaces de menú, estado de la franja | Solo el color actual | — | Color en `--duracion-base` |

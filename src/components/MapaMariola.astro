@@ -560,12 +560,16 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		}
 	}
 
+	/* `--escala-actual` es la escala del estado (1 en reposo, `--escala-pico-activo` en hover y seleccionado).
+	   Pulsar la multiplica por `--escala-pulsado` en vez de sustituirla: un pico ya grande no salta a pequeño. */
 	.punto-pico {
+		--escala-actual: 1;
 		width: 14px;
 		height: 14px;
 		background: var(--color-boira);
 		border: 2px solid var(--color-verd-bosc);
 		border-radius: 50%;
+		transform: scale(var(--escala-actual));
 		transition:
 			transform var(--duracion-base) var(--curva-salida),
 			background-color var(--transicion),
@@ -581,14 +585,23 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 	/* Crecen con `scale` y no con `width`: la zona pulsable (`.pico`) no cambia. */
 	@media (hover: hover) and (pointer: fine) {
 		.con-js .pico:hover .punto-pico {
-			transform: scale(var(--escala-pico-activo));
+			--escala-actual: var(--escala-pico-activo);
 		}
 	}
 
 	.pico[aria-expanded='true'] .punto-pico {
-		transform: scale(var(--escala-pico-activo));
+		--escala-actual: var(--escala-pico-activo);
 		background: var(--color-teula-clara);
 		border-color: var(--color-tinta);
+	}
+
+	/* Pulsar: entra en `--duracion-rapida`; al soltar vuelve al hover o al seleccionado en `--duracion-base`. */
+	.con-js .pico:active .punto-pico {
+		transform: scale(calc(var(--escala-actual) * var(--escala-pulsado)));
+		transition:
+			transform var(--duracion-rapida) var(--curva-salida),
+			background-color var(--transicion),
+			border-color var(--transicion);
 	}
 
 	.pico:focus-visible {
@@ -818,7 +831,9 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		font-weight: 600;
 		text-decoration: none;
 		border-radius: var(--radio-boton);
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	.entra:hover,
@@ -826,6 +841,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		background: var(--color-tinta);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.entra:active {
+		transform: scale(var(--escala-pulsado));
 	}
 
 	/* ---- Lista de destinos: la alternativa con enlaces directos de 44 px. ---- */

@@ -98,7 +98,9 @@ const enlaceCorreo = `mailto:${CORREO_CONTACTO}?subject=${encodeURIComponent(asu
 		text-align: center;
 		text-decoration: none;
 		border-radius: var(--radio-boton);
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	.boton-inscripcion:hover,
@@ -106,6 +108,10 @@ const enlaceCorreo = `mailto:${CORREO_CONTACTO}?subject=${encodeURIComponent(asu
 		background: var(--color-teula-fosca);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.boton-inscripcion:active {
+		transform: scale(var(--escala-pulsado));
 	}
 
 	.nota {

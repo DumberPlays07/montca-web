@@ -315,7 +315,9 @@ const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 		font-weight: 600;
 		text-decoration: none;
 		border-radius: var(--radio-boton);
-		transition: background-color var(--transicion);
+		transition:
+			background-color var(--transicion),
+			transform var(--duracion-rapida) var(--curva-salida);
 	}
 
 	.boton-reserva:hover,
@@ -323,6 +325,10 @@ const idiomaDestino: Idioma = lang === 'ca' ? 'es' : 'ca';
 		background: var(--color-teula-fosca);
 		text-decoration: underline;
 		text-decoration-thickness: 2px;
+	}
+
+	.boton-reserva:active {
+		transform: scale(var(--escala-pulsado));
 	}
 
 	.boton-menu {
