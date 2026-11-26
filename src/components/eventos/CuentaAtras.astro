@@ -228,6 +228,14 @@ const Etiqueta = hayEvento ? 'a' : 'div';
 	.cuenta :global(.flecha) {
 		flex-shrink: 0;
 		color: var(--color-verd-bosc);
+		/* Solo se mueve la flecha, no la zona pulsable. */
+		transition: transform var(--transicion);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.cuenta[href]:hover :global(.flecha) {
+			transform: translateX(var(--desplazamiento-flecha));
+		}
 	}
 
 	/* Sin enlace (Properament, también cuando el script quita el `href`) no hay flecha. */

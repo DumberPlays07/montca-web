@@ -114,6 +114,14 @@ const evento = eventoParaFranja(eventos, new Date());
 
 	.franja :global(.flecha) {
 		color: var(--color-teula-clara);
+		/* Solo se mueve la flecha, no la zona pulsable. */
+		transition: transform var(--transicion);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		.franja:hover :global(.flecha) {
+			transform: translateX(var(--desplazamiento-flecha));
+		}
 	}
 
 	.franja:hover {
