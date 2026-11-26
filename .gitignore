@@ -26,3 +26,9 @@ scripts/mapa/salida/
 
 # caché de Python
 __pycache__/
+
+# capturas de movimiento que genera `/impeccable animate` (se regeneran)
+.impeccable/review/
+
+# motor de Impeccable: lo descarga el lanzador en ~/.impeccable, no se sube
+.claude/skills/impeccable/scripts/bin/
