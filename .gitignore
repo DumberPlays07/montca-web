@@ -29,3 +29,6 @@ __pycache__/
 
 # capturas de movimiento que genera `/impeccable animate` (se regeneran)
 .impeccable/review/
+
+# motor de Impeccable: lo descarga el lanzador en ~/.impeccable, no se sube
+.claude/skills/impeccable/scripts/bin/
