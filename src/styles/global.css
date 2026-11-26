@@ -15,6 +15,14 @@
 	/* Amarillo de las marcas PR: solo en los botones del mapa-menú (DESIGN.md, Trail Mark Rule). */
 	--color-groc-sender: #ddb03c;
 	--color-blanco: #ffffff;
+	/* Escena del mapa (B-22): torsos de los excursionistas, lejos del Groc sender y de la teja, y tres
+	   tonos de piel. Solo en `EscenaMapa.astro` (DESIGN.md, Escena del mapa). */
+	--color-roig-motxilla: #c42a3c;
+	--color-blau-cantimplora: #2b66b0;
+	--color-morat-bruc: #7b3fa8;
+	--color-pell-clara: #f1c7a1;
+	--color-pell-bruna: #c08457;
+	--color-pell-fosca: #6e432a;
 	--color-linea: rgb(55 86 57 / 0.18);
 	--color-linea-sobre-verde: rgb(241 246 239 / 0.16);
 	--color-hover-sobre-verde: rgb(241 246 239 / 0.08);
@@ -49,6 +57,8 @@
 	--escalon: 40ms; /* entre picos; el último empieza como mucho a los 400 ms */
 	--curva-salida: cubic-bezier(0.23, 1, 0.32, 1);
 	--curva-panel: cubic-bezier(0.32, 0.72, 0, 1);
+	/* Ease-in-out suave (seno): solo los pájaros de la escena de entrada del mapa, que cruzan el cielo. */
+	--curva-escena: cubic-bezier(0.37, 0, 0.63, 1);
 	--escala-entrada: 0.95;
 	--escala-pulsado: 0.97;
 	--desplazamiento-panel: 0.5rem;

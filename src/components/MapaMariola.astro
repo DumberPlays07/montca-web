@@ -9,7 +9,8 @@
  *   `src/data/destinos-mapa.json`; la lógica, en `src/lib/mapa.ts`. Los picos toman sus coordenadas
  *   de `picos-mapa.json`; los demás picos del dibujo no tienen botón.
  * - **Capas** dentro de `.mapa`, todas en % del recorte: `.lienzo` envuelve `.recorte` (la imagen),
- *   `.escena` (vacía, para B-22) y `.botones`. La viñeta, el aviso y los degradados quedan fuera del lienzo.
+ *   `.escena` (la escena de entrada de B-22, `EscenaMapa.astro`) y `.botones`. La viñeta, el aviso y los
+ *   degradados quedan fuera del lienzo.
  * - **Movimiento (B-19, DESIGN.md → Movimiento):** al cargar, los ocho botones brotan escalonados de abajo
  *   arriba (`--orden`) y los picos pequeños se funden a la vez; al pasar el ratón el botón sube 2 px. Todo
  *   va en el punto y en la placa, nunca en `.boton`: la zona pulsable de 44 px no cambia de tamaño ni se mueve.
@@ -27,6 +28,7 @@
  */
 import Icono from './Icono.astro';
 import Foto from './Foto.astro';
+import EscenaMapa from './EscenaMapa.astro';
 import { type ClaveRuta, type Idioma, ruta, textoEnLosDosIdiomas } from './textos-navegacion';
 import { t } from './textos-portada';
 import mapa from '../assets/mapa/mapa-mariola.webp';
@@ -94,8 +96,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 						</div>
 					</div>
 
-					<!-- Vacía en B-21: B-22 pone aquí la boira, los pájaros y los excursionistas, por debajo de los botones. -->
-					<div class="escena" data-escena aria-hidden="true"></div>
+					<!-- Escena de entrada (B-22): boira, brisa, pájaros y excursionistas, por debajo de los botones. -->
+					<div class="escena" data-escena aria-hidden="true">
+						<EscenaMapa proporcion={proporcion} />
+					</div>
 
 					<div class="botones" style={`--ultimo: ${destinos.length - 1}`}>
 						{
@@ -336,6 +340,16 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
+	}
+
+	/* Los pájaros salen del encuadre: se recortan aquí y no alargan lo que se desliza en el móvil. `hidden`
+	   solo para los navegadores sin `clip` (Safari < 16). Es contenedor de tamaño para que el sendero de los
+	   excursionistas se mida en `cqw` y `cqh` (1 % de su ancho y de su alto); como es absoluta y llena el
+	   lienzo, no cambia el tamaño de nada. */
+	.escena {
+		overflow: hidden;
+		overflow: clip;
+		container-type: size;
 	}
 
 	/* ---- Botones: zona de 44 px con el punto en el centro y la placa pegada a un lado. ---- */

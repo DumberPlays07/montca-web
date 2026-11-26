@@ -1,0 +1,314 @@
+---
+/**
+ * Escena de entrada del mapa de Mariola (B-22): la boira se levanta, pasan dos ráfagas de brisa, una
+ * bandada de pájaros en V cruza el cielo aleteando y tres excursionistas suben en zigzag por un sendero
+ * hasta la ladera del castillo y se quedan quietos. Las reglas están en DESIGN.md (Movimiento → Escena de
+ * entrada de la portada): todo acaba como mucho a los 4,9 s (WCAG 2.2.2), con la boira y la brisa dentro
+ * de los primeros 1,6 s.
+ *
+ * - Va dentro de `.escena` de `MapaMariola.astro`: entre la imagen y los botones, sin recibir clics y con
+ *   las mismas coordenadas (% del recorte). Nada pasa por encima de un botón, una placa o un pico.
+ * - **Solo CSS**: keyframes con un número fijo de repeticiones, `transform` y `opacity`, y sin `forwards`. El
+ *   estado de reposo es el final (sin boira, brisa ni pájaros; los excursionistas en su sitio), así que si
+ *   las animaciones no se ejecutan, o con movimiento reducido, se ve el mapa quieto. Las animaciones solo
+ *   existen dentro de `prefers-reduced-motion: no-preference`.
+ * - **Tiempos y sendero** en `src/lib/escena-mapa.ts` y `src/data/escena-mapa.json`: las pruebas simulan el
+ *   paseo con ellos. Aquí llegan como variables CSS, y el `@keyframes` de cada excursionista se genera allí.
+ * - Se repite en cada carga nueva de la portada; al volver con "Atrás" (bfcache) la página vuelve tal cual.
+ * - Dibujos en SVG en línea y degradados CSS: sin peticiones ni imágenes que compitan con el LCP del mapa.
+ */
+import escenaEnCruda from '../data/escena-mapa.json';
+import {
+	ALETEO,
+	ALTO_EXCURSIONISTA,
+	ANCHO_EXCURSIONISTA,
+	BALANCEO_PASO,
+	type EscenaEnCruda,
+	TIEMPOS,
+	keyframesDe,
+	nombreAnimacion,
+	prepararExcursionistas,
+} from '../lib/escena-mapa';
+
+interface Props {
+	/** Ancho entre alto del mapa recortado: el sendero se mide con él. */
+	proporcion: number;
+}
+
+const { proporcion } = Astro.props;
+const excursionistas = prepararExcursionistas(escenaEnCruda as EscenaEnCruda, proporcion);
+const keyframes = excursionistas.map(keyframesDe).join('');
+const tiempo = ({ empieza, dura }: { empieza: number; dura: number }) => `--empieza: ${empieza}ms; --dura: ${dura}ms`;
+
+/** Los cinco pájaros de la V (centro de cada uno en el SVG de 48×20): el primero va delante, a la derecha. */
+const pajaros = [
+	[40, 10],
+	[30, 5.5],
+	[30, 14.5],
+	[20, 2.5],
+	[20, 17.5],
+];
+---
+
+<!-- El paseo de cada excursionista por su trozo de sendero (src/lib/escena-mapa.ts). -->
+<style is:inline set:html={keyframes} />
+
+<div class="boira boira-baja" style={tiempo(TIEMPOS.boiraBaja)}></div>
+<div class="boira boira-alta" style={tiempo(TIEMPOS.boiraAlta)}></div>
+
+<svg class="rafaga rafaga-1" viewBox="0 0 90 24" width="90" height="24" focusable="false" style={tiempo(TIEMPOS.rafaga1)}>
+	<path d="M2 7c20-4 38 4 60-1" />
+	<path d="M18 14c20-4 38 4 70-2" />
+	<path d="M8 21c16-3 28 2 44-1" />
+</svg>
+<svg class="rafaga rafaga-2" viewBox="0 0 90 24" width="90" height="24" focusable="false" style={tiempo(TIEMPOS.rafaga2)}>
+	<path d="M2 7c20-4 38 4 60-1" />
+	<path d="M18 14c20-4 38 4 70-2" />
+	<path d="M8 21c16-3 28 2 44-1" />
+</svg>
+
+<div class="bandada" style={`${tiempo(TIEMPOS.pajaros)}; --aleteo-dura: ${ALETEO.dura}ms; --aleteos: ${ALETEO.veces}`}>
+	<svg viewBox="0 0 48 20" width="48" height="20" focusable="false">
+		{
+			pajaros.map(([x, y], i) => (
+				<path class="pajaro" d={`M${x - 4} ${y}q2-2.5 4 0q2-2.5 4 0`} style={`--desfase: ${ALETEO.desfases[i]}ms`} />
+			))
+		}
+	</svg>
+</div>
+
+{
+	excursionistas.map((e) => (
+		<svg
+			class="excursionista"
+			viewBox={`0 0 ${ANCHO_EXCURSIONISTA} ${ALTO_EXCURSIONISTA}`}
+			width={ANCHO_EXCURSIONISTA}
+			height={ALTO_EXCURSIONISTA}
+			focusable="false"
+			data-excursionista={e.id}
+			style={`--x: ${e.final.x}%; --y: ${e.final.y}%; --animacion: ${nombreAnimacion(e)}; ${tiempo(e)}; --pasos: ${e.pasos}; --balanceo: ${-BALANCEO_PASO}px; --torso: var(--color-${e.torso}); --pell: var(--color-${e.pell})`}
+		>
+			<!-- Vistos de espaldas (suben alejándose): no miran a ningún lado, así que valen para ir a izquierda y a derecha. -->
+			<g class="cuerpo">
+				<path class="trazo" d="M4 13.2 3.6 19.4M6 13.2l.4 6.2M8.6 9.6l.6 9.8" />
+				<rect class="torso" x="2.4" y="5.6" width="5.2" height="7.8" rx="1.8" />
+				<path class="tirantes" d="M3.7 6v4.6M6.3 6v4.6" />
+				<circle class="cabeza" cx="5" cy="3" r="2.4" />
+			</g>
+		</svg>
+	))
+}
+
+<style>
+	.boira,
+	.rafaga,
+	.bandada,
+	.excursionista {
+		position: absolute;
+	}
+
+	/* ---- Boira: capas de elipses Boira semitransparentes. Sin filter ni blur. En reposo, invisible. ---- */
+	.boira {
+		left: 0;
+		width: 100%;
+		opacity: 0;
+	}
+
+	/* Sobre los valles y los bancales. */
+	.boira-baja {
+		top: 40%;
+		height: 55%;
+		background:
+			radial-gradient(ellipse 28% 55% at 12% 55%, color-mix(in srgb, var(--color-boira) 90%, transparent), transparent),
+			radial-gradient(ellipse 30% 60% at 38% 45%, color-mix(in srgb, var(--color-boira) 85%, transparent), transparent),
+			radial-gradient(ellipse 26% 55% at 62% 55%, color-mix(in srgb, var(--color-boira) 90%, transparent), transparent),
+			radial-gradient(ellipse 24% 60% at 84% 45%, color-mix(in srgb, var(--color-boira) 88%, transparent), transparent);
+	}
+
+	/* Más fina, sobre las crestas. */
+	.boira-alta {
+		top: 18%;
+		height: 40%;
+		background:
+			radial-gradient(ellipse 34% 50% at 25% 60%, color-mix(in srgb, var(--color-boira) 75%, transparent), transparent),
+			radial-gradient(ellipse 30% 55% at 58% 55%, color-mix(in srgb, var(--color-boira) 70%, transparent), transparent),
+			radial-gradient(ellipse 26% 50% at 86% 65%, color-mix(in srgb, var(--color-boira) 75%, transparent), transparent);
+	}
+
+	/* ---- Brisa: tres líneas finas que pasan y se funden. ---- */
+	.rafaga {
+		opacity: 0;
+		fill: none;
+		stroke: var(--color-blanco);
+		stroke-width: 1.5;
+		stroke-linecap: round;
+	}
+
+	/* Sobre la ladera baja, entre Tossal Redó y Cocentaina. */
+	.rafaga-1 {
+		left: 59%;
+		top: 65%;
+	}
+
+	/* Más abajo en el valle, entre Tossal del Mas de Miró y la placa de Cocentaina. Sobre el cielo o la meseta
+	   clara el blanco no se ve: las dos ráfagas van sobre los bancales oscuros. */
+	.rafaga-2 {
+		left: 57%;
+		top: 74.5%;
+	}
+
+	/* ---- Pájaros: la capa mide lo que la escena, así que `translate` en % recorre su ancho. ---- */
+	.bandada {
+		--bandada-desde: 52%;
+		/* Entre el aviso "Llisca…" del móvil (acaba a unos 50 px) y la cresta (desde el 25 %). */
+		top: 18%;
+		left: 0;
+		width: 100%;
+		opacity: 0;
+	}
+
+	.bandada svg {
+		display: block;
+		overflow: visible;
+		fill: none;
+		stroke: var(--color-verd-bosc);
+		stroke-opacity: 0.75;
+		stroke-width: 1.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* Cada pájaro aletea sobre su propio centro. */
+	.pajaro {
+		transform-box: fill-box;
+		transform-origin: center;
+	}
+
+	/* En escritorio el cielo entero se ve: empiezan más a la izquierda. */
+	@media (min-width: 64rem) {
+		.bandada {
+			--bandada-desde: 30%;
+		}
+	}
+
+	/* ---- Excursionistas: en reposo, en su sitio final. ---- */
+	.excursionista {
+		left: var(--x);
+		top: var(--y);
+		overflow: visible;
+		translate: -50% -50%;
+	}
+
+	.trazo,
+	.tirantes {
+		fill: none;
+		stroke: var(--color-tinta);
+		stroke-linecap: round;
+	}
+
+	.trazo {
+		stroke-width: 1.3;
+	}
+
+	.tirantes {
+		stroke-width: 0.7;
+	}
+
+	.torso {
+		fill: var(--torso);
+	}
+
+	.cabeza {
+		fill: var(--pell);
+		stroke: var(--color-tinta);
+		stroke-width: 0.6;
+	}
+
+	/* Solo con movimiento: con movimiento reducido no hay escena y los excursionistas salen quietos. Los
+	   tiempos vienen de src/lib/escena-mapa.ts en el `style` de cada pieza. */
+	@media (prefers-reduced-motion: no-preference) {
+		.boira {
+			animation: boira-se-levanta var(--dura) var(--curva-salida) var(--empieza) backwards;
+		}
+
+		.rafaga {
+			animation: brisa-pasa var(--dura) var(--curva-salida) var(--empieza) backwards;
+		}
+
+		.bandada {
+			animation: bandada-cruza var(--dura) var(--curva-escena) var(--empieza) backwards;
+		}
+
+		/* Un número fijo de aleteos, cada pájaro con su desfase; después planea hasta salir. */
+		.pajaro {
+			animation: aleteo var(--aleteo-dura) var(--curva-escena) calc(var(--empieza) + var(--desfase)) var(--aleteos);
+		}
+
+		/* La curva se aplica a cada tramo del sendero: frenan en cada giro y el último los deja parados. */
+		.excursionista {
+			animation: var(--animacion) var(--dura) var(--curva-escena) var(--empieza) backwards;
+		}
+
+		/* Un paso detrás de otro mientras andan: tantos como `--pasos`, el último acaba al llegar. */
+		.cuerpo {
+			animation: paso calc(var(--dura) / var(--pasos)) var(--curva-escena) var(--empieza) var(--pasos);
+		}
+	}
+
+	/* Sube un poco y se funde; aguanta un momento antes de irse. */
+	@keyframes boira-se-levanta {
+		0% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+		30% {
+			opacity: 0.85;
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-6%);
+		}
+	}
+
+	@keyframes brisa-pasa {
+		0% {
+			opacity: 0;
+			transform: translateX(-28px);
+		}
+		30% {
+			opacity: 0.9;
+		}
+		100% {
+			opacity: 0;
+			transform: translateX(28px);
+		}
+	}
+
+	/* Entra fundiéndose, cruza subiendo 6 px y sale del encuadre por la derecha (la escena recorta). */
+	@keyframes bandada-cruza {
+		0% {
+			opacity: 0;
+			transform: translate(var(--bandada-desde), 0);
+		}
+		6% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 1;
+			transform: translate(100%, -6px);
+		}
+	}
+
+	/* Las alas bajan y vuelven: el arco del pájaro se aplana a la mitad del aleteo. */
+	@keyframes aleteo {
+		50% {
+			transform: scaleY(0.5);
+		}
+	}
+
+	@keyframes paso {
+		50% {
+			transform: translateY(var(--balanceo));
+		}
+	}
+</style>
