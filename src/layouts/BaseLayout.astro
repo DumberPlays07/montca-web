@@ -6,6 +6,8 @@ import BotonWhatsApp from '../components/BotonWhatsApp.astro';
 import Cabecera from '../components/Cabecera.astro';
 import Pie from '../components/Pie.astro';
 import { type TextoAlternativo, exigirTextoAlternativo } from '../components/imagenes';
+import { ruta } from '../components/textos-navegacion';
+import { TIPO_VUELO, activarVuelo, vieneDelMapa } from '../lib/vuelo';
 import '../styles/global.css';
 
 interface Props {
@@ -65,6 +67,10 @@ const imagenCompartir = await getImage({
 // TODO: definir `site` en astro.config.mjs cuando exista el dominio (A-11); hasta
 // entonces la URL sale con el host local y no sirve para compartir de verdad.
 const imageUrl = new URL(imagenCompartir.src, Astro.site ?? Astro.url).href;
+
+// Las dos funciones del vuelo se publican tal cual (`.toString()`): no pueden usar nada de fuera de su cuerpo.
+const configuracionVuelo = { tipo: TIPO_VUELO, inicios: [ruta('ca', 'inicio'), ruta('es', 'inicio')] };
+const scriptVuelo = `(${activarVuelo})(window, ${JSON.stringify(configuracionVuelo)}, ${vieneDelMapa});`;
 ---
 
 <!doctype html>
@@ -74,6 +80,13 @@ const imageUrl = new URL(imagenCompartir.src, Astro.site ?? Astro.url).href;
 		<!-- viewport-fit=cover: la barra inferior respeta la zona segura del móvil con env(). -->
 		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<Font cssVariable="--font-overpass" preload />
+		<!--
+			Vuelo del mapa (B-19): al pulsar "Entra" en la viñeta, el punto del botón viaja hasta el título de la
+			página nueva. La lógica y su explicación están en `src/lib/vuelo.ts` (con sus pruebas); este script solo
+			la publica. Va aquí, en la cabecera y sin ser un módulo, porque `pagereveal` se dispara antes del primer
+			pintado de la página nueva y un módulo (diferido) podría llegar tarde. No guarda nada en el navegador.
+		-->
+		<script is:inline set:html={scriptVuelo}></script>
 		<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
 		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<meta name="description" content={description} />

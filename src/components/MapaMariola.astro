@@ -1,19 +1,22 @@
 ---
 /**
- * Mapa de Mariola como menú de la web (B-21): la ilustración con siete botones, cada uno con su
- * placa siempre visible y una viñeta que lleva al apartado, y debajo la lista de los mismos siete
+ * Mapa de Mariola como menú de la web (B-21): la ilustración con ocho botones, cada uno con su
+ * placa siempre visible y una viñeta que lleva al apartado, y debajo la lista de los mismos ocho
  * destinos como enlaces directos. Cambia el concepto del 14/11 (un punto por actividad):
  * decisión del 25/11 en `docs/decisiones.md`; propuesta en el issue #108.
  *
  * - **Los datos** (posición, lado de la placa, ruta y textos en los dos idiomas) están en
  *   `src/data/destinos-mapa.json`; la lógica, en `src/lib/mapa.ts`. Los picos toman sus coordenadas
  *   de `picos-mapa.json`; los demás picos del dibujo no tienen botón.
- * - **Capas** dentro de `.mapa`, todas en % del recorte: `.lienzo` (lo que B-19 escalará para el zoom)
- *   envuelve `.recorte` (la imagen), `.escena` (vacía en B-21, para B-22) y `.botones`. La viñeta, el
- *   aviso y los degradados quedan fuera del lienzo para que no se escalen.
- * - **Pensado para B-19 y B-22 (sin animar nada aquí):** cada botón se centra con `translate` y no con
- *   `transform`, y lleva `--x`, `--y` y `--orden`; el punto y la placa son elementos separados; el
- *   enlace de la viñeta lleva `data-destino`; los estados van en `aria-expanded` y `hidden` (que pone el script).
+ * - **Capas** dentro de `.mapa`, todas en % del recorte: `.lienzo` envuelve `.recorte` (la imagen),
+ *   `.escena` (vacía, para B-22) y `.botones`. La viñeta, el aviso y los degradados quedan fuera del lienzo.
+ * - **Movimiento (B-19, DESIGN.md → Movimiento):** al cargar, los ocho botones brotan escalonados de abajo
+ *   arriba (`--orden`) y los picos pequeños se funden a la vez; al pasar el ratón el botón sube 2 px. Todo
+ *   va en el punto y en la placa, nunca en `.boton`: la zona pulsable de 44 px no cambia de tamaño ni se mueve.
+ *   El vuelo al apartado está en `src/lib/vuelo.ts` (con sus pruebas) y `global.css`.
+ * - **Estructura:** cada botón se centra con `translate` y no con `transform`, y lleva `--x`, `--y` y
+ *   `--orden`; el punto y la placa son elementos separados; el enlace de la viñeta lleva `data-destino`;
+ *   los estados van en `aria-expanded` y `hidden` (que pone el script).
  * - **En el móvil el mapa mide 56rem y se desliza** dentro de su marco, con degradado en los bordes y
  *   un aviso que desaparece al primer deslizamiento. Empieza centrado en el 76 % del ancho.
  * - **La viñeta** es una sola para todos los botones y la rellena `mapa-mariola-cliente.ts`: panel
@@ -94,7 +97,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 					<!-- Vacía en B-21: B-22 pone aquí la boira, los pájaros y los excursionistas, por debajo de los botones. -->
 					<div class="escena" data-escena aria-hidden="true"></div>
 
-					<div class="botones">
+					<div class="botones" style={`--ultimo: ${destinos.length - 1}`}>
 						{
 							destinos.map((destino) => (
 								<a
@@ -244,8 +247,8 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		width: max(100%, var(--ancho-minimo));
 	}
 
-	/* El lienzo es lo que B-19 escalará para el zoom hacia el botón: lleva la imagen, la escena y los
-	   botones, todos con el mismo sistema de coordenadas (% del recorte). */
+	/* El lienzo lleva la imagen, la escena y los botones, todos con el mismo sistema de coordenadas
+	   (% del recorte). */
 	.lienzo {
 		position: relative;
 	}
@@ -354,8 +357,41 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		pointer-events: auto;
 		/* Por encima de los picos: donde sus zonas se solapan, manda el botón de destino. */
 		z-index: 2;
-		/* `translate` y no `transform`: así B-19 puede escalar y levantar el botón sin descolocarlo. */
+		/* `translate` y no `transform`: el centrado no choca con el movimiento del punto y la placa. */
 		translate: -50% -50%;
+	}
+
+	/* ---- Movimiento (B-19): solo `transform` y `opacity`, en el punto y la placa y no en `.boton`, para
+	   que la zona pulsable no se mueva ni cambie de tamaño ni al brotar ni al pasar el ratón. ---- */
+	.punto,
+	.placa {
+		/* Brotan de abajo arriba, 40 ms entre uno y otro (`--orden` va de 0 a 7: el último a los 280 ms).
+		   `backwards` y no un estado inicial oculto: sin animación todo se ve. Una sola vez. */
+		animation: brota var(--duracion-media) var(--curva-salida) calc(var(--orden) * var(--escalon)) backwards;
+		/* Al soltar el ratón vuelven más rápido de lo que subieron. */
+		transition: transform var(--duracion-rapida) var(--curva-salida);
+	}
+
+	@keyframes brota {
+		from {
+			opacity: 0;
+			transform: scale(var(--escala-entrada));
+		}
+	}
+
+	/* Montcabrer: su punto toca ya el de la Alt de la Reja (a 896 px de mapa, 24 px entre centros), así que
+	   subir lo haría taparla más. No sube; le queda el subrayado de la placa. */
+	.boton[data-id='montcabrer'] {
+		--elevacion-hover: 0px;
+	}
+
+	/* Solo con ratón. Con el teclado no se mueve nada: el anillo de foco aparece al instante. */
+	@media (hover: hover) and (pointer: fine) {
+		.boton:hover .punto,
+		.boton:hover .placa {
+			transform: translateY(var(--elevacion-hover));
+			transition-duration: var(--duracion-base);
+		}
 	}
 
 	/* Punto: 20 px de amarillo, anillo Verd bosc de 3 px y halo Blanco de 2 px; el borde llega a 3:1
@@ -370,7 +406,7 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		box-shadow: 0 0 0 2px var(--color-blanco);
 	}
 
-	/* Seleccionado: solo cambia el color del anillo (sin escala, para que B-19 pueda añadirla). */
+	/* Seleccionado: solo cambia el color del anillo. */
 	.boton[aria-expanded='true'] .punto {
 		border-color: var(--color-tinta);
 	}
@@ -476,6 +512,14 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		pointer-events: auto;
 		z-index: 1;
 		translate: -50% -50%;
+		/* Sin botón no brotan: solo se funden, todos a la vez cuando empieza el último botón. */
+		animation: aparece var(--duracion-media) var(--curva-salida) calc(var(--ultimo) * var(--escalon)) backwards;
+	}
+
+	@keyframes aparece {
+		from {
+			opacity: 0;
+		}
 	}
 
 	.punto-pico {
@@ -484,6 +528,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		background: var(--color-boira);
 		border: 2px solid var(--color-verd-bosc);
 		border-radius: 50%;
+		transition:
+			transform var(--duracion-base) var(--curva-salida),
+			background-color var(--transicion),
+			border-color var(--transicion);
 	}
 
 	/* Los picos solo se comportan como botones cuando el script ha cargado (`.con-js` en la raíz del mapa):
@@ -492,14 +540,15 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		cursor: pointer;
 	}
 
-	.con-js .pico:hover .punto-pico,
-	.pico[aria-expanded='true'] .punto-pico {
-		width: 18px;
-		height: 18px;
-		border-width: 3px;
+	/* Crecen con `scale` y no con `width`: la zona pulsable (`.pico`) no cambia. */
+	@media (hover: hover) and (pointer: fine) {
+		.con-js .pico:hover .punto-pico {
+			transform: scale(var(--escala-pico-activo));
+		}
 	}
 
 	.pico[aria-expanded='true'] .punto-pico {
+		transform: scale(var(--escala-pico-activo));
 		background: var(--color-teula-clara);
 		border-color: var(--color-tinta);
 	}
@@ -752,6 +801,16 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		color: var(--color-tinta);
 		font-size: 1rem;
 		font-weight: 400;
+	}
+
+	/* Movimiento reducido: sin escalas, sin subida y sin escalonado (`--escala-entrada`, `--elevacion-hover`,
+	   `--escala-pico-activo` y `--escalon` ya valen 1, 0 y 0 en global.css); solo queda el fundido. */
+	@media (prefers-reduced-motion: reduce) {
+		.punto,
+		.placa,
+		.pico {
+			animation-duration: var(--duracion-base);
+		}
 	}
 
 	@media (min-width: 48rem) {
