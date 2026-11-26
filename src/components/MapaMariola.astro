@@ -397,7 +397,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		   `backwards` y no un estado inicial oculto: sin animación todo se ve. Una sola vez. */
 		animation: brota var(--duracion-media) var(--curva-salida) calc(var(--orden) * var(--escalon)) backwards;
 		/* Al soltar el ratón vuelven más rápido de lo que subieron. */
-		transition: transform var(--duracion-rapida) var(--curva-salida);
+		transition:
+			transform var(--duracion-rapida) var(--curva-salida),
+			opacity var(--duracion-base) var(--curva-salida),
+			visibility var(--duracion-base) allow-discrete;
 	}
 
 	@keyframes brota {
@@ -503,7 +506,14 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 	/* Con la viñeta abierta, la placa ya está en la viñeta y taparía su borde. El nombre del botón no
 	   cambia porque va en `aria-label`. */
 	.boton[aria-expanded='true'] .placa {
+		opacity: 0;
 		visibility: hidden;
+		/* Se funde a la vez que entra la viñeta, sin dejar un hueco vacío; `visibility` con `allow-discrete`
+		   la mantiene visible mientras dura el fundido. */
+		transition:
+			transform var(--duracion-rapida) var(--curva-salida),
+			opacity var(--duracion-media) var(--curva-salida),
+			visibility var(--duracion-media) allow-discrete;
 	}
 
 	@media (hover: hover) and (pointer: fine) {
@@ -691,8 +701,40 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		box-shadow: var(--sombra-panel);
 	}
 
+	/* Abrir y cerrar (DESIGN.md → Movimiento, «Ficha: abrir y cerrar»). Móvil: sube desde
+	   `--desplazamiento-panel` con `--curva-panel`. Transiciones y no keyframes: se abren y cierran rápido
+	   y tienen que poder interrumpirse. `display` con `allow-discrete` deja ver el cierre antes de ocultarse
+	   y `@starting-style` da el punto de partida de la entrada; sin soporte, aparece y desaparece sin más.
+	   `visibility` no entra en la transición a propósito: en una transición discreta se queda visible
+	   mientras dura, así que el script pone `inert` al cerrar para que ni el tabulador ni el lector lo lean. */
+	.vineta {
+		--curva-vineta: var(--curva-panel);
+		opacity: 1;
+		transition:
+			opacity var(--duracion-media) var(--curva-vineta),
+			transform var(--duracion-media) var(--curva-vineta),
+			display var(--duracion-media) allow-discrete;
+	}
+
 	.vineta[hidden] {
 		display: none;
+		opacity: 0;
+		transform: translateY(var(--desplazamiento-panel));
+		pointer-events: none;
+		transition-duration: var(--duracion-base);
+	}
+
+	@starting-style {
+		.vineta {
+			opacity: 0;
+			transform: translateY(var(--desplazamiento-panel));
+		}
+	}
+
+	/* Al pasar de un punto a otro el panel que se va desaparece al instante (lo pone el script): así nunca
+	   se ven dos a la vez. */
+	.vineta[data-cambio] {
+		transition: none;
 	}
 
 	.vineta:focus {
@@ -879,6 +921,28 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 			border: 1px solid var(--color-linea);
 			border-radius: var(--radio-boton);
 			box-shadow: none;
+		}
+
+		/* Escritorio: crece desde su pico, con la curva de salida (la del panel es solo del móvil). El piquito
+		   está a la altura `--cola-y` del borde que mira al punto. */
+		.vineta {
+			--curva-vineta: var(--curva-salida);
+			transform-origin: 0 var(--cola-y, 50%);
+		}
+
+		.vineta[data-lado='izquierda'] {
+			transform-origin: 100% var(--cola-y, 50%);
+		}
+
+		.vineta[hidden] {
+			transform: scale(var(--escala-entrada));
+		}
+
+		@starting-style {
+			.vineta {
+				opacity: 0;
+				transform: scale(var(--escala-entrada));
+			}
 		}
 
 		.vineta::before {
