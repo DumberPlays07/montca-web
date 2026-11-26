@@ -1,0 +1,42 @@
+{
+  "sendero": [
+    { "x": 70, "y": 80.05 },
+    { "x": 60, "y": 74.85 },
+    { "x": 77, "y": 72.25 },
+    { "x": 71, "y": 67.375 },
+    { "x": 89, "y": 66.725 },
+    { "x": 86, "y": 64.775 }
+  ],
+  "excursionistas": [
+    {
+      "id": "a",
+      "torso": "roig-motxilla",
+      "pell": "pell-fosca",
+      "desde": 0.43,
+      "hasta": 1,
+      "empieza": 400,
+      "dura": 3800,
+      "pasos": 13
+    },
+    {
+      "id": "b",
+      "torso": "blau-cantimplora",
+      "pell": "pell-clara",
+      "desde": 0.21,
+      "hasta": 0.81,
+      "empieza": 650,
+      "dura": 3900,
+      "pasos": 14
+    },
+    {
+      "id": "c",
+      "torso": "morat-bruc",
+      "pell": "pell-bruna",
+      "desde": 0.005,
+      "hasta": 0.58,
+      "empieza": 1250,
+      "dura": 3250,
+      "pasos": 11
+    }
+  ]
+}

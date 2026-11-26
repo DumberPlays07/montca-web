@@ -14,6 +14,12 @@ colors:
   teula-clara: "#f0b890"
   groc-sender: "#ddb03c"
   blanco: "#ffffff"
+  roig-motxilla: "#c42a3c"
+  blau-cantimplora: "#2b66b0"
+  morat-bruc: "#7b3fa8"
+  pell-clara: "#f1c7a1"
+  pell-bruna: "#c08457"
+  pell-fosca: "#6e432a"
   linea: "rgb(55 86 57 / 0.18)"
   linea-sobre-verde: "rgb(241 246 239 / 0.16)"
   hover-sobre-verde: "rgb(241 246 239 / 0.08)"
@@ -154,7 +160,7 @@ components:
 
 # Design System: Montca Actiu
 
-> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos; y el mismo día, con el Groc sender de los botones del mapa-menú (B-21). Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
+> Acordado con Pablo en la B-09 (2026-11-22) y recogido de lo construido con `/impeccable document`. Actualizado el 2026-11-25 con lo construido en C-04 (T047): el tamaño Display y los componentes de eventos; y el mismo día, con el Groc sender de los botones del mapa-menú (B-21). El 2026-11-26, con la escena de entrada del mapa (B-22). Los colores salen medidos de la ilustración `src/assets/mapa/mapa-mariola.webp`. Los tokens del frontmatter son las variables CSS de `src/styles/global.css` (`--color-*`, `--espacio-*`, `--radio-*`): si cambia uno, se cambian los dos. Los detalles que el formato no admite (foco, movimiento, puntos de corte) están en `.impeccable/design.json`.
 
 ## Overview
 
@@ -195,7 +201,15 @@ Paleta medida sobre la ilustración del mapa. Verdes de bancal en una base de ne
 
 ### Mapa-menú
 
-- **Groc sender** (#ddb03c): los botones del mapa-menú (B-21). Es el amarillo de las marcas de los senderos PR, que se pintan en blanco y amarillo; no sale del mapa, pero está medido sobre él. Es el relleno del punto de cada botón, con anillo Verd bosc (4.05:1 junto al amarillo) y un halo Blanco de 2 px por fuera: sobre las zonas del mapa donde caen los botones el amarillo solo mide 1.1–4.6:1, así que el contraste del borde lo dan el anillo o el halo (3.2:1 como mínimo). También es la marca de sendero (un punto de 10 px con anillo Verd bosc de 2 px) delante del destino en las placas del mapa y del lugar en su viñeta; sobre Boira mide 1.8:1, por eso lleva siempre anillo. Se distingue de la Teula (ΔE00 34.1), de la Teula clara (16.7) y de los torsos de los excursionistas del mapa (rojo #c42a3c, azul #2b66b0 y naranja #e0621c: ΔE00 28.4 o más). Nunca lleva texto.
+- **Groc sender** (#ddb03c): los botones del mapa-menú (B-21). Es el amarillo de las marcas de los senderos PR, que se pintan en blanco y amarillo; no sale del mapa, pero está medido sobre él. Es el relleno del punto de cada botón, con anillo Verd bosc (4.05:1 junto al amarillo) y un halo Blanco de 2 px por fuera: sobre las zonas del mapa donde caen los botones el amarillo solo mide 1.1–4.6:1, así que el contraste del borde lo dan el anillo o el halo (3.2:1 como mínimo). También es la marca de sendero (un punto de 10 px con anillo Verd bosc de 2 px) delante del destino en las placas del mapa y del lugar en su viñeta; sobre Boira mide 1.8:1, por eso lleva siempre anillo. Se distingue de la Teula (ΔE00 34.1), de la Teula clara (16.7) y de los torsos de los excursionistas del mapa (Roig motxilla, Blau cantimplora y Morat bruc: ΔE00 48.3 o más). Nunca lleva texto.
+
+### Escena del mapa
+
+Los colores de la escena de entrada (B-22, ver Movimiento → Escena de entrada de la portada). Son la excepción a sacar los colores del mapa: los excursionistas tienen que destacar sobre los verdes, así que llevan colores vivos que no se confunden con las señales de la web. Solo van en `EscenaMapa.astro`; nunca en texto, fondos ni controles.
+
+- **Roig motxilla** (#c42a3c), **Blau cantimplora** (#2b66b0) y **Morat bruc** (#7b3fa8, el morado del bruc de Mariola): los torsos de los tres excursionistas. Distintos del Groc sender (ΔE00 48.3, 59.2 y 68.8) y de la Teula (17.0, 41.4 y 40.2). El morado sustituye al naranja (#e0621c) que se había pensado en B-21, porque era el más parecido a la teja (15.5) y al amarillo (28.4).
+- **Pell clara** (#f1c7a1), **Pell bruna** (#c08457) y **Pell fosca** (#6e432a): las cabezas, una de cada tono, para que se vea a todo el mundo. Llevan un contorno Tinta de 0,6 px para recortarse sobre la ladera.
+- Las piernas, el bastón y los tirantes de la mochila van en Tinta; los pájaros, en Verd bosc al 75 %; la brisa, en Blanco, y la boira, en Boira semitransparente.
 
 ### Neutral
 
@@ -274,15 +288,16 @@ Formas de señal de sendero: rectángulos con esquinas ligeramente suavizadas (4
 
 La web se mueve poco y con motivo: cada animación confirma una acción, explica de dónde viene algo o hace legible un cambio de estado. Lo que no tiene un porqué claro se queda quieto. Esta sección sustituye a la antigua regla de "solo 160 ms de color u opacidad" (B-18, 2026-11-25).
 
-**Duraciones** (tres, con nombre; nada pasa de 240 ms). Salir siempre es más rápido que entrar.
+**Duraciones** (tres, con nombre; nada pasa de 240 ms, salvo la escena de entrada (ver su apartado)). Salir siempre es más rápido que entrar.
 - `--duracion-rapida` · 100 ms: pulsar.
 - `--duracion-base` · 160 ms: hover, color, cerrar y el giro del chevron.
 - `--duracion-media` · 240 ms: abrir la ficha y el menú, aparición de los picos.
 - `--escalon` · 40 ms entre botones del mapa: el último empieza como mucho a los 400 ms (con 8 botones, a los 280 ms).
 
-**Curvas** (dos):
+**Curvas** (dos, y una tercera solo para la escena):
 - `--curva-salida`: `cubic-bezier(0.23, 1, 0.32, 1)`, ease-out fuerte. Vale para todo: entrar, salir, hover y pulsar.
 - `--curva-panel`: `cubic-bezier(0.32, 0.72, 0, 1)`. Solo para los paneles que se deslizan: la ficha en el móvil y el menú móvil.
+- `--curva-escena`: `cubic-bezier(0.37, 0, 0.63, 1)`, ease-in-out suave (seno). Solo para la escena de entrada: los pájaros, que cruzan el cielo, y los excursionistas, que frenan en cada giro del sendero. Arrancan y frenan sin tirón.
 - Nunca `ease-in`, nunca `linear` y nunca los `ease` de CSS por defecto en un movimiento.
 
 **Qué se anima.** Todo lo que se mueve usa solo `transform` y `opacity`. **Excepción explícita:** `color` y `background-color` en hover y pulsado, a `--duracion-base`, porque no mueven nada. Prohibido: `transition: all`, `width`, `height`, `margin`, `top`, `left`, `clip-path`, `filter` y sombras. Nada empieza desde `scale(0)`: las entradas parten de `scale(0.95)` y `opacity: 0`.
@@ -312,10 +327,39 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 | Flecha de la franja y de la cuenta atrás | Sí, solo con ratón | Reforzar que la banda lleva a otra página | `translateX` de `--desplazamiento-flecha` (3 px) a la derecha al hover, `--duracion-base`, `--curva-salida`; solo con `@media (hover: hover) and (pointer: fine)`. Sin desplazamiento en movimiento reducido |
 | Cuenta atrás | No | Ya cambia cada segundo; animar cada dígito sería movimiento constante | — |
 | Selector de idioma, enlaces de menú, estado de la franja | Solo el color actual | — | Color en `--duracion-base` |
-| Entradas de sección al hacer scroll, carga de página | No | No tienen porqué | — |
+| Entradas de sección al hacer scroll | No | No tienen porqué | — |
+| Carga de página | No, salvo la escena de entrada de la portada | No tiene porqué; la escena da vida al mapa una vez | Ver "Escena de entrada de la portada" |
 | Vuelo del mapa a su apartado | Sí, solo al pulsar «Entra» en la viñeta | Continuidad espacial: de dónde viene la página | View Transition nativa entre páginas (sin `<ClientRouter />` ni librerías). El punto del botón seleccionado vuela hasta una marca invisible al principio del `<h1>` de la página nueva y se funde encima (`--duracion-media`, `--curva-salida`; se funde en el último tramo) mientras la página nueva aparece con un fundido de `--duracion-base`. Cualquier otra navegación, con el mapa o sin él, no se anima. Con movimiento reducido no hay transición; en navegadores sin soporte, navegación normal. Reglas en `global.css`; la lógica que decide si es un vuelo (con la Navigation API, sin guardar nada en el navegador), en `src/lib/vuelo.ts` |
 
 **Cómo se trabaja el movimiento.** Se instalan dos skills de Emil Kowalski en `.claude/skills/`: `animate` y `review-animations`. `/impeccable animate` sirve para **decidir qué se mueve** y `/animate` (Emil) para **construirlo**; `/review-animations` lo revisa, y solo se lanza escribiéndolo. Las recetas de Emil que usan Motion o Base UI no aplican (la web es Astro sin React y sin librerías): se traducen a CSS, `@starting-style` o la API de animaciones del navegador (WAAPI).
+
+### Escena de entrada de la portada
+
+Acordada por Pablo el 26/11 (B-22, `docs/decisiones.md`). Reglas:
+
+- Es la única excepción a "nada pasa de 240 ms" y a "la carga de página no se anima". Duración total máxima: 4,9 s desde que carga el mapa, con la boira y la brisa dentro de los primeros 1,6 s; después, todo quieto. El límite viene de WCAG 2.2.2: más de 5 s de movimiento automático obligaría a poner un botón de pausa.
+- Orden: boira de 0 a 900 ms (sube un poco y se funde). Botones de la B-19 sin cambios (0 a 520 ms). Brisa: dos ráfagas que empiezan a los 300 y a los 700 ms y duran 600 ms (líneas finas que pasan y se funden). Pájaros en V de 200 a 4.200 ms como mucho (cruzan el cielo despacio, unos 4 s de vuelo, y salen del encuadre). Tres excursionistas que empiezan a los 400 ms y acaban como mucho a los 4,9 s (hasta 4,5 s andando): suben en zigzag por un sendero, cada uno con su desfase y sin cruzarse entre ellos, y se quedan quietos.
+- Recorrido de los excursionistas: por la parte del mapa que se ve sin deslizar a 375 px. Pueden pasar entre los botones, pero nunca por encima de un botón, una placa ni un pico, en ningún momento del recorrido; las pruebas lo comprueban tramo a tramo de 320 a 1920 px de pantalla.
+- Solo transform y opacity. Nada de filter ni blur: la niebla son capas semitransparentes que se desplazan y se funden.
+- Curvas: --curva-salida para la boira y la brisa; --curva-escena (ease-in-out suave, `cubic-bezier(0.37, 0, 0.63, 1)`) para los pájaros y los excursionistas, solo en la escena.
+- Capas: toda la escena va entre la imagen del mapa y los botones, con pointer-events: none. Nunca tapa un botón ni una placa; los botones se pueden pulsar desde el primer momento.
+- Solo CSS, sin JavaScript: keyframes de una iteración, salvo los pasos de los excursionistas y el aleteo de los pájaros, que se repiten un número fijo de veces y acaban dentro de la escena. Nada en bucle. Si las animaciones no se ejecutan, no hay niebla y los excursionistas están en su posición final.
+- Movimiento reducido: sin niebla, brisa ni pájaros; los excursionistas, quietos en su sitio final.
+- Se repite en cada carga nueva de la portada (no se guarda nada en el navegador); con "Atrás" (bfcache) no se repite.
+- Móvil a 375 px: todo pasa en la parte del mapa que se ve sin deslizar.
+- Excursionistas: torso de colores vivos distintos del amarillo (Groc sender) y del teja (Roig motxilla #c42a3c, Blau cantimplora #2b66b0 y Morat bruc #7b3fa8); cabeza en tres tonos de piel (Pell clara #f1c7a1, Pell bruna #c08457 y Pell fosca #6e432a). Detalle en Colors → Escena del mapa.
+- Dibujos en SVG hechos aquí, nada de imágenes de terceros, poco peso y sin afectar al LCP del mapa.
+
+**Cómo está hecha** (`src/components/EscenaMapa.astro`, dentro de la capa `.escena` de `MapaMariola.astro`). Las posiciones van en % del recorte del mapa; a 375 px se ve del 55 % al 97 % del ancho.
+
+| Pieza | Dónde | Cuándo y cómo |
+| --- | --- | --- |
+| Boira | Dos capas a todo el ancho: del 40 % al 95 % del alto (valles) y del 18 % al 58 % (crestas). Elipses `radial-gradient` en Boira, del 70 al 90 % de opacidad | 0–900 ms la baja y 0–750 ms la alta: suben un 6 % de su alto y se funden, con `--curva-salida` |
+| Brisa | Tres líneas Blanco de 1,5 px sobre los bancales oscuros del valle: en el 59 %·65 % y en el 57 %·74,5 % (sobre el cielo y la meseta clara no se ven) | 300 y 700 ms, 600 ms cada una: pasan 56 px de izquierda a derecha y se funden, con `--curva-salida` |
+| Pájaros | V de cinco en Verd bosc al 75 %, al 18 % del alto: entre el aviso "Llisca…" del móvil y la cresta | 200–4.200 ms con `--curva-escena`: entran fundiéndose y cruzan hasta salir por la derecha, desde el 52 % del ancho (el 30 % desde 64rem); suben 6 px. Cada pájaro aletea 8 veces (`scaleY`, 450 ms cada aleteo, con un desfase de 0 a 200 ms entre pájaros) y después planea; el último aleteo acaba a los 4.000 ms. La capa `.escena` recorta con `overflow: clip` |
+| Excursionistas | Un sendero invisible en zigzag (en la imagen no hay sendero dibujado) que sube del valle a la ladera clara del castillo: (70, 77) → (60, 69) → (77, 65) → (71, 57,5) → (89, 56,5) → (86, 53,5). Cada uno recorre su trozo, unos 285–300 px a 896 px de mapa, y se queda en (86, 53,5), (81,7, 56,9) y (72,9, 59,8). Van vistos de espaldas, así que valen para ir a los dos lados | Salen a 400, 650 y 1.250 ms y acaban a los 4.200, 4.550 y 4.500 ms. `--curva-escena` en cada tramo del sendero: frenan en cada giro y el último los deja parados. Un paso de 1,5 px arriba y abajo, 13, 14 y 11 veces, que acaba al llegar. Sendero y tiempos en `src/data/escena-mapa.json` (en % de la imagen, como los picos); el `@keyframes` de cada uno lo genera `src/lib/escena-mapa.ts` en unidades `cqw` y `cqh` de la escena (contenedor de tamaño, que no cambia ninguna medida del mapa). Las pruebas (`destinos-mapa.test.ts`) simulan el paseo cada 20 ms, con el balanceo, con el mapa de 896 a 1088 px (de 320 a 1920 px de pantalla): no pisan botones, placas ni picos, no se solapan entre ellos (queda 3,5 px de hueco como mínimo), se ven sin deslizar a 375 y 320 px y todo acaba antes de los 4,9 s, con el último paso y el último aleteo |
+
+El estado de reposo es el final (boira, brisa y pájaros con `opacity: 0`; excursionistas en su sitio) y las animaciones solo existen dentro de `prefers-reduced-motion: no-preference`, sin `forwards`. Así, la regla de movimiento reducido y la de "si no se ejecutan" se cumplen sin una segunda regla. Las animaciones CSS empiezan cuando se pinta la página: con una conexión muy lenta la escena puede pasar antes de que llegue la imagen del mapa, igual que los botones de la B-19.
 
 ## Components
 
@@ -415,12 +459,12 @@ import foto from '../assets/fotos/actividades/nom-de-la-foto.jpg';
 ### Do:
 
 - **Do** poner toda imagen con `Foto.astro`, con su texto alternativo en VAL y CAST, y guardarla en `src/assets/`.
-- **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo.
+- **Do** sacar todo color nuevo del mapa (`src/assets/mapa/mapa-mariola.webp`) y comprobar su contraste antes de usarlo. Las excepciones tienen su motivo escrito en Colors: el Groc sender y los colores de la escena del mapa.
 - **Do** reservar la teja (#9c5530) para la acción principal y la marca de "estás aquí"; lo que solo informa (el estado de un evento) va en Verd bosc.
 - **Do** poner en Verd bosc el texto pequeño sobre Pedra y Herba clara.
 - **Do** mantener cada zona táctil en al menos 44 × 44 px y el foco visible: anillo teja sobre fondos claros y teja clara (#f0b890) sobre verde bosque.
 - **Do** diseñar cada pieza primero a 375 px y comprobarla después en escritorio.
-- **Do** seguir la sección Movimiento: tres duraciones, dos curvas, solo `transform` y `opacity` (más el color de hover y pulsado), nada en bucle y una alternativa con `prefers-reduced-motion`.
+- **Do** seguir la sección Movimiento: tres duraciones, dos curvas (más la de la escena), solo `transform` y `opacity` (más el color de hover y pulsado), nada en bucle y una alternativa con `prefers-reduced-motion`.
 
 ### Don't:
 

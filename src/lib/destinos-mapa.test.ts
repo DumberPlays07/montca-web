@@ -1,9 +1,23 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { describe, it } from 'node:test';
 import { ruta, t as tNavegacion } from '../components/textos-navegacion.ts';
 import destinosEnCrudo from '../data/destinos-mapa.json' with { type: 'json' };
+import escenaEnCruda from '../data/escena-mapa.json' with { type: 'json' };
 import picosEnCrudo from '../data/picos-mapa.json' with { type: 'json' };
 import {
+	CURVA_ESCENA,
+	FIN_MAXIMO_BOIRA_Y_BRISA,
+	FIN_MAXIMO_ESCENA,
+	type EscenaEnCruda,
+	finales,
+	posicionEn,
+	prepararExcursionistas,
+	rectanguloExcursionista,
+} from './escena-mapa.ts';
+import {
+	CENTRO_INICIAL_MARCO,
+	ESQUINAS_ANCHO,
 	ESQUINAS_DESDE,
 	ESQUINAS_HASTA,
 	FUNDIDO_INFERIOR_DESDE,
@@ -347,4 +361,125 @@ describe('zonas y placas con el mapa a todos sus anchos (896 a 1088 px)', () => 
 			}
 		});
 	}
+});
+
+describe('escena de entrada (B-22)', () => {
+	const escena = escenaEnCruda as EscenaEnCruda;
+	const excursionistas = prepararExcursionistas(escena, PROPORCION);
+	/** Cada 20 ms, de 0 a 5 s: antes de echar a andar, andando y ya quietos. */
+	const instantes = Array.from({ length: 251 }, (_, i) => i * 20);
+	/**
+	 * Ancho del mapa para cada ancho de pantalla de 320 a 1920 px: en el móvil el marco ocupa la pantalla y el
+	 * mapa no baja de 896 px (se desliza); desde 48rem el marco tiene 32 px de margen a cada lado y el mapa
+	 * llega como mucho a 1088 px.
+	 */
+	const anchoMapaPara = (pantalla: number) => Math.min(1088, Math.max(896, pantalla < 768 ? pantalla : pantalla - 64));
+	const anchos = [...new Set(Array.from({ length: 101 }, (_, i) => anchoMapaPara(320 + i * 16)))];
+
+	/** Zonas de botón, placas (en los dos idiomas) y zonas de pico a un ancho de mapa, con su nombre. */
+	const obstaculos = (ancho: number) => [
+		...destinos.flatMap((d) => [
+			{ nombre: `zona de ${d.id}`, rect: zonaDeBoton(centroEnPx(d.id, ancho)) },
+			{ nombre: `placa de ${d.id} (ca)`, rect: placaDe(d.id, 0, ancho) },
+			{ nombre: `placa de ${d.id} (es)`, rect: placaDe(d.id, 1, ancho) },
+		]),
+		...picos.map((p) => {
+			const lado = zonaPulsable(p.vecino, p.vecinoBoton, ancho);
+			const c = centroPicoEnPx(p, ancho);
+			return { nombre: p.nombre, rect: { izquierda: c.x - lado / 2, arriba: c.y - lado / 2, ancho: lado, alto: lado } };
+		}),
+	];
+
+	it('son tres, cada uno con un torso y una piel distintos', () => {
+		assert.equal(excursionistas.length, 3);
+		assert.equal(new Set(excursionistas.map((e) => e.torso)).size, 3);
+		assert.equal(new Set(excursionistas.map((e) => e.pell)).size, 3);
+	});
+
+	it('los anchos de mapa van de 896 a 1088 px', () => {
+		assert.equal(Math.min(...anchos), 896);
+		assert.equal(Math.max(...anchos), 1088);
+	});
+
+	it('en ningún momento del paseo pisan un botón, una placa ni un pico, de 320 a 1920 px de pantalla', () => {
+		for (const ancho of anchos) {
+			const alto = ancho / PROPORCION;
+			const lista = obstaculos(ancho);
+			for (const e of excursionistas) {
+				for (const ms of instantes) {
+					const rect = rectanguloExcursionista(posicionEn(e, ms), ancho, alto);
+					for (const o of lista) {
+						assert.equal(sePisan(rect, o.rect), false, `${e.id} a los ${ms} ms y ${o.nombre}, con el mapa a ${ancho} px`);
+					}
+				}
+			}
+		}
+	});
+
+	it('no se solapan entre ellos en ningún momento', () => {
+		for (const ancho of anchos) {
+			const alto = ancho / PROPORCION;
+			for (const ms of instantes) {
+				const rects = excursionistas.map((e) => rectanguloExcursionista(posicionEn(e, ms), ancho, alto));
+				for (let i = 0; i < rects.length; i++) {
+					for (let j = i + 1; j < rects.length; j++) {
+						assert.equal(sePisan(rects[i], rects[j]), false, `${excursionistas[i].id} y ${excursionistas[j].id} a los ${ms} ms, con el mapa a ${ancho} px`);
+					}
+				}
+			}
+		}
+	});
+
+	it('todo el paseo se ve sin deslizar en el móvil (375 y 320 px, mapa de 896 px centrado en el 76 %)', () => {
+		const ancho = 896;
+		for (const pantalla of [375, 320]) {
+			const desde = CENTRO_INICIAL_MARCO * ancho - pantalla / 2;
+			const hasta = desde + pantalla;
+			for (const e of excursionistas) {
+				for (const ms of instantes) {
+					const rect = rectanguloExcursionista(posicionEn(e, ms), ancho, ancho / PROPORCION);
+					assert.ok(rect.izquierda >= desde && rect.izquierda + rect.ancho <= hasta, `${e.id} a los ${ms} ms a ${pantalla} px`);
+				}
+			}
+		}
+	});
+
+	it('el paseo no entra en lo que difumina la máscara: ni en el fundido de abajo ni en los laterales de las esquinas', () => {
+		for (const e of excursionistas) {
+			for (const f of e.fotogramas) {
+				assert.ok(f.y / 100 < 1 - FUNDIDO_INFERIOR_DESDE, `${e.id} en ${f.x}, ${f.y}: fundido de abajo`);
+				const enLaFranjaCentral = f.x / 100 > ESQUINAS_ANCHO && f.x / 100 < 1 - ESQUINAS_ANCHO;
+				assert.ok(f.y / 100 < ESQUINAS_DESDE || enLaFranjaCentral, `${e.id} en ${f.x}, ${f.y}: esquinas`);
+			}
+		}
+	});
+
+	it('cada uno anda más que antes (al menos 250 px con el mapa a 896 px)', () => {
+		for (const e of excursionistas) {
+			let andado = 0;
+			for (let i = 1; i < e.fotogramas.length; i++) {
+				const [a, b] = [e.fotogramas[i - 1], e.fotogramas[i]];
+				andado += Math.hypot(((b.x - a.x) / 100) * 896, ((b.y - a.y) / 100) * (896 / PROPORCION));
+			}
+			assert.ok(andado >= 250, `${e.id}: ${Math.round(andado)} px`);
+		}
+	});
+
+	it('todo acaba como mucho a los 4,9 s, con el último paso y el último aleteo (WCAG 2.2.2)', () => {
+		for (const [pieza, fin] of Object.entries(finales(escena.excursionistas))) {
+			assert.ok(fin <= FIN_MAXIMO_ESCENA, `${pieza} acaba a los ${fin} ms`);
+		}
+	});
+
+	it('la boira y la brisa acaban dentro de los primeros 1,6 s', () => {
+		const fin = finales(escena.excursionistas);
+		for (const pieza of ['boiraBaja', 'boiraAlta', 'rafaga1', 'rafaga2']) {
+			assert.ok(fin[pieza] <= FIN_MAXIMO_BOIRA_Y_BRISA, `${pieza} acaba a los ${fin[pieza]} ms`);
+		}
+	});
+
+	it('la curva de la simulación es la misma que --curva-escena de global.css', () => {
+		const css = readFileSync(new URL('../styles/global.css', import.meta.url), 'utf8');
+		assert.ok(css.includes(`--curva-escena: cubic-bezier(${CURVA_ESCENA.join(', ')});`));
+	});
 });

@@ -257,7 +257,7 @@
       {
         "name": "duracion-media",
         "value": "240ms",
-        "purpose": "Abrir la ficha y el menú, aparición de los picos. Nada pasa de 240 ms."
+        "purpose": "Abrir la ficha y el menú, aparición de los picos. Nada pasa de 240 ms, salvo la escena de entrada de la portada (DESIGN.md): 4,9 s como máximo por WCAG 2.2.2 (más de 5 s de movimiento automático pediría un botón de pausa); la boira y la brisa, dentro de los primeros 1,6 s; los pájaros, hasta los 4,2 s, y los excursionistas, hasta los 4,9 s."
       },
       {
         "name": "escalon",
@@ -273,6 +273,11 @@
         "name": "curva-panel",
         "value": "cubic-bezier(0.32, 0.72, 0, 1)",
         "purpose": "Solo paneles que se deslizan: ficha en el móvil y menú móvil."
+      },
+      {
+        "name": "curva-escena",
+        "value": "cubic-bezier(0.37, 0, 0.63, 1)",
+        "purpose": "Ease-in-out suave (seno). Solo la escena de entrada del mapa: los pájaros y cada tramo y paso de los excursionistas."
       },
       {
         "name": "escala-entrada",
