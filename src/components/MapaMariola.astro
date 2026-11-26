@@ -51,12 +51,16 @@ import {
 	prepararPicos,
 	proporcionRecortada,
 } from '../lib/mapa';
+import { LIMITE_ESPERA_MAPA_MS, esperarMapa } from '../lib/escena-espera';
 
 interface Props {
 	lang: Idioma;
 }
 
 const { lang } = Astro.props;
+
+// `esperarMapa` se publica tal cual (`.toString()`): no puede usar nada de fuera de su cuerpo.
+const scriptEspera = `(${esperarMapa})(document.currentScript.previousElementSibling, document.currentScript.parentElement.querySelector('.recorte img'), window, ${LIMITE_ESPERA_MAPA_MS});`;
 
 const destinosPreparados = prepararDestinos(destinosEnCrudo as DestinoEnCrudo[], picosEnCrudo);
 const destinos = destinosPreparados.map((destino) => ({
@@ -100,6 +104,12 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 					<div class="escena" data-escena aria-hidden="true">
 						<EscenaMapa proporcion={proporcion} />
 					</div>
+					<!--
+						La escena espera a que el mapa esté pintado (src/lib/escena-espera.ts): pone `data-estado` en `.escena`.
+						Va aquí, justo después y sin ser un módulo, para cambiarlo antes del primer pintado. Sin JavaScript no
+						hay estado y la escena corre como siempre.
+					-->
+					<script is:inline set:html={scriptEspera}></script>
 
 					<div class="botones" style={`--ultimo: ${destinos.length - 1}`}>
 						{
@@ -266,6 +276,10 @@ const visible = 1 - RECORTE_SUPERIOR - RECORTE_INFERIOR;
 		position: relative;
 		overflow: hidden;
 		aspect-ratio: var(--proporcion);
+		/* Mientras llega la imagen: Verd prat, lo más cercano a la media de lo que se ve del mapa (#8ba477).
+		   Lleva la misma máscara, así que se funde con la página igual que el mapa, y las placas nunca
+		   flotan sobre blanco con la red lenta. La imagen es opaca y lo tapa del todo al llegar. */
+		background: var(--color-verd-prat);
 		-webkit-mask-image:
 			linear-gradient(to right, transparent, var(--color-tinta) 5%, var(--color-tinta) 95%, transparent),
 			linear-gradient(

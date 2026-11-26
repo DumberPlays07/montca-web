@@ -255,6 +255,21 @@ const pajaros = [
 		}
 	}
 
+	/* Espera al mapa (src/lib/escena-espera.ts, `data-estado` en `.escena`). Sin atributo (sin JavaScript) la
+	   escena corre como siempre. Con el mapa sin llegar, o si no llega en 4 s, no hay animaciones: la boira, la
+	   brisa y los pájaros descansan invisibles y los excursionistas, en su sitio final. Mientras esperan, los
+	   excursionistas se esconden para no verlos quietos sobre un mapa vacío; cuando se omite la escena se ven
+	   quietos, como con movimiento reducido. Al pasar a `listo` se quitan estas reglas y todo arranca desde cero. */
+	@media (prefers-reduced-motion: no-preference) {
+		:global([data-escena]:is([data-estado='esperando'], [data-estado='omitida'])) :is(.boira, .rafaga, .bandada, .pajaro, .excursionista, .cuerpo) {
+			animation: none;
+		}
+
+		:global([data-escena][data-estado='esperando']) .excursionista {
+			visibility: hidden;
+		}
+	}
+
 	/* Sube un poco y se funde; aguanta un momento antes de irse. */
 	@keyframes boira-se-levanta {
 		0% {

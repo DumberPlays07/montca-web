@@ -216,7 +216,7 @@ Los colores de la escena de entrada (B-22, ver Movimiento → Escena de entrada 
 - **Boira de Mariola** (#f1f6ef): el fondo de toda la web, que es el cielo del mapa. Se elige en lugar de un blanco o una crema para que la ilustración se funda con la página.
 - **Herba clara** (#dff3d7): superficies teñidas, `hover` de los enlaces del menú, separación de bloques sin usar líneas, los bloques de plazas por categoría y las tarjetas de evento sin inscripción abierta.
 - **Tinta de bosc** (#1f3324): el texto de cuerpo. Mide 12.3:1 sobre la neblina y 10.9:1 sobre crema.
-- **Verd prat** (#99b561): solo decoración (ilustración, detalles gráficos). **Nunca texto ni borde funcional** (2.1:1).
+- **Verd prat** (#99b561): solo decoración (ilustración, detalles gráficos). **Nunca texto ni borde funcional** (2.1:1). También es el fondo del mapa mientras llega la imagen (lo más cercano a la media de lo que se ve del mapa, #8ba477); lleva la misma máscara de bordes y la imagen lo tapa del todo.
 
 ### Named Rules
 
@@ -337,6 +337,7 @@ La web se mueve poco y con motivo: cada animación confirma una acción, explica
 
 Acordada por Pablo el 26/11 (B-22, `docs/decisiones.md`). Reglas:
 
+- **Empieza cuando el mapa está pintado; si no llega en 4 s, no hay escena.** Un script pequeño (`src/lib/escena-espera.ts`) pone `data-estado` en la escena: `esperando` (sin animaciones y sin excursionistas), `listo` (un fotograma después de `load` de la imagen, o ya completa si estaba en caché: arranca desde cero) u `omitida` (el mapa no llegó en 4 s desde que empezó la carga de la página, o falló: no se arranca tarde y los excursionistas se quedan quietos en su sitio, como con movimiento reducido). Sin JavaScript no hay estado y la escena corre como siempre; con movimiento reducido nunca hay animación. **Los botones no esperan:** son el menú de la web y salen siempre, sobre el fondo Verd prat del mapa.
 - Es la única excepción a "nada pasa de 240 ms" y a "la carga de página no se anima". Duración total máxima: 4,9 s desde que carga el mapa, con la boira y la brisa dentro de los primeros 1,6 s; después, todo quieto. El límite viene de WCAG 2.2.2: más de 5 s de movimiento automático obligaría a poner un botón de pausa.
 - Orden: boira de 0 a 900 ms (sube un poco y se funde). Botones de la B-19 sin cambios (0 a 520 ms). Brisa: dos ráfagas que empiezan a los 300 y a los 700 ms y duran 600 ms (líneas finas que pasan y se funden). Pájaros en V de 200 a 4.200 ms como mucho (cruzan el cielo despacio, unos 4 s de vuelo, y salen del encuadre). Tres excursionistas que empiezan a los 400 ms y acaban como mucho a los 4,9 s (hasta 4,5 s andando): suben en zigzag por un sendero, cada uno con su desfase y sin cruzarse entre ellos, y se quedan quietos.
 - Recorrido de los excursionistas: por la parte del mapa que se ve sin deslizar a 375 px. Pueden pasar entre los botones, pero nunca por encima de un botón, una placa ni un pico, en ningún momento del recorrido; las pruebas lo comprueban tramo a tramo de 320 a 1920 px de pantalla.
