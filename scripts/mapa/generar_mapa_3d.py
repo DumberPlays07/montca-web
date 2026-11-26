@@ -71,6 +71,15 @@ CAMARAS = {
 }
 CAMARA_PRINCIPAL = "sur"  # la que se copia como mapa-3d.png/.webp y picos-3d.json
 
+# Variantes con más relieve (uv run scripts/mapa/generar_mapa_3d.py --relieve): misma cámara
+# que la v2 (CAMARA_PRINCIPAL), más exageración vertical y bordes de escalón más marcados.
+# No sobrescriben los archivos de la v2: salen como mapa-3d-relieve-x<exageración>.*
+RELIEVES = (2.5, 3, 4)
+RELIEVE_LUZ_AMBIENTE = 0.4  # más bajo que LUZ_AMBIENTE: cantos en sombra más oscuros
+RELIEVE_SOMBRA_OPACIDAD = 0.35  # más alto que SOMBRA_OPACIDAD: sombra arrojada más marcada
+# Encuadre por exageración (zoom y desplazamiento de la cámara); si no está, se usa el de la v2.
+RELIEVE_ENCUADRE = {}
+
 ANCHO_IMAGEN, ALTO_IMAGEN = 2400, 1350
 
 # Versión con nombres (mapa-3d-*-nombres): punto y rótulo de cada pico dibujados en la imagen.
@@ -80,8 +89,17 @@ RADIO_PUNTO = 11
 GROSOR_HALO = 5  # contorno claro alrededor del texto para que se lea sobre cualquier capa
 COLOR_PUNTO, COLOR_NOMBRE, COLOR_HALO = "#b4452f", "#26261f", "#fffdf6"
 PESO_MAXIMO_WEBP_KB = 250
-COCENTAINA = (38.7449, -0.4399)  # (lat, lon): solo para comprobar que entra en el encuadre
 METROS_GRADO = 111_320
+
+# Lugares que no son picos, de OpenStreetMap (consultados el 18/11/2026). Se guardan en
+# pueblos-3d*.json y se marcan con un punto en mapa-3d-*-marcas.png.
+PUEBLOS = [
+    {"osm": "node/1470838222", "nombre": "Cocentaina", "tipo": "place=town", "altura": 436,
+     "lat": 38.7441580, "lon": -0.4400707, "color": "#e01b1b"},
+    {"osm": "way/376877218", "nombre": "Castell de Cocentaina", "tipo": "historic=castle", "altura": None,
+     "lat": 38.7459185, "lon": -0.4475344, "color": "#1b4fe0"},
+]
+DIAMETRO_MARCA = 20  # px, sobre la imagen de 2400 px
 
 
 # ---------- relieve ----------
@@ -145,7 +163,7 @@ def sombra_arrojada(z, paso):
     return sombra.astype(float)
 
 
-def sombreado_celdas(z, paso):
+def sombreado_celdas(z, paso, luz_ambiente):
     """Factor de luz por celda: 1 en los techos planos, más claro u oscuro en los cantos.
 
     Los cantos usan la orientación del relieve suavizado: la de la propia celda va
@@ -161,8 +179,8 @@ def sombreado_celdas(z, paso):
     lambert_canto = np.clip(np.tensordot(luz, normal, axes=1), 0, 1)
     es_canto = (z[:-1, :-1] != z[1:, :-1]) | (z[:-1, :-1] != z[:-1, 1:]) | (z[:-1, :-1] != z[1:, 1:])
     lambert = np.where(es_canto, lambert_canto, luz[2])
-    plano = LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * luz[2]
-    return (LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * lambert) / plano
+    plano = luz_ambiente + (1 - luz_ambiente) * luz[2]
+    return (luz_ambiente + (1 - luz_ambiente) * lambert) / plano
 
 
 def en_celdas(valores):
@@ -176,10 +194,11 @@ def hex_a_rgb(color):
 
 # ---------- malla ----------
 
-def construir_malla(x, y, alturas):
+def construir_malla(x, y, alturas, exageracion=EXAGERACION, luz_ambiente=LUZ_AMBIENTE,
+                    sombra_opacidad=SOMBRA_OPACIDAD):
     """Superficie escalonada con faldón hasta la base, coloreada por celda (RGB ya iluminado)."""
     indice, umbrales = escalonar(alturas)
-    grosor_capa = (umbrales[1] - umbrales[0]) * EXAGERACION
+    grosor_capa = (umbrales[1] - umbrales[0]) * exageracion
     z = indice * grosor_capa + GROSOR_BASE
     paso = x[1] - x[0]
 
@@ -187,7 +206,7 @@ def construir_malla(x, y, alturas):
     # Cada celda toma el color de su esquina más alta: el canto pertenece a la capa de arriba.
     escalon_celda = np.maximum.reduce([indice[:-1, :-1], indice[1:, :-1], indice[:-1, 1:], indice[1:, 1:]])
     sombra = gaussian_filter(sombra_arrojada(z, paso), SOMBRA_DIFUMINADO)
-    luz = sombreado_celdas(z, paso) * (1 - SOMBRA_OPACIDAD * en_celdas(sombra))
+    luz = sombreado_celdas(z, paso, luz_ambiente) * (1 - sombra_opacidad * en_celdas(sombra))
     rgb = colores[escalon_celda] * luz[..., None]
 
     # Faldón: una fila/columna más en cada borde, a altura 0, con las mismas x/y.
@@ -203,7 +222,7 @@ def construir_malla(x, y, alturas):
     luz_dir = direccion_luz()
     for lado, normal in (((0, slice(None)), (0, -1)), ((-1, slice(None)), (0, 1)),
                          ((slice(None), 0), (-1, 0)), ((slice(None), -1), (1, 0))):
-        factor = LUZ_AMBIENTE + (1 - LUZ_AMBIENTE) * max(0.0, luz_dir[0] * normal[0] + luz_dir[1] * normal[1])
+        factor = luz_ambiente + (1 - luz_ambiente) * max(0.0, luz_dir[0] * normal[0] + luz_dir[1] * normal[1])
         rgb_total[lado] = canto * factor
 
     malla = pv.StructuredGrid(malla_x, malla_y, zs)
@@ -311,6 +330,36 @@ def rotular(imagen, picos):
     return rotulada
 
 
+def proyectar_pueblos(escena, superficie, camara, z, x, y):
+    """Posición en la imagen de cada lugar de PUEBLOS, sobre el techo de la capa en la que cae."""
+    resultado = []
+    for lugar in PUEBLOS:
+        px, py = metros(lugar["lon"], lugar["lat"])
+        py = -py + y[-1]
+        columna = int(np.clip(np.searchsorted(x, px), 0, len(x) - 1))
+        fila = int(np.clip(np.searchsorted(y, py), 0, len(y) - 1))
+        # La celda exacta, no el máximo alrededor como en los picos: un pueblo al pie de un
+        # escalón subiría al de arriba.
+        punto = np.array([px, py, float(z[fila, columna])])
+        izquierda, arriba = proyectar(escena, punto)
+        resultado.append({**{k: lugar[k] for k in ("osm", "nombre", "tipo", "altura", "lat", "lon")},
+                          "x": round(izquierda, 2), "y": round(arriba, 2),
+                          "visible": bool(esta_visible(superficie, camara, punto))})
+    return resultado
+
+
+def marcar_pueblos(imagen, pueblos):
+    """Copia de la imagen con un punto de color (el de PUEBLOS) en cada lugar."""
+    marcada = imagen.copy()
+    dibujo = ImageDraw.Draw(marcada)
+    radio = DIAMETRO_MARCA / 2
+    for lugar, ajustes in zip(pueblos, PUEBLOS):
+        cx, cy = lugar["x"] / 100 * imagen.width, lugar["y"] / 100 * imagen.height
+        dibujo.ellipse((cx - radio, cy - radio, cx + radio, cy + radio), fill=ajustes["color"],
+                       outline="white", width=2)
+    return marcada
+
+
 def guardar_imagenes(imagen, base):
     """Guarda base.png y base.webp; devuelve (peso, calidad, ancho) del webp."""
     imagen.save(SALIDA / f"{base}.png", optimize=True)
@@ -331,23 +380,26 @@ def generar_variante(nombre, ajustes, malla, superficie, z, x, y, picos, centro)
         resultado.append({"osm": pico["id"], "nombre": pico["nombre"], "altura": round(pico["altura"]),
                           "x": round(izquierda, 2), "y": round(arriba, 2),
                           "visible": bool(esta_visible(superficie, camara, punto))})
-    cx, cy = metros(COCENTAINA[1], COCENTAINA[0])
-    cocentaina = proyectar(escena, np.array([cx, -cy + y[-1], GROSOR_BASE]))
+    pueblos = proyectar_pueblos(escena, superficie, camara, z, x, y)
     escena.close()
 
     peso, calidad, ancho = guardar_imagenes(imagen, f"mapa-3d-{nombre}")
     peso_nombres, _, _ = guardar_imagenes(rotular(imagen, resultado), f"mapa-3d-{nombre}-nombres")
     peso = max(peso, peso_nombres)
-    datos = {"camara": nombre, "imagen": f"mapa-3d-{nombre}.webp", "ancho": imagen.width,
-             "alto": imagen.height, "picos": resultado}
-    (SALIDA / f"picos-3d-{nombre}.json").write_text(json.dumps(datos, ensure_ascii=False, indent=2),
-                                                     encoding="utf-8")
+    marcar_pueblos(imagen, pueblos).save(SALIDA / f"mapa-3d-{nombre}-marcas.png", optimize=True)
+    cabecera = {"camara": nombre, "imagen": f"mapa-3d-{nombre}.webp", "ancho": imagen.width,
+                "alto": imagen.height}
+    for prefijo, clave, lista in (("picos", "picos", resultado), ("pueblos", "pueblos", pueblos)):
+        (SALIDA / f"{prefijo}-3d-{nombre}.json").write_text(
+            json.dumps({**cabecera, clave: lista}, ensure_ascii=False, indent=2), encoding="utf-8")
 
     aviso = "" if peso <= PESO_MAXIMO_WEBP_KB else f"  ¡SUPERA {PESO_MAXIMO_WEBP_KB} KB!"
     print(f"\n[{nombre}] webp sin nombres y con nombres: el mayor pesa {peso:.0f} KB "
           f"(calidad {calidad}, {ancho} px){aviso}")
-    dentro = 0 <= cocentaina[0] <= 100 and 0 <= cocentaina[1] <= 100
-    print(f"  Cocentaina en ({cocentaina[0]:.1f} %, {cocentaina[1]:.1f} %): {'dentro' if dentro else 'FUERA'}")
+    for lugar in pueblos:
+        dentro = 0 <= lugar["x"] <= 100 and 0 <= lugar["y"] <= 100
+        print(f"  {lugar['nombre']:<28} {lugar['x']:6.1f} %  {lugar['y']:6.1f} %"
+              f"{'' if dentro else '  FUERA DEL ENCUADRE'}{'' if lugar['visible'] else '  (tapado)'}")
     for pico in resultado:
         estado = "" if pico["visible"] else "  (tapado por otra montaña)"
         print(f"  {pico['nombre']:<28} {pico['x']:6.1f} %  {pico['y']:6.1f} %{estado}")
@@ -361,6 +413,10 @@ def main():
         sys.exit(f"COLORES_ESCALONES tiene {len(COLORES_ESCALONES)} colores y NUM_ESCALONES es {NUM_ESCALONES}.")
     descargar_datos()
     x, y, alturas = leer_alturas()
+    if "--relieve" in sys.argv:
+        SALIDA.mkdir(exist_ok=True)
+        generar_relieves(x, y, alturas, elegir_picos(leer_picos()))
+        return
     malla, z, umbrales = construir_malla(x, y, alturas)
     print(f"Malla: {malla.n_cells:,} celdas; escalones desde " + ", ".join(f"{u:.0f}" for u in umbrales) + " m")
     superficie = malla.extract_surface().triangulate()
@@ -374,12 +430,26 @@ def main():
         for extension in ("png", "webp"):
             shutil.copyfile(SALIDA / f"mapa-3d-{CAMARA_PRINCIPAL}{sufijo}.{extension}",
                             SALIDA / f"mapa-3d{sufijo}.{extension}")
-    principal = json.loads((SALIDA / f"picos-3d-{CAMARA_PRINCIPAL}.json").read_text(encoding="utf-8"))
-    principal["imagen"] = "mapa-3d.webp"
-    (SALIDA / "picos-3d.json").write_text(json.dumps(principal, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nPrincipal ({CAMARA_PRINCIPAL}) copiada como mapa-3d.png, mapa-3d.webp y picos-3d.json.")
+    for prefijo in ("picos", "pueblos"):
+        principal = json.loads((SALIDA / f"{prefijo}-3d-{CAMARA_PRINCIPAL}.json").read_text(encoding="utf-8"))
+        principal["imagen"] = "mapa-3d.webp"
+        (SALIDA / f"{prefijo}-3d.json").write_text(json.dumps(principal, ensure_ascii=False, indent=2),
+                                                    encoding="utf-8")
+    print(f"\nPrincipal ({CAMARA_PRINCIPAL}) copiada como mapa-3d.png, mapa-3d.webp, picos-3d.json "
+          "y pueblos-3d.json.")
     if any(peso > PESO_MAXIMO_WEBP_KB for peso in pesos.values()):
         sys.exit(f"\nAlgún WebP supera {PESO_MAXIMO_WEBP_KB} KB.")
+
+
+def generar_relieves(x, y, alturas, picos):
+    """Variantes de la cámara principal con más exageración vertical y bordes más marcados."""
+    for exageracion in RELIEVES:
+        malla, z, _ = construir_malla(x, y, alturas, exageracion, RELIEVE_LUZ_AMBIENTE, RELIEVE_SOMBRA_OPACIDAD)
+        superficie = malla.extract_surface().triangulate()
+        # Misma regla de punto de mira que la v2 (sube con la altura del bloque).
+        centro = np.array([x.mean(), y.mean(), z.max() * 0.3])
+        ajustes = {**CAMARAS[CAMARA_PRINCIPAL], **RELIEVE_ENCUADRE.get(exageracion, {})}
+        generar_variante(f"relieve-x{exageracion:g}", ajustes, malla, superficie, z, x, y, picos, centro)
 
 
 if __name__ == "__main__":

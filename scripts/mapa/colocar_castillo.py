@@ -157,6 +157,23 @@ def sombra(mapa, cx, cy, media_anchura, inclinacion):
     return Image.composite(Image.new("RGB", mapa.size, COLOR_SOMBRA), mapa, mascara)
 
 
+def pegar_torre(mapa, destino_x, destino_y, ancho, quitar=True):
+    """Pega la torre de TORRE con el centro de su base en (destino_x, destino_y) px y `ancho` px.
+
+    Si `quitar` es True, borra antes los árboles que quedan bajo la base.
+    Devuelve el mapa nuevo y el tamaño (ancho, alto) de la torre pegada.
+    """
+    torre = escalar_torre(recortar_torre(TORRE), ancho)
+    bx, by, media_anchura = centro_base(torre)
+    inclinacion = (torre.height - by) / media_anchura if media_anchura else 0.5  # alto/ancho del rombo de la base
+    esquina = (round(destino_x - bx), round(destino_y - by))
+    if quitar:
+        mapa = quitar_arboles(mapa, destino_x, destino_y, media_anchura, inclinacion)
+    mapa = sombra(mapa, destino_x, destino_y, media_anchura, inclinacion)
+    mapa.paste(torre, esquina, torre)
+    return mapa, torre.size
+
+
 def main():
     for ruta in (MAPA, TORRE):
         if not ruta.exists():
@@ -170,19 +187,12 @@ def main():
         print(f"Punto azul encontrado en {100 * px / mapa.width:.2f} %, {100 * py / mapa.height:.2f} % "
               f"(constantes: {POSICION_X} %, {POSICION_Y} %).")
 
-    torre = escalar_torre(recortar_torre(TORRE), round(mapa.width * ANCHO_TORRE / 100))
-    bx, by, media_anchura = centro_base(torre)
     destino_x = mapa.width * POSICION_X / 100
     destino_y = mapa.height * POSICION_Y / 100
-    inclinacion = (torre.height - by) / media_anchura if media_anchura else 0.5  # alto/ancho del rombo de la base
-
-    esquina = (round(destino_x - bx), round(destino_y - by))
-    mapa = quitar_arboles(mapa, destino_x, destino_y, media_anchura, inclinacion)
-    mapa = sombra(mapa, destino_x, destino_y, media_anchura, inclinacion)
-    mapa.paste(torre, esquina, torre)
+    mapa, tamano = pegar_torre(mapa, destino_x, destino_y, round(mapa.width * ANCHO_TORRE / 100))
     SALIDA.mkdir(exist_ok=True)
     mapa.save(RESULTADO, optimize=True)
-    print(f"Torre de {torre.width} x {torre.height} px con la base en ({destino_x:.0f}, {destino_y:.0f}) px.")
+    print(f"Torre de {tamano[0]} x {tamano[1]} px con la base en ({destino_x:.0f}, {destino_y:.0f}) px.")
     print(f"Guardado {RESULTADO.name}.")
 
 
