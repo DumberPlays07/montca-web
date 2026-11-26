@@ -1,6 +1,7 @@
 /**
  * Script del mapa de Mariola (B-21): abre y cierra la viñeta de un destino y la ficha de un pico, coloca el mapa al empezar y
- * enseña el aviso y los degradados de deslizar en el móvil. Sin animaciones.
+ * enseña el aviso y los degradados de deslizar en el móvil. La animación de abrir y cerrar los paneles
+ * es CSS (transiciones en MapaMariola.astro); aquí solo se cuida el orden para que se vea bien.
  *
  * Sin este script cada botón del mapa es un enlace (`<a href>`) directo a su apartado. Al cargar, el
  * script los convierte en botones que abren la viñeta (role, aria-expanded y aria-controls) y deja de
@@ -95,7 +96,10 @@ function iniciar(raiz: HTMLElement): void {
 			return;
 		}
 		const controlRect = control.getBoundingClientRect();
-		const hueco = panel.getBoundingClientRect().top - controlRect.bottom - BOTON_SOBRE_PANEL_PX;
+		// El panel acaba de aparecer y aún está desplazado por la animación de entrada, así que su `top` medido
+		// sería falso: se calcula con la ventana, su `bottom` y su altura, que no dependen del transform.
+		const parteSuperior = window.innerHeight - Number.parseFloat(getComputedStyle(panel).bottom) - panel.offsetHeight;
+		const hueco = parteSuperior - controlRect.bottom - BOTON_SOBRE_PANEL_PX;
 		const margenCabecera = controlRect.top - ALTO_CABECERA_PX - BOTON_SOBRE_PANEL_PX;
 		if (hueco < 0) {
 			window.scrollBy({ top: Math.min(-hueco, Math.max(0, margenCabecera)), behavior: 'instant' });
@@ -135,13 +139,28 @@ function iniciar(raiz: HTMLElement): void {
 			` ${enlace.dataset.conector ?? ''} ${titulo}`;
 	}
 
+	/**
+	 * Oculta un panel al instante, sin el fundido de cierre. Se usa al pasar de un punto a otro para que
+	 * nunca se vean dos paneles a la vez, y para que el que se abre empiece su entrada desde cero.
+	 */
+	function ocultarSinFundido(panel: HTMLElement): void {
+		panel.dataset.cambio = '';
+		panel.hidden = true;
+		panel.inert = true;
+		// Hay que leer el estilo antes de quitar `data-cambio`: sin esa lectura el navegador solo ve el estado
+		// final y sí animaría el cierre.
+		void getComputedStyle(panel).display;
+		delete panel.dataset.cambio;
+	}
+
 	function abrir(desde: HTMLElement): void {
 		const panel = panelDe(desde);
-		// Solo hay un panel abierto: si estaba abierto el otro, se cierra.
-		for (const otro of [vineta, ficha]) {
-			otro.hidden = otro !== panel;
-		}
+		// Solo hay un panel abierto: el otro se cierra sin fundido.
+		ocultarSinFundido(vineta);
+		ocultarSinFundido(ficha);
 		rellenar(desde, panel);
+		panel.inert = false;
+		panel.hidden = false;
 		marcarAbierto(desde);
 		abierto = desde;
 		colocar(desde, panel);
@@ -155,8 +174,12 @@ function iniciar(raiz: HTMLElement): void {
 			return;
 		}
 		const origen = abierto;
-		vineta.hidden = true;
-		ficha.hidden = true;
+		// Se cierran con fundido (CSS). `inert` los saca ya del tabulador y del lector de pantalla, aunque
+		// se sigan viendo unos 160 ms.
+		for (const panel of [vineta, ficha]) {
+			panel.hidden = true;
+			panel.inert = true;
+		}
 		marcarAbierto(null);
 		abierto = null;
 		origen.focus({ preventScroll: true });
