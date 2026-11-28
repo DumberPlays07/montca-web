@@ -23,25 +23,15 @@ describe('urlComArribar', () => {
 });
 
 describe('destinoInscripcion', () => {
-	const FORMS = 'https://forms.gle/prova';
-
-	it('canal de Montca con url: lleva a la url', () => {
-		assert.equal(destinoInscripcion({ inscripcion: { modo: 'canal-montca', url: FORMS } }), FORMS);
+	it('con url: lleva a la página de inscripción', () => {
+		assert.equal(destinoInscripcion({ inscripcion: { url: '/inscripcio/' } }), '/inscripcio/');
 	});
 
-	it('canal de Montca sin url: null (se muestra el contacto)', () => {
-		assert.equal(destinoInscripcion({ inscripcion: { modo: 'canal-montca', url: '' } }), null);
+	it('sin url: null (se muestra el contacto), nunca un botón roto', () => {
+		assert.equal(destinoInscripcion({ inscripcion: { url: '' } }), null);
 	});
 
 	it('url con solo espacios cuenta como vacía', () => {
-		assert.equal(destinoInscripcion({ inscripcion: { modo: 'canal-montca', url: '   ' } }), null);
-	});
-
-	it('modo web con url: lleva a la página de inscripción', () => {
-		assert.equal(destinoInscripcion({ inscripcion: { modo: 'web', url: '/inscripcio/' } }), '/inscripcio/');
-	});
-
-	it('modo web sin url: null, nunca un botón roto', () => {
-		assert.equal(destinoInscripcion({ inscripcion: { modo: 'web', url: '' } }), null);
+		assert.equal(destinoInscripcion({ inscripcion: { url: '   ' } }), null);
 	});
 });

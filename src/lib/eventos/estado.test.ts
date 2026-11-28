@@ -3,9 +3,8 @@ import { describe, it } from 'node:test';
 import {
 	type EventoParaEstado,
 	calcularEstado,
-	confirmadosPorCategoria,
+	equiposPorCategoria,
 	esEventoPasado,
-	listaRetirada,
 	plazasCategoria,
 } from './estado.ts';
 
@@ -59,18 +58,18 @@ describe('calcularEstado', () => {
 	});
 
 	it('con las dos categorías llenas da completes', () => {
-		const confirmados = { 'infantil-cadet': 8, 'juvenil-senior': 6 };
-		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, confirmados), 'completes');
+		const equipos = { 'infantil-cadet': 8, 'juvenil-senior': 6 };
+		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, equipos), 'completes');
 	});
 
 	it('con una sola categoría llena sigue obertes', () => {
-		const confirmados = { 'infantil-cadet': 8, 'juvenil-senior': 2 };
-		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, confirmados), 'obertes');
+		const equipos = { 'infantil-cadet': 8, 'juvenil-senior': 2 };
+		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, equipos), 'obertes');
 	});
 
 	it('una categoría sin recuento cuenta como con plazas', () => {
-		const confirmados = { 'infantil-cadet': 8 };
-		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, confirmados), 'obertes');
+		const equipos = { 'infantil-cadet': 8 };
+		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, equipos), 'obertes');
 	});
 
 	it('sin recuento nunca da completes', () => {
@@ -79,19 +78,19 @@ describe('calcularEstado', () => {
 
 	it('llenas pero después del cierre da tancades', () => {
 		const ahora = new Date('2026-12-22T10:00:00+01:00');
-		const confirmados = { 'infantil-cadet': 8, 'juvenil-senior': 6 };
-		assert.equal(calcularEstado(torneo(), ahora, confirmados), 'tancades');
+		const equipos = { 'infantil-cadet': 8, 'juvenil-senior': 6 };
+		assert.equal(calcularEstado(torneo(), ahora, equipos), 'tancades');
 	});
 });
 
 describe('plazasCategoria', () => {
 	const categoria = { id: 'infantil-cadet', maxEquipos: 8 };
 
-	it('resta los confirmados del máximo', () => {
+	it('resta los equipos que ocupan plaza del máximo', () => {
 		assert.deepEqual(plazasCategoria(categoria, 1), { libres: 7, completa: false });
 	});
 
-	it('sin confirmados quedan todas', () => {
+	it('sin equipos quedan todas', () => {
 		assert.deepEqual(plazasCategoria(categoria, 0), { libres: 8, completa: false });
 	});
 
@@ -120,65 +119,53 @@ describe('esEventoPasado', () => {
 	});
 });
 
-describe('listaRetirada', () => {
-	it('el 09/01/2027 a las 23:59 de Madrid la lista sigue', () => {
-		const ahora = new Date('2027-01-09T23:59:00+01:00');
-		assert.equal(listaRetirada(torneo(), ahora), false);
-	});
-
-	it('el 10/01/2027 a las 00:00 de Madrid la lista se retira', () => {
-		const ahora = new Date('2027-01-10T00:00:00+01:00');
-		assert.equal(listaRetirada(torneo(), ahora), true);
-	});
-
-	it('usa la fecha de Madrid aunque en UTC aún sea el día anterior', () => {
-		// 23:30 UTC del 09/01 son las 00:30 del 10/01 en Madrid.
-		const ahora = new Date('2027-01-09T23:30:00Z');
-		assert.equal(listaRetirada(torneo(), ahora), true);
-	});
-
-	it('en un evento de verano (+02:00) se retira desde el 12/07 a las 00:00', () => {
-		const verano: EventoParaEstado = { ...torneo(), jornadas: [{ fecha: '2027-07-05' }] };
-		assert.equal(listaRetirada(verano, new Date('2027-07-11T23:59:00+02:00')), false);
-		assert.equal(listaRetirada(verano, new Date('2027-07-12T00:00:00+02:00')), true);
-	});
-
-	it('los 7 días cruzan bien el cambio de mes', () => {
-		const finDeMes: EventoParaEstado = { ...torneo(), jornadas: [{ fecha: '2027-01-28' }] };
-		assert.equal(listaRetirada(finDeMes, new Date('2027-02-03T23:59:00+01:00')), false);
-		assert.equal(listaRetirada(finDeMes, new Date('2027-02-04T00:00:00+01:00')), true);
-	});
-});
-
-describe('confirmadosPorCategoria', () => {
+describe('equiposPorCategoria', () => {
 	const categorias = ['infantil-cadet', 'juvenil-senior'];
 
-	it('cuenta los equipos de cada categoría', () => {
-		const equipos = [{ categoria: 'infantil-cadet' }, { categoria: 'juvenil-senior' }, { categoria: 'infantil-cadet' }];
-		assert.deepEqual(confirmadosPorCategoria(equipos, categorias), { 'infantil-cadet': 2, 'juvenil-senior': 1 });
+	it('pasa los recuentos de la fuente a un registro por categoría', () => {
+		const plazas = [
+			{ categoria: 'infantil-cadet', equiposActuales: 5 },
+			{ categoria: 'juvenil-senior', equiposActuales: 2 },
+		];
+		assert.deepEqual(equiposPorCategoria(plazas, categorias), { 'infantil-cadet': 5, 'juvenil-senior': 2 });
 	});
 
-	it('una categoría sin equipos cuenta cero, no falta', () => {
-		assert.deepEqual(confirmadosPorCategoria([], categorias), { 'infantil-cadet': 0, 'juvenil-senior': 0 });
+	it('una categoría con cero equipos cuenta cero', () => {
+		const plazas = [
+			{ categoria: 'infantil-cadet', equiposActuales: 0 },
+			{ categoria: 'juvenil-senior', equiposActuales: 0 },
+		];
+		assert.deepEqual(equiposPorCategoria(plazas, categorias), { 'infantil-cadet': 0, 'juvenil-senior': 0 });
+	});
+
+	it('una categoría que no llega no aparece: no se da por vacía', () => {
+		const plazas = [{ categoria: 'infantil-cadet', equiposActuales: 3 }];
+		assert.deepEqual(equiposPorCategoria(plazas, categorias), { 'infantil-cadet': 3 });
 	});
 
 	it('ignora las categorías que el evento no tiene', () => {
-		const equipos = [{ categoria: 'veterans' }, { categoria: 'infantil-cadet' }];
-		assert.deepEqual(confirmadosPorCategoria(equipos, categorias), { 'infantil-cadet': 1, 'juvenil-senior': 0 });
+		const plazas = [
+			{ categoria: 'veterans', equiposActuales: 4 },
+			{ categoria: 'infantil-cadet', equiposActuales: 1 },
+		];
+		assert.deepEqual(equiposPorCategoria(plazas, categorias), { 'infantil-cadet': 1 });
 	});
 
 	it('con todas las categorías llenas, el estado pasa a completes', () => {
-		const equipos = [
-			...Array.from({ length: 8 }, () => ({ categoria: 'infantil-cadet' })),
-			...Array.from({ length: 6 }, () => ({ categoria: 'juvenil-senior' })),
+		const plazas = [
+			{ categoria: 'infantil-cadet', equiposActuales: 8 },
+			{ categoria: 'juvenil-senior', equiposActuales: 6 },
 		];
-		const recuento = confirmadosPorCategoria(equipos, categorias);
+		const recuento = equiposPorCategoria(plazas, categorias);
 		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, recuento), 'completes');
 	});
 
 	it('con una sola categoría llena, el estado sigue siendo obertes', () => {
-		const equipos = Array.from({ length: 8 }, () => ({ categoria: 'infantil-cadet' }));
-		const recuento = confirmadosPorCategoria(equipos, categorias);
+		const plazas = [
+			{ categoria: 'infantil-cadet', equiposActuales: 8 },
+			{ categoria: 'juvenil-senior', equiposActuales: 2 },
+		];
+		const recuento = equiposPorCategoria(plazas, categorias);
 		assert.equal(calcularEstado(torneo(), DENTRO_DEL_PLAZO, recuento), 'obertes');
 	});
 });
