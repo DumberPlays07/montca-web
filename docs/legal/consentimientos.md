@@ -1,124 +1,123 @@
 # Borrador · Textos de las casillas y autorización del tutor
 
-Borrador de A-18 en castellano, para la revisión legal de Montca. Cuando esté revisado se traduce al valenciano y se pasa a `src/content` en B-08 (la web) y a un documento imprimible (la autorización en papel). Sale de [tratamientos.md](tratamientos.md) (T4, T5 y T6) y completa la [política de privacidad](privacidad.md) y la [información de cada formulario](capas-formularios.md).
+Borrador de A-18 en castellano, para la revisión legal de Montca. Cuando esté revisado se traduce al valenciano y se pasa a `src/content` en B-08. Sale de [tratamientos.md](tratamientos.md) (T4, T5, T6 y T9) y de las [historias de usuario de las inscripciones](../historias-usuario-inscripciones.md) v3.1 (HU-06, HU-08 y Anexo A), y completa la [política de privacidad](privacidad.md) y la [información de cada formulario](capas-formularios.md). Adaptado el 2026-11-28.
 
 Notas para quien lo revise (no forman parte de los textos):
 
-- Cada texto tiene un **identificador de versión**. La web guarda qué versión aceptó cada persona (T4, T5, T6). Si un texto cambia después de publicarse, se crea una versión nueva (`-v2`) y la anterior no se borra de este archivo.
+- Cada texto tiene un **identificador de versión**. La web guarda qué versión aceptó cada persona (T4, T5, T6, T9). Si un texto cambia después de publicarse, se crea una versión nueva y la anterior no se borra de este archivo.
+- **Los textos `-v1` anteriores a esta actualización quedan sustituidos** por los `-v2` (`autorizacion-tutor-v1`, `imagen-menor-v1`, `info-actividades-tutor-v1`, `imagen-adulto-v1` e `info-actividades-v1`) y no se usan. Ya no existe la autorización en papel.
+- Los textos de las casillas de menores (A1 a A7) son **los literales del Anexo A de las historias de usuario**, sin cambiar ni una palabra. Cualquier cambio crea una versión nueva.
+- Los textos de las casillas del formulario juvenil/sénior (apartado 1) son un **BORRADOR pendiente de revisión de Montca**: están redactados a partir de los de menores, adaptados a un adulto que se inscribe a sí mismo.
+- En todos los formularios, **ninguna casilla viene marcada** y no hay una casilla de "aceptar todo".
 - Los huecos entre llaves se rellenan con los datos de cada evento. Así los textos sirven para el siguiente evento sin cambiarlos. Para el torneo de Navidad:
   - `{evento}`: Torneo de Navidad de Montca Sports
   - `{fechas}`: los días 27 de diciembre de 2026 y 3 de enero de 2027
   - `{lugar}`: el Poliesportiu Municipal de Cocentaina
-- **Imagen de menores de 14 a 17 años.** La LO 1/1982 dice que el menor con madurez suficiente presta él mismo el consentimiento sobre su imagen. Se decidió una sola casilla, que marca el tutor, así que el texto dice que el tutor da el permiso "con el conocimiento y la conformidad del menor". Hay que confirmar que esto es suficiente.
-- **No se incluye** una declaración de salud del menor (serían datos de salud, que no se tratan) ni una autorización para decisiones médicas urgentes. Si Montca quiere alguna de las dos, se añade aquí y en [tratamientos.md](tratamientos.md).
+- **Imagen de menores de 14 a 17 años.** La LO 1/1982 dice que el menor con madurez suficiente presta él mismo el consentimiento sobre su imagen. El texto A6 dice que el tutor da el permiso "respetando la opinión del menor". Hay que confirmar en la revisión legal que esto es suficiente (ver [tratamientos.md](tratamientos.md), pendientes).
 - El enlace a las normas (`/ruta-de-las-normas`) se cambia por la ruta real de la página del torneo cuando exista (C-04).
-- Las casillas opcionales van sin marcar y debajo llevan el aviso "Opcional". No marcarlas no impide inscribirse.
+- Las casillas opcionales llevan debajo el aviso "Opcional". No marcarlas no impide inscribirse.
+- La casilla "He leído la política de privacidad" de cada formulario ([capas-formularios.md](capas-formularios.md)) deja constancia de que se ha informado y **no es un consentimiento**.
 
 ---
 
-## 1. Formulario de adultos
+## 1. Formulario juvenil/sénior · BORRADOR pendiente de revisión de Montca
 
-### Derechos de imagen · `imagen-adulto-v1` · opcional
+Lo rellena el propio jugador. No se piden datos de salud.
 
-- [ ] Doy permiso a la Associació Juvenil i Esportiva Montca Actiu para publicar en su web y en sus perfiles de Instagram y TikTok fotografías y vídeos en los que aparezca, hechos durante el {evento}. No se me nombrará ni etiquetará. Puedo retirar este permiso cuando quiera escribiendo a montcaadventure@gmail.com.
+| Casilla | Identificador | Obligatoria |
+| --- | --- | --- |
+| Normas y condiciones del torneo | `normas-adulto-v1` | Sí |
+| Declaración de aptitud para participar | `aptitud-adulto-v1` | Sí |
+| Protección de datos | `proteccion-datos-adulto-v1` | Sí |
+| Derechos de imagen | `imagen-adulto-v2` | No |
+| Información sobre futuras actividades | `info-actividades-v2` | No |
+
+### Normas y condiciones del torneo · `normas-adulto-v1` · obligatoria · BORRADOR
+
+- [ ] Conozco y acepto las [normas y condiciones de participación del {evento}](/ruta-de-las-normas) y sus medidas de seguridad. El torneo se celebra {fechas} en {lugar}.
+
+> Obligatoria. Sin marcarla no puede inscribirse.
+
+### Declaración de aptitud · `aptitud-adulto-v1` · obligatoria · BORRADOR
+
+- [ ] Declaro que estoy en condiciones de participar en el {evento} y que los datos que facilito son correctos.
+
+> Obligatoria. Sin marcarla no puede inscribirse.
+
+### Protección de datos · `proteccion-datos-adulto-v1` · obligatoria · BORRADOR
+
+- [ ] He leído la información sobre protección de datos y la [política de privacidad](/privacidad) de Montca Actiu.
+
+> Obligatoria. Sin marcarla no puede inscribirse.
+
+### Derechos de imagen · `imagen-adulto-v2` · opcional · BORRADOR
+
+- [ ] Autorizo a Montca Actiu a realizar y publicar fotografías y vídeos en los que yo aparezca durante el {evento}, en la web y en los perfiles oficiales de la asociación. Puedo retirar este permiso cuando quiera escribiendo a montcaadventure@gmail.com.
 
 > Opcional. Puede inscribirse igualmente sin marcar esta casilla.
 
-### Información de otras actividades · `info-actividades-v1` · opcional
+### Información sobre futuras actividades · `info-actividades-v2` · opcional · BORRADOR
 
-- [ ] Quiero recibir por correo electrónico información sobre otras actividades y eventos de Montca Actiu. Puedo darme de baja en cualquier momento desde el propio correo.
+- [ ] Quiero recibir por correo electrónico información sobre futuras actividades y eventos organizados por Montca Actiu. Puedo darme de baja en cualquier momento desde el propio correo.
 
 > Opcional. Puede inscribirse igualmente sin marcar esta casilla.
 
 ---
 
-## 2. Formulario de menores
+## 2. Formulario infantil/cadete (tutor)
 
-Lo rellena el padre, la madre o el tutor legal del menor.
+Lo rellena el padre, la madre o el tutor legal del menor. Los textos son los literales del Anexo A de las historias de usuario.
 
-### Autorización del tutor · `autorizacion-tutor-v1` · obligatoria
+| # | Casilla | Identificador | Obligatoria |
+| --- | --- | --- | --- |
+| A1 | Declaración de representación legal | `representacion-tutor-v2` | Sí |
+| A2 | Autorización de participación | `participacion-menor-v2` | Sí |
+| A3 | Protección de datos | `proteccion-datos-menor-v2` | Sí |
+| A4 | Consentimiento específico de datos de salud | `salud-menor-v2` | **Solo si** se rellena algún campo de salud |
+| A5 | Emergencias médicas | `emergencias-menor-v2` | Sí |
+| A6 | Derechos de imagen | `imagen-menor-v2` | No |
+| A7 | Información sobre futuras actividades | `info-actividades-tutor-v2` | No |
 
-- [ ] Declaro que soy el padre, la madre o el tutor legal de este menor, que los datos de este formulario son ciertos y que conozco las [normas del {evento}](/ruta-de-las-normas). Autorizo su participación en el {evento}, que se celebra {fechas} en {lugar}.
+Los campos de salud del menor (alergias, lesiones actuales, enfermedad o circunstancia relevante para la práctica deportiva, medicación de emergencia y otras observaciones) son todos opcionales. Si no se rellena ninguno, no se exige A4 y no se guarda ningún dato de salud.
+
+### A1 · Declaración de representación legal · `representacion-tutor-v2` · obligatoria
+
+- [ ] Declaro que soy el padre, la madre o el tutor legal del menor cuyos datos facilito y que estoy autorizado/a para realizar esta inscripción. Confirmo que los datos proporcionados son correctos.
+
+> Obligatoria. Sin esta declaración el menor no queda inscrito.
+
+### A2 · Autorización de participación · `participacion-menor-v2` · obligatoria
+
+- [ ] Autorizo al menor a participar en el torneo organizado por la Associació Juvenil i Esportiva Montca Actiu y manifiesto que conozco y acepto sus normas, condiciones de participación y medidas de seguridad.
 
 > Obligatoria. Sin esta autorización el menor no queda inscrito.
 
-### Derechos de imagen del menor · `imagen-menor-v1` · opcional
+### A3 · Protección de datos · `proteccion-datos-menor-v2` · obligatoria
 
-- [ ] Como tutor legal, y con el conocimiento y la conformidad del menor, doy permiso a la Associació Juvenil i Esportiva Montca Actiu para publicar en su web y en sus perfiles de Instagram y TikTok fotografías y vídeos en los que aparezca el menor, hechos durante el {evento}. No se le nombrará ni etiquetará. Puedo retirar este permiso cuando quiera escribiendo a montcaadventure@gmail.com.
+- [ ] He leído la información sobre protección de datos y la política de privacidad de Montca Actiu.
+
+> Obligatoria. Debe enlazar a la [política de privacidad](/privacidad), que se abre en una pestaña nueva sin perder lo rellenado.
+
+### A4 · Datos de salud · `salud-menor-v2` · obligatoria solo si se rellenan datos de salud
+
+- [ ] Autorizo expresamente el tratamiento de los datos de salud que facilito sobre el menor, exclusivamente para valorar y atender las necesidades de seguridad y asistencia durante el torneo, conforme a la información de privacidad.
+
+> Obligatoria solo si rellena algún dato de salud. Si no rellena ninguno, no se guarda ningún dato de salud.
+
+### A5 · Emergencias médicas · `emergencias-menor-v2` · obligatoria
+
+- [ ] Autorizo a Montca Actiu a contactar con los servicios de emergencia cuando resulte necesario, facilitar a los profesionales sanitarios la información relevante disponible y avisar a los contactos de emergencia indicados.
+
+> Obligatoria. Sin esta autorización el menor no queda inscrito.
+
+### A6 · Derechos de imagen · `imagen-menor-v2` · opcional
+
+- [ ] Como tutor legal, y respetando la opinión del menor, autorizo a Montca Actiu a realizar y publicar fotografías y vídeos en los que aparezca durante el torneo, en la web y en los perfiles oficiales de la asociación.
 
 > Opcional. El menor puede inscribirse igualmente sin marcar esta casilla.
 
-### Información de otras actividades · `info-actividades-tutor-v1` · opcional
+### A7 · Información sobre futuras actividades · `info-actividades-tutor-v2` · opcional
 
-- [ ] Quiero recibir en mi correo electrónico información sobre otras actividades y eventos de Montca Actiu. Puedo darme de baja en cualquier momento desde el propio correo.
+- [ ] Quiero recibir por correo electrónico información sobre futuras actividades y eventos organizados por Montca Actiu.
 
 > Opcional. El menor puede inscribirse igualmente sin marcar esta casilla.
-
----
-
-## 3. Autorización en papel
-
-Documento para imprimir y firmar, para el tutor que no autorice en la web. Usa los mismos textos y versiones que el formulario de menores, así que la autorización queda igual en los dos formatos. Mientras la inscripción por la web no esté lista, es la forma de autorizar.
-
-Huecos que hay que completar antes de imprimirlo:
-
-- `[dirección de Softco]`: dirección donde se entrega.
-- `[cómo se envía la firma digital]`: se propone enviar el documento firmado a montcaadventure@gmail.com. Montca lo tiene que confirmar.
-
----
-
-### Autorización para la participación de un menor en el {evento}
-
-**Datos del menor**
-
-| | |
-| --- | --- |
-| Nombre y apellidos | |
-| DNI | |
-| Fecha de nacimiento | |
-| Nombre del equipo | |
-| Dorsal (del 1 al 99) | |
-
-**Datos del padre, la madre o el tutor legal**
-
-| | |
-| --- | --- |
-| Nombre y apellidos | |
-| DNI | |
-| Fecha de nacimiento | |
-| Teléfono | |
-| Correo electrónico | |
-
-**Autorización** (obligatoria) · `autorizacion-tutor-v1`
-
-Declaro que soy el padre, la madre o el tutor legal de este menor, que los datos de este documento son ciertos y que conozco las normas del {evento}. Autorizo su participación en el {evento}, que se celebra {fechas} en {lugar}.
-
-**Derechos de imagen** (opcional) · `imagen-menor-v1`
-
-☐ Como tutor legal, y con el conocimiento y la conformidad del menor, doy permiso a la Associació Juvenil i Esportiva Montca Actiu para publicar en su web y en sus perfiles de Instagram y TikTok fotografías y vídeos en los que aparezca el menor, hechos durante el {evento}. No se le nombrará ni etiquetará. Puedo retirar este permiso cuando quiera escribiendo a montcaadventure@gmail.com.
-
-**Información de otras actividades** (opcional) · `info-actividades-tutor-v1`
-
-☐ Quiero recibir en mi correo electrónico información sobre otras actividades y eventos de Montca Actiu. Puedo darme de baja en cualquier momento desde el propio correo.
-
-Las dos casillas son opcionales: el menor queda inscrito igualmente si no las marca.
-
-Fecha: ____ / ____ / ________          Firma del padre, la madre o el tutor legal:
-
-&nbsp;
-
-**Cómo entregarlo:** en sobre cerrado en Softco, [dirección de Softco], o firmado digitalmente y enviado a [cómo se envía la firma digital]. El menor no queda inscrito hasta que Montca Actiu recibe esta autorización.
-
-> **Información básica sobre protección de datos**
->
-> **Responsable:** Associació Juvenil i Esportiva Montca Actiu (NIF G88904354).
->
-> **Finalidad:** gestionar la inscripción del menor, darle de alta en el seguro del evento, comprobar que usted es mayor de edad, enviarle los avisos del evento y guardar constancia de su autorización.
->
-> **Base legal:** la inscripción que usted solicita en nombre del menor; para guardar la autorización, nuestro interés legítimo en poder acreditarla. Las casillas de imagen e información, su consentimiento.
->
-> **Destinatarios:** la aseguradora del evento. El nombre de pila y el dorsal del menor, sin apellidos, aparecerán en la lista pública de equipos de la web hasta una semana después del evento.
->
-> **Conservación:** los datos de la inscripción, hasta tres meses después del evento; esta autorización, un año; el permiso de imagen y la información de actividades, hasta que los retire.
->
-> **Derechos:** acceso, rectificación, supresión y demás derechos escribiendo a montcaadventure@gmail.com. Más información en la política de privacidad de la web.
