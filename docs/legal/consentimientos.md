@@ -7,7 +7,7 @@ Notas para quien lo revise (no forman parte de los textos):
 - Cada texto tiene un **identificador de versión**. La web guarda qué versión aceptó cada persona (T4, T5, T6, T9). Si un texto cambia después de publicarse, se crea una versión nueva y la anterior no se borra de este archivo.
 - **Los textos `-v1` anteriores a esta actualización quedan sustituidos** por los `-v2` (`autorizacion-tutor-v1`, `imagen-menor-v1`, `info-actividades-tutor-v1`, `imagen-adulto-v1` e `info-actividades-v1`) y no se usan. Ya no existe la autorización en papel.
 - Los textos de las casillas de menores (A1 a A7) son **los literales del Anexo A de las historias de usuario**, sin cambiar ni una palabra. Cualquier cambio crea una versión nueva.
-- Los textos de las casillas del formulario juvenil/sénior (apartado 1) son un **BORRADOR pendiente de revisión de Montca**: están redactados a partir de los de menores, adaptados a un adulto que se inscribe a sí mismo.
+- Los textos de las casillas del formulario juvenil/sénior (apartado 1) están **aprobados por Montca (28/11/2026)**. Se redactaron a partir de los de menores, adaptados a un adulto que se inscribe a sí mismo. Las casillas de imagen y de futuras actividades no repiten que el permiso se puede retirar: eso se dice en el recuadro informativo del formulario ([capas-formularios.md](capas-formularios.md)) y en la [política de privacidad](privacidad.md).
 - En todos los formularios, **ninguna casilla viene marcada** y no hay una casilla de "aceptar todo".
 - Los huecos entre llaves se rellenan con los datos de cada evento. Así los textos sirven para el siguiente evento sin cambiarlos. Para el torneo de Navidad:
   - `{evento}`: Torneo de Navidad de Montca Sports
@@ -20,7 +20,7 @@ Notas para quien lo revise (no forman parte de los textos):
 
 ---
 
-## 1. Formulario juvenil/sénior · BORRADOR pendiente de revisión de Montca
+## 1. Formulario juvenil/sénior · aprobado por Montca (28/11/2026)
 
 Lo rellena el propio jugador. No se piden datos de salud.
 
@@ -32,33 +32,33 @@ Lo rellena el propio jugador. No se piden datos de salud.
 | Derechos de imagen | `imagen-adulto-v2` | No |
 | Información sobre futuras actividades | `info-actividades-v2` | No |
 
-### Normas y condiciones del torneo · `normas-adulto-v1` · obligatoria · BORRADOR
+### Normas y condiciones del torneo · `normas-adulto-v1` · obligatoria
 
 - [ ] Conozco y acepto las [normas y condiciones de participación del {evento}](/ruta-de-las-normas) y sus medidas de seguridad. El torneo se celebra {fechas} en {lugar}.
 
 > Obligatoria. Sin marcarla no puede inscribirse.
 
-### Declaración de aptitud · `aptitud-adulto-v1` · obligatoria · BORRADOR
+### Declaración de aptitud · `aptitud-adulto-v1` · obligatoria
 
 - [ ] Declaro que estoy en condiciones de participar en el {evento} y que los datos que facilito son correctos.
 
 > Obligatoria. Sin marcarla no puede inscribirse.
 
-### Protección de datos · `proteccion-datos-adulto-v1` · obligatoria · BORRADOR
+### Protección de datos · `proteccion-datos-adulto-v1` · obligatoria
 
 - [ ] He leído la información sobre protección de datos y la [política de privacidad](/privacidad) de Montca Actiu.
 
 > Obligatoria. Sin marcarla no puede inscribirse.
 
-### Derechos de imagen · `imagen-adulto-v2` · opcional · BORRADOR
+### Derechos de imagen · `imagen-adulto-v2` · opcional
 
-- [ ] Autorizo a Montca Actiu a realizar y publicar fotografías y vídeos en los que yo aparezca durante el {evento}, en la web y en los perfiles oficiales de la asociación. Puedo retirar este permiso cuando quiera escribiendo a montcaadventure@gmail.com.
+- [ ] Autorizo a Montca Actiu a realizar y publicar fotografías y vídeos en los que yo aparezca durante el {evento}, en la web y en los perfiles oficiales de la asociación.
 
 > Opcional. Puede inscribirse igualmente sin marcar esta casilla.
 
-### Información sobre futuras actividades · `info-actividades-v2` · opcional · BORRADOR
+### Información sobre futuras actividades · `info-actividades-v2` · opcional
 
-- [ ] Quiero recibir por correo electrónico información sobre futuras actividades y eventos organizados por Montca Actiu. Puedo darme de baja en cualquier momento desde el propio correo.
+- [ ] Quiero recibir por correo electrónico información sobre futuras actividades y eventos organizados por Montca Actiu.
 
 > Opcional. Puede inscribirse igualmente sin marcar esta casilla.
 

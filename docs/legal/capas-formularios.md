@@ -47,7 +47,7 @@ Lo rellena el capitán, que queda inscrito como primer jugador del equipo. Se pi
 >
 > **Conservación:** hasta tres meses después del evento.
 >
-> **Derechos:** acceso, rectificación, supresión y demás derechos escribiendo a montcaadventure@gmail.com.
+> **Derechos:** acceso, rectificación, supresión y demás derechos escribiendo a montcaadventure@gmail.com. Si marca alguna casilla opcional (imágenes o información sobre futuras actividades), puede retirar ese consentimiento en cualquier momento escribiendo al mismo correo, y los correos de futuras actividades incluyen un enlace para darse de baja. Retirarlo no afecta a lo que ya se haya hecho.
 >
 > Más información en la [política de privacidad](/privacidad).
 
@@ -95,7 +95,7 @@ Sirve para unirse a un equipo con el enlace o con el código. Se pide nombre y a
 >
 > **Conservación:** hasta tres meses después del evento.
 >
-> **Derechos:** acceso, rectificación, supresión y demás derechos escribiendo a montcaadventure@gmail.com.
+> **Derechos:** acceso, rectificación, supresión y demás derechos escribiendo a montcaadventure@gmail.com. Si marca alguna casilla opcional (imágenes o información sobre futuras actividades), puede retirar ese consentimiento en cualquier momento escribiendo al mismo correo, y los correos de futuras actividades incluyen un enlace para darse de baja. Retirarlo no afecta a lo que ya se haya hecho.
 >
 > Más información en la [política de privacidad](/privacidad).
 
