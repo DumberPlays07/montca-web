@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-28 (A-03 y A-26 descartadas y C-04, C-05 y C-06 ajustadas a las historias de inscripción; antes, 2026-11-25: catálogo y Repte de Montca: A-08 y A-09 empezadas; el mapa pasa a ser el menú de la web: nuevas B-21, B-22, B-23 y A-31; B-19 se replantea). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-28 (A-32: transferir el sitio de Netlify a la cuenta de Montca; A-03 y A-26 descartadas y C-04, C-05 y C-06 ajustadas a las historias de inscripción; antes, 2026-11-25: catálogo y Repte de Montca: A-08 y A-09 empezadas; el mapa pasa a ser el menú de la web: nuevas B-21, B-22, B-23 y A-31; B-19 se replantea). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -52,6 +52,22 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-16 | Ficha de Google Business                                                                           | M + S | Mejor con el dominio ya activo | ⬜ Pendiente |
 | A-25 | Pedir Google Workspace para entidades sin ánimo de lucro (correo profesional)                      | M + S | Cuando la web esté publicada   | ⬜ Pendiente |
 | A-27 | Documento de Drive compartido (Saúl, Pablo y Montca) con los datos personales que no pueden ir al repo | S     | Ya hay datos que guardar        | ✅ Acabada |
+| A-32 | Transferir el sitio de Netlify a la cuenta de Montca (montcaadventure@gmail.com): pasos justo debajo de la tabla | P     | Antes de configurar Supabase, el correo y el dominio en producción (A-12, A-14, A-15) | ⬜ Pendiente |
+
+**A-32 · Transferir Netlify a la cuenta de Montca**
+
+- **Motivo:** el sitio está ahora en la cuenta personal de Pablo. El registro de tratamientos dice que el contrato de encargado de Netlify se acepta desde la cuenta de Montca, y Montca tiene que poder acceder a su propia web aunque cambie quien la mantiene. Saúl ya ha creado la cuenta de Netlify de Montca, que está vacía.
+- **Pasos:**
+  1. Desde la cuenta de Montca, invitar a Pablo como miembro del equipo. Para transferir un sitio, hay que ser miembro de los dos equipos.
+  2. Pablo transfiere el sitio desde su equipo al de Montca (configuración del sitio → opción de transferir a otro equipo).
+  3. Comprobar después de la transferencia:
+     - que el sitio sigue enlazado al repositorio de GitHub y que un push a `main` despliega (si no, volver a conectar el repositorio);
+     - que las variables de entorno y la configuración de build se han mantenido;
+     - que la web publicada sigue funcionando igual.
+  4. Borrar la variable `PUBLIC_FUENTE_EQUIPOS` si existe (ya no se usa) y comprobar que `PUBLIC_FUENTE_PLAZAS` no está en `prueba`.
+  5. Aceptar el contrato de encargado del tratamiento (DPA) de Netlify desde la cuenta de Montca.
+  6. Dar acceso a Saúl. Si el plan gratuito no permite tantos miembros, decidir entre Pablo y Saúl quién se queda con acceso y anotarlo en [decisiones.md](decisiones.md).
+  7. Cuando esté hecho, actualizar la fila de Netlify en la tabla de encargados de [legal/tratamientos.md](legal/tratamientos.md) (estado del DPA) y añadir una entrada en [decisiones.md](decisiones.md) con la fecha de la transferencia.
 
 ### A3. Legal
 
