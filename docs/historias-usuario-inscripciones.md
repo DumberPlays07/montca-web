@@ -536,6 +536,31 @@
 
 ---
 
+### HU-19 · Ver las plazas libres por categoría en la página del torneo (P2)
+
+**Como** visitante de la web (jugador, padre o madre),
+**quiero** ver cuántas plazas de equipo quedan en cada categoría,
+**para** saber si todavía puedo apuntar un equipo antes de empezar.
+
+**Depende de:** HU-01, HU-16, HU-17.
+
+**Por qué esta prioridad:** sustituye a la lista pública de equipos, que se ha suprimido (D-4). Anima a inscribirse sin mostrar ningún dato personal.
+
+**Prueba independiente:** crear equipos en una categoría y comprobar que el contador de la página del torneo cambia sin volver a desplegar la web.
+
+**Criterios de aceptación**
+
+1. **Dado** que visito la página del torneo, **cuando** se carga, **entonces** veo, para cada categoría, cuántos equipos hay sobre el máximo (por ejemplo, «Infantil/cadete: 5 de 8 equipos» y «Juvenil/sénior: 2 de 6 equipos»).
+2. **Dado** que una categoría ha llegado a su máximo, **cuando** veo su contador, **entonces** aparece como «Completo» y el botón de crear equipo de esa categoría no está disponible.
+3. **Dado** que cuentan todos los equipos que ocupan plaza (RN-19), **cuando** se crea un equipo en estado `creado`, **entonces** el contador ya lo incluye.
+4. **Dado** que las inscripciones están abiertas o cerradas (HU-16), **cuando** veo la sección, **entonces** también veo ese estado y la fecha de cierre.
+5. **Dado** que la sección es pública, **cuando** la veo, **entonces** no aparece ningún nombre de equipo ni de jugador, ni ningún otro dato de la inscripción: solo los números por categoría.
+6. **Dado** que se crea o se borra un equipo, **cuando** recargo la página, **entonces** el contador está actualizado sin volver a desplegar la web. Los datos salen de una consulta pública que solo devuelve los recuentos por categoría.
+7. **Dado** que no se pueden cargar los datos, **cuando** abro la página, **entonces** veo un mensaje neutro («No se han podido cargar las plazas») en vez de un número incorrecto.
+8. **Dado** que uso un lector de pantalla o no distingo colores, **cuando** leo los contadores, **entonces** el estado se entiende por el texto, no solo por el color.
+
+---
+
 ### HU-18 · Borrar los datos del torneo cuando termina su plazo (P2)
 
 **Como** webmaster de Montca,
@@ -679,6 +704,7 @@ No queda ninguna pregunta abierta.
 | Cierre el 20/12 y apertura/cierre manual | HU-16 |
 | Estados del equipo (creado, inscrito, completo) | RN-19, HU-17 |
 | Conservación y borrado de datos | RN-20, 8.4, HU-18 |
+| Plazas libres por categoría en lugar de la lista pública | HU-19 |
 
 ---
 
@@ -691,7 +717,7 @@ Los documentos de `docs/legal/` (registro de tratamientos, política de privacid
 | D-1 | **DNI de los jugadores** | Obligatorio para **todos** los jugadores, porque la aseguradora lo exige para darles de alta | No se pide DNI a ningún jugador; solo al tutor. Montca confirma que el seguro no lo necesita: le bastan los datos de los formularios |
 | D-2 | **Teléfono** | Solo del administrador del equipo y de los tutores | También de cada jugador juvenil/sénior |
 | D-3 | **Dorsal** | Obligatorio (1–99, único por equipo) y público | No aparece |
-| D-4 | **Lista pública de equipos** | Se publican los equipos confirmados (adultos: nombre y primer apellido; menores: solo nombre) hasta una semana después del torneo | No aparece |
+| D-4 | **Lista pública de equipos** | Se publican los equipos confirmados (adultos: nombre y primer apellido; menores: solo nombre) hasta una semana después del torneo | Se suprime. Públicamente solo se muestran las plazas libres por categoría, sin datos personales (HU-19) |
 | D-5 | **Capitán menor** | Da él mismo su correo y su teléfono, y recibe el enlace del equipo | Se dan el correo del tutor y un teléfono de contacto; el enlace lo recibe el tutor |
 | D-6 | **Autorización del tutor** | Casilla en la web, firma digital o papel entregado en Softco | Solo en la web, con código de verificación por correo |
 | D-7 | **Derechos de imagen** | Solo Instagram y TikTok, sin nombrar ni etiquetar al menor | Texto nuevo: «en la web y en los perfiles oficiales de la asociación» |
