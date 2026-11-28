@@ -5,9 +5,11 @@
  * inscripciones y la fecha de cierre, y debajo el segundo "Inscriure's". No muestra ningún dato
  * personal ni ningún nombre de equipo.
  *
- * Al construir la web solo deja la estructura, escondida: `eventos-cliente.ts` pide los recuentos a
- * la fuente elegida (`FuentePlazas`), los escribe en cada categoría y enseña el bloque. Los textos
- * salen de `textos-eventos.ts` (diccionario por idioma), no del script. El máximo de cada categoría
+ * Al construir la web deja la estructura con el sitio de los números ya reservado (T050), para que lo
+ * de debajo no se mueva cuando llegan: `eventos-cliente.ts` pide los recuentos a la fuente elegida
+ * (`FuentePlazas`) y los escribe en cada categoría. El aviso de error es una región `role="status"`
+ * vacía desde el build, que el script rellena si la fuente falla, para que los lectores de pantalla
+ * lo anuncien (T051). Los textos salen de `textos-eventos.ts` (diccionario por idioma), no del script. El máximo de cada categoría
  * sale de los datos del evento, no de la fuente.
  *
  * - Fuente `ninguna` (producción antes de la consulta pública): no sale nada, ni el segundo botón (FR-015).
@@ -56,7 +58,7 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 
 {
 	mostrar && (
-		<div class="plazas-evento" data-plazas-evento data-evento-id={eventoId} hidden>
+		<div class="plazas-evento" data-plazas-evento data-evento-id={eventoId}>
 			<section class="bloque" aria-labelledby="titol-places">
 				<h2 id="titol-places">{t(lang, 'placesPerCategoria')}</h2>
 
@@ -69,9 +71,7 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 				{/* Con las inscripciones abiertas, la fecha de cierre ya sale en la línea de estado. */}
 				<p class="cierre">{rellenar(t(lang, 'cierreInscripciones'), { fecha: fechaCierre })}</p>
 
-				<p class="aviso" data-error hidden>
-					{t(lang, 'errorCargaPlazas')}
-				</p>
+				<p class="aviso" role="status" data-error></p>
 
 				<div class="categorias" data-categorias>
 					{evento.categorias.map((categoria) => (
@@ -105,6 +105,7 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 				data-textos
 				data-texto-ocupados={t(lang, 'equipsOcupats')}
 				data-texto-completa={t(lang, 'completa')}
+				data-texto-error={t(lang, 'errorCargaPlazas')}
 			/>
 
 			{plazasIncrustadas !== null && (
@@ -135,10 +136,13 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 		display: none;
 	}
 
+	/* Vacío ocupa su línea: así el aviso de error no empuja las categorías al aparecer (T050). */
 	.aviso {
 		max-width: 60ch;
+		min-height: 1.5em;
 		margin: 0 0 var(--espacio-4);
 		font-weight: 600;
+		line-height: 1.5;
 	}
 
 	.categorias {
@@ -164,7 +168,9 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 		margin: var(--espacio-1) 0 var(--espacio-3);
 	}
 
+	/* Una línea reservada (1.5rem × 1.2) para que el número no mueva nada al llegar (T050). */
 	.plazas {
+		min-height: 1.8rem;
 		margin: 0;
 		color: var(--color-verd-bosc);
 		font-size: 1.5rem;
@@ -176,8 +182,4 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 		max-width: 28rem;
 	}
 
-	/* Al final para ganar a los `display` de arriba: el script esconde y enseña con `hidden`. */
-	[hidden] {
-		display: none;
-	}
 </style>

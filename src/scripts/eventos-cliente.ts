@@ -100,7 +100,7 @@ function elemento<T extends Element>(raiz: ParentNode, selector: string): T {
 }
 
 /**
- * Escribe "N de M equips" o "Completa" en cada categoría y enseña el bloque.
+ * Escribe "N de M equips" o "Completa" en cada categoría.
  * Si falta el recuento de alguna categoría, no inventa un número: enseña el aviso de error.
  * @returns el recuento por categoría, o `undefined` si faltaba alguno.
  */
@@ -131,15 +131,16 @@ function pintarPlazas(
 			: rellenar(textoOcupados, { n: recuento[id], max: maxEquipos });
 	});
 
-	bloque.hidden = false;
 	return recuento;
 }
 
-/** Una línea de aviso en lugar de los números; el resto de la página sigue (FR-028). */
+/**
+ * Una línea de aviso en lugar de los números; el resto de la página sigue (FR-028). El aviso es una
+ * región `role="status"` que ya estaba en la página, vacía: al rellenarla, los lectores de pantalla la anuncian.
+ */
 function pintarError(bloque: HTMLElement): void {
-	elemento<HTMLElement>(bloque, '[data-error]').hidden = false;
-	elemento<HTMLElement>(bloque, '[data-categorias]').hidden = true;
-	bloque.hidden = false;
+	const { textoError = '' } = elemento<HTMLElement>(bloque, '[data-textos]').dataset;
+	elemento(bloque, '[data-error]').textContent = textoError;
 }
 
 /**
