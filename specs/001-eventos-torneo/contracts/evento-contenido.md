@@ -25,11 +25,7 @@ inscripcion:
   apertura: "2026-11-25T00:00:00+01:00"
   cierre: "2026-12-20T23:59:59+01:00"
   cerradaAMano: false
-  modo: "canal-montca"
-  url: ""                # pendiente: enlace del Google Forms de Montca
-  nota:
-    ca: "T'apuntes amb el formulari de Montca. L'autorització del tutor dels menors es lliura amb signatura digital o en paper a Softco."
-    es: "Te apuntas con el formulario de Montca. La autorización del tutor de los menores se entrega con firma digital o en papel en Softco."
+  url: ""                # pendiente: página de inscripción de la web (C-05); vacía, sale el contacto
 categorias:
   - id: "infantil-cadet"
     nombre: { ca: "Infantil/Cadet", es: "Infantil/Cadete" }
@@ -58,4 +54,4 @@ preguntas:   # las seis de docs/info-montca.md, en ca y es
 Notas:
 - **Nombre de la categoría en castellano**: "Infantil/Cadete" y "Juvenil/Sénior" son una propuesta. Las categorías son nombres de Montca, así que se confirma con Montca si se traducen o se dejan igual.
 - **`direccion` vacía**: "Com arribar" busca por nombre y localidad, y el JSON-LD lleva solo la localidad.
-- **`url` vacía**: se muestra el contacto en lugar del botón (FR-019).
+- **`url` vacía**: en lugar del botón sale "Escríbenos para apuntarte" con el contacto (FR-019). Ya no existen `modo` ni `nota` (28/11/2026: no hay Google Forms).

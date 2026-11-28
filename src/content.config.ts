@@ -74,9 +74,7 @@ const eventos = defineCollection({
 					apertura: instante,
 					cierre: instante,
 					cerradaAMano: z.boolean().default(false),
-					modo: z.enum(['canal-montca', 'web']),
 					url: z.union([z.literal(''), z.url()]).default(''),
-					nota: texto.optional(),
 				}),
 				categorias: z.array(categoria).min(1),
 				normas: z.array(texto).optional(),
@@ -90,13 +88,6 @@ const eventos = defineCollection({
 						code: 'custom',
 						path: ['inscripcion', 'cierre'],
 						message: 'el cierre tiene que ser posterior a la apertura',
-					});
-				}
-				if (inscripcion.modo === 'canal-montca' && inscripcion.nota === undefined) {
-					ctx.addIssue({
-						code: 'custom',
-						path: ['inscripcion', 'nota'],
-						message: 'con modo "canal-montca" la nota es obligatoria (FR-018)',
 					});
 				}
 				if (precio.importe !== undefined && !precio.confirmado) {

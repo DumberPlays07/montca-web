@@ -21,44 +21,44 @@ export interface EventoParaEstado {
 	categorias: CategoriaParaPlazas[];
 }
 
+/** Lo que usa `calcularEstado`: las jornadas solo importan para saber si el evento ya pasó. */
+export type EventoParaCalcularEstado = Pick<EventoParaEstado, 'inscripcion' | 'categorias'>;
+
 export interface CategoriaParaPlazas {
 	id: string;
 	maxEquipos: number;
 }
 
-/** Equipos confirmados por `id` de categoría. */
-export type ConfirmadosPorCategoria = Record<string, number>;
+/** Equipos que ocupan plaza por `id` de categoría. */
+export type EquiposPorCategoria = Record<string, number>;
 
 /**
- * Equipos confirmados por categoría. Cuenta una por una las categorías del evento (con cero si
- * no hay ninguno) y se salta las que el evento no tiene.
+ * Recuentos de la fuente de plazas en un registro por categoría. Se salta las categorías que el
+ * evento no tiene. Una categoría de la que no llega recuento no aparece: no se da por vacía.
  */
-export function confirmadosPorCategoria(
-	equipos: { categoria: string }[],
+export function equiposPorCategoria(
+	plazas: { categoria: string; equiposActuales: number }[],
 	idsCategorias: string[],
-): ConfirmadosPorCategoria {
-	const recuento: ConfirmadosPorCategoria = Object.fromEntries(idsCategorias.map((id) => [id, 0]));
-	for (const equipo of equipos) {
-		if (equipo.categoria in recuento) {
-			recuento[equipo.categoria] += 1;
+): EquiposPorCategoria {
+	const recuento: EquiposPorCategoria = {};
+	for (const { categoria, equiposActuales } of plazas) {
+		if (idsCategorias.includes(categoria)) {
+			recuento[categoria] = equiposActuales;
 		}
 	}
 	return recuento;
 }
 
-/** La lista de equipos se retira una semana después de la última jornada (FR-040). */
-const DIAS_HASTA_RETIRAR_LISTA = 7;
-
 const ZONA_HORARIA_EVENTOS = 'Europe/Madrid';
 
 /**
  * Calcula el estado de las inscripciones en el instante `ahora`.
- * Sin `confirmadosPorCategoria` (sin fuente de equipos) nunca devuelve `completes`.
+ * Sin `equiposPorCategoria` (sin fuente de plazas) nunca devuelve `completes`.
  */
 export function calcularEstado(
-	evento: EventoParaEstado,
+	evento: EventoParaCalcularEstado,
 	ahora: Date,
-	confirmadosPorCategoria?: ConfirmadosPorCategoria,
+	equiposPorCategoria?: EquiposPorCategoria,
 ): EstadoInscripcion {
 	const { inscripcion } = evento;
 	if (inscripcion.cerradaAMano) {
@@ -71,40 +71,32 @@ export function calcularEstado(
 	if (instante > Date.parse(inscripcion.cierre)) {
 		return 'tancades';
 	}
-	if (confirmadosPorCategoria !== undefined && todasCompletas(evento.categorias, confirmadosPorCategoria)) {
+	if (equiposPorCategoria !== undefined && todasCompletas(evento.categorias, equiposPorCategoria)) {
 		return 'completes';
 	}
 	return 'obertes';
 }
 
-function todasCompletas(categorias: CategoriaParaPlazas[], confirmados: ConfirmadosPorCategoria): boolean {
+function todasCompletas(categorias: CategoriaParaPlazas[], equipos: EquiposPorCategoria): boolean {
 	return categorias.every((categoria) => {
-		const recuento = confirmados[categoria.id];
+		const recuento = equipos[categoria.id];
 		// Una categoría de la que no llega recuento no se da por llena.
 		return recuento !== undefined && plazasCategoria(categoria, recuento).completa;
 	});
 }
 
-/** Plazas libres de una categoría: máximo menos confirmados, nunca negativo. */
+/** Plazas libres de una categoría: máximo menos equipos que ocupan plaza, nunca negativo. */
 export function plazasCategoria(
 	categoria: CategoriaParaPlazas,
-	confirmados: number,
+	equiposActuales: number,
 ): { libres: number; completa: boolean } {
-	const libres = Math.max(0, categoria.maxEquipos - confirmados);
+	const libres = Math.max(0, categoria.maxEquipos - equiposActuales);
 	return { libres, completa: libres === 0 };
 }
 
 /** Verdadero cuando en Madrid ya ha terminado el día de la última jornada (FR-004). */
 export function esEventoPasado(evento: EventoParaEstado, ahora: Date): boolean {
 	return fechaEnMadrid(ahora) > ultimaJornada(evento);
-}
-
-/**
- * Verdadero desde las 00:00 (Madrid) del día que cae 7 días después de la última jornada:
- * desde entonces no se muestran ni la lista de equipos ni las plazas (FR-040).
- */
-export function listaRetirada(evento: EventoParaEstado, ahora: Date): boolean {
-	return fechaEnMadrid(ahora) >= sumarDias(ultimaJornada(evento), DIAS_HASTA_RETIRAR_LISTA);
 }
 
 /** Fecha de la última jornada (`AAAA-MM-DD`). El esquema garantiza que hay al menos una. */
@@ -121,10 +113,4 @@ export function fechaEnMadrid(ahora: Date): string {
 		month: '2-digit',
 		day: '2-digit',
 	}).format(ahora);
-}
-
-/** Suma `dias` a una fecha `AAAA-MM-DD`. Se hace en UTC para que no influya el horario de verano. */
-function sumarDias(fecha: string, dias: number): string {
-	const [anio, mes, dia] = fecha.split('-').map(Number);
-	return new Date(Date.UTC(anio, mes - 1, dia + dias)).toISOString().slice(0, 10);
 }

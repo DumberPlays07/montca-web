@@ -32,4 +32,4 @@
 ## Notes
 
 - Las decisiones abiertas se resolvieron en `/speckit-clarify` (2026-11-24, sección *Clarifications* de la spec). Quedan pendientes de Montca (A-26) solo las marcadas así en la spec.
-- Se nombran Google Forms, Google Maps y la base de datos (A-14) porque son decisiones de negocio de Montca o del proyecto, no detalles de implementación de esta feature.
+- Se nombran Google Maps y la base de datos (A-14) porque son decisiones de negocio de Montca o del proyecto, no detalles de implementación de esta feature.

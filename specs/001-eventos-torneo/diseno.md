@@ -31,8 +31,6 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 │ Poliesportiu Municipal…  Com arribar│  enlace externo a Google Maps
 │ ▰ Inscripcions obertes fins al 20/12│  marca de pintura + estado
 │ [         Inscriure's             ] │  botón teja, ancho completo
-│ T'apuntes amb el formulari de       │  nota del canal de Montca
-│ Montca. L'autorització…             │
 ├─────────────────────────────────────┤
 │  Agenda   Activitats   Contacte     │  BarraInferior (existente)
 └─────────────────────────────────────┘
@@ -44,13 +42,13 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 
 ### Debajo del pliegue, en este orden
 
-1. **Places i equips**: un bloque por categoría (plano Herba clara) con el nombre, los años de nacimiento, "N de M places lliures" y jugadores por equipo.
-   - Categoría llena: "Completa" y el texto "Pots apuntar-te a la llista d'espera".
-   - Sin equipos confirmados: las plazas y "Encara no hi ha cap equip confirmat. Sigues el primer!".
-   - Lista de equipos confirmados: cada equipo es un desplegable (`<details>`) con su nombre y el número de jugadores; dentro, los jugadores con su nombre público, el dorsal si lo tienen ("Laia · 7", "Marc García · 10") y el capitán con el texto "capità" (no solo un icono ni un color).
-   - Sin fuente de equipos (antes de A-14): este bloque no sale.
-   - Error al cargar: un aviso de una línea en lugar de la lista; el resto de la página sigue.
-2. **Inscriure's** (segunda vez, debajo de los equipos, como pide la spec) con la misma nota del canal de Montca.
+1. **Places**: un bloque por categoría (plano Herba clara) con el nombre, los años de nacimiento y "N de M equips" (HU-19). Arriba, el estado de las inscripciones y la fecha de cierre.
+   - Categoría llena: "Completa". Sin lista de espera.
+   - El estado se entiende por el texto, no solo por el color.
+   - Sin fuente de plazas (antes de la consulta pública): este bloque no sale.
+   - Error al cargar: "No s'han pogut carregar les places"; el resto de la página sigue.
+   - No hay lista de equipos ni de jugadores: la web no publica ningún dato personal.
+2. **Inscriure's** (segunda vez, debajo de las plazas, como pide la spec).
 3. **Què cal saber**: tabla de categorías (años, máximo de equipos, mínimo y máximo de jugadores), precio, plazo de inscripción y normas (solo cuando Montca las pase).
 4. **Preguntes freqüents**: desplegables (`<details>`), una pregunta por fila de al menos 44 px.
 5. **Com arribar**: lugar y enlace a Google Maps (sin mapa incrustado).
@@ -61,9 +59,9 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 |---|---|---|
 | pròximament | "Inscripcions a partir del 25/11" | no sale |
 | obertes | marca de pintura + "Inscripcions obertes fins al 20/12" | Inscriure's |
-| completes | "Places completes · llista d'espera" | Inscriure's (lista de espera, por el mismo canal) |
+| completes | "Places completes" | no sale |
 | tancades | "Inscripcions tancades" | no sale |
-| canal de Montca sin dirección | estado normal | en su lugar, "Escriu-nos per a apuntar-te" (WhatsApp o correo) |
+| sin dirección de inscripción | estado normal | en su lugar, "Escriu-nos per a apuntar-te" (WhatsApp o correo) |
 
 ## 3. Sección Eventos (`/esdeveniments/`)
 
@@ -96,12 +94,12 @@ Resumen del `/impeccable shape` del 2026-11-24, confirmado por Pablo. Sistema vi
 ## 6. Componentes
 
 - **Se reutilizan**: `BaseLayout`, `Cabecera`, `Pie`, `BarraInferior`, `EnlaceVolver`, `Icono` (con dos iconos nuevos: lugar y enlace externo).
-- **Nuevos** (zona de Pablo): estado de las inscripciones, botón de inscripción, plazas de una categoría, lista de equipos, preguntas frecuentes, tarjeta de evento y franja del evento.
+- **Nuevos** (zona de Pablo): estado de las inscripciones, botón de inscripción, plazas de una categoría, preguntas frecuentes, tarjeta de evento y franja del evento.
 - `DESIGN.md` se actualiza con `/impeccable document` al terminar la implementación (tamaño Display ya construido, componentes nuevos), no antes.
 
 ## 7. Restricciones que no se pueden inventar al construir
 
 - Ningún texto escrito en los componentes: todo sale de los datos del evento o del diccionario provisional (constitución II).
-- Precio, normas, premios y dirección del Forms: solo los de Montca; si faltan, se muestra "pendent" o no se muestra.
-- Datos de prueba de equipos: marcados como prueba y nunca en producción.
+- Precio, normas, premios y dirección de inscripción: solo los de Montca; si faltan, se muestra "pendent" o no se muestra.
+- Datos de prueba de plazas: marcados como prueba y nunca en producción.
 - Zonas pulsables de 44 px como mínimo, foco visible, comprobación en 375 px y en escritorio, y `prefers-reduced-motion` si se añade movimiento (no está previsto).

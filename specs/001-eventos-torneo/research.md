@@ -2,12 +2,12 @@
 
 Decisiones técnicas tomadas para el plan. Cada una dice qué se elige, por qué y qué se descartó. Lo comprobado en esta máquina el 2026-11-24 va marcado como **comprobado**; el resto, como **por comprobar**.
 
-## R1. Cómo cambian el estado y la lista sin volver a publicar (FR-012, FR-027)
+## R1. Cómo cambian el estado y las plazas sin volver a publicar (FR-012, FR-027)
 
 - **Decision**: la web sigue siendo estática (Astro sin adaptador). Cada página trae, al construirse, el estado calculado en ese momento, y un **script pequeño en el navegador**:
   - vuelve a calcular el estado con la hora del visitante, a partir de las fechas que lleva la propia página;
-  - si hay fuente real de equipos, pide la lista de equipos confirmados a la vista pública de Supabase.
-- **Rationale**: cumple "cambia en su fecha sin volver a publicar" y "aparece en menos de 1 hora" sin servidor propio y sin coste. Sin JavaScript, la página sigue mostrando toda la información y el estado del día en que se construyó.
+  - si hay fuente real de plazas, pide los recuentos por categoría a la consulta pública de Supabase.
+- **Rationale**: cumple "cambia en su fecha sin volver a publicar" y "el contador se actualiza al recargar" sin servidor propio y sin coste. Sin JavaScript, la página sigue mostrando toda la información y el estado del día en que se construyó.
 - **Alternatives considered**:
   - *Reconstruir la web cada hora con un aviso programado de Netlify*: unas 720 construcciones al mes superan los 300 minutos gratuitos de Netlify y tocaría `netlify.toml` (zona de Saúl).
   - *Páginas generadas en el servidor (adaptador de Netlify)*: añade un adaptador y funciones por visita para una página que cambia pocas veces al día.
@@ -21,51 +21,34 @@ Decisiones técnicas tomadas para el plan. Cada una dice qué se elige, por qué
   - *JSON*: igual de válido, pero menos cómodo de editar a mano para Montca.
   - *Markdown con frontmatter*: no encaja con textos en dos idiomas.
 
-## R3. La capa de datos de equipos detrás de una interfaz
+## R3. La capa de datos de plazas detrás de una interfaz
 
-- **Decision**: una interfaz `FuenteEquipos` con un único método que devuelve los **equipos públicos** de un evento o un resultado "sin fuente" o "error". Tiene tres implementaciones:
-  - **`ninguna`**: producción antes de A-14. No pide nada y no se muestran ni la lista ni las plazas (FR-015).
-  - **`prueba`**: datos inventados. Se convierten en equipos públicos **al construir la página** y solo llega al navegador el resultado público (SC-003).
-  - **`supabase`** (A-14): `fetch` a la vista `equipos_publicos` con la clave pública (`anon`) de Supabase.
+- **Decision**: una interfaz `FuentePlazas` con un único método que devuelve los **recuentos de equipos por categoría** de un evento o un resultado "sin fuente" o "error". Tiene tres implementaciones:
+  - **`ninguna`**: producción antes de la consulta pública. No pide nada y no se muestran las plazas (FR-015).
+  - **`prueba`**: recuentos inventados. La página los deja incrustados **al construirse** (solo local y vistas previas).
+  - **`supabase`** (A-14): `fetch` a la consulta `plazas_por_categoria` con la clave pública (`anon`) de Supabase.
 
-  La fuente se elige con la variable de entorno `PUBLIC_FUENTE_EQUIPOS`, que vale `ninguna` por defecto. El build **falla** si se pide `prueba` en el contexto de producción de Netlify.
-- **Rationale**: toda la interfaz se puede hacer ya con datos de prueba, y cuando exista A-14 solo cambia la variable de entorno. Los datos de prueba nunca salen en producción.
-- **Alternatives considered**:
-  - *Librería `@supabase/supabase-js`*: es una dependencia nueva para una sola petición de lectura. Con `fetch` a la API REST de Supabase basta y no hay que justificar ninguna librería.
-  - *Pasar los datos de prueba "en crudo" al navegador y filtrarlos allí*: enviaría apellidos y equipos pendientes, aunque inventados, y no se podría comprobar SC-003.
+  La fuente se elige con la variable de entorno `PUBLIC_FUENTE_PLAZAS`, que vale `ninguna` por defecto. El build **falla** si se pide `prueba` en el contexto de producción de Netlify.
+- **Rationale**: toda la interfaz se puede hacer ya con datos de prueba, y cuando exista la consulta solo cambia la variable de entorno. Los datos de prueba nunca salen en producción.
+- **Alternatives considered**: la librería `@supabase/supabase-js` (dependencia nueva para una sola petición de lectura; con `fetch` basta).
+- *Sustituye (28/11/2026) a la interfaz `FuenteEquipos` y a la lista pública de equipos y jugadores.*
 
-## R4. Privacidad en la base de datos (FR-023, FR-024, FR-026)
+## R4. Privacidad en la base de datos (FR-026)
 
-- **Decision**: las tablas `equipos` y `jugadores` tienen RLS (seguridad por filas) activada y **ninguna política para `anon`**. La única puerta pública es la **vista `equipos_publicos`**, que:
-  - devuelve solo los equipos confirmados;
-  - calcula en SQL el nombre público (primer nombre de los menores; nombre y primer apellido de los adultos);
-  - deja fuera a los menores sin autorización registrada;
-  - devuelve solo nombre del equipo, categoría, nombre público, dorsal y capitán.
-- **Rationale**: el navegador no puede recibir un dato que no esté en la vista, por mucho que alguien manipule la petición. La regla del nombre público vive en un solo sitio en producción (SQL), y las mismas reglas se prueban en TypeScript con los datos de prueba (contrato en [contracts/vista-publica.md](contracts/vista-publica.md)).
-- **Alternatives considered**:
-  - *Políticas RLS de lectura sobre las tablas*: expondrían todas las columnas de las filas permitidas, apellidos y fecha de nacimiento incluidos.
-  - *Una función de Netlify que filtre*: añade una pieza más que mantener.
-- **Por comprobar (Saúl, A-14)**: que la vista se cree con el propietario adecuado para leer tablas con RLS, y que `anon` solo tenga permiso de lectura sobre la vista. Mirar la documentación de Supabase sobre vistas y `security_invoker` antes de crearla.
+- **Decision**: las tablas de inscripciones tienen RLS activada y **ninguna política para `anon`**. La única puerta pública es la consulta **`plazas_por_categoria`**, que devuelve solo `{ evento, categoria, equipos_actuales }` ([contracts/vista-publica.md](contracts/vista-publica.md)).
+- **Rationale**: el navegador no puede recibir un dato que no esté en la consulta, por mucho que alguien manipule la petición. Ni nombres de equipo ni de jugador salen de la base de datos.
+- **Por comprobar (Saúl)**: que la vista o la función se creen con el propietario adecuado para leer tablas con RLS, y que `anon` solo tenga permiso sobre ella (documentación de Supabase sobre vistas y `security_invoker`).
+- *Sustituye (28/11/2026) a la vista `equipos_publicos`.*
 
-## R5. Importación del Google Forms (FR-033, FR-034)
+## R5. Importación del Google Forms: suprimida (28/11/2026)
 
-- **Decision**: **pendiente de Saúl en A-30 (issue #70)**. Hay dos opciones, descritas en [contracts/importacion-forms.md](contracts/importacion-forms.md):
-  - **(a) Apps Script + Netlify Function** (recomendada): un Apps Script vinculado a la hoja, en la cuenta de Google de Montca, envía las filas con un secreto compartido a una Netlify Function, que escribe en Supabase con la clave de servicio que ya está en Netlify.
-  - **(b) Importación puntual desde un ordenador**: solo si A-30 cambia antes el registro de tratamientos.
-- **Rationale**: `docs/legal/tratamientos.md` §5 dice que las exportaciones no van a dispositivos personales y que la clave de servicio solo está en Netlify. La primera versión de este plan (CSV descargado y script local con la clave en `.env`) chocaba con las dos reglas. La opción (a) las cumple sin tocar el registro.
-- **Alternatives considered**:
-  - *Script local con el CSV descargado y la clave en `.env`* (primera versión): descartado por `tratamientos.md` §5, salvo que A-30 lo permita (opción b).
-  - *Apps Script que escriba directamente en Supabase*: dejaría la clave de servicio en la cuenta de Google de Montca, fuera de Netlify.
-  - *Copiar los datos a mano en el editor de Supabase*: descartado en el clarify.
-- **Por decidir (Saúl)**: la opción, y las columnas exactas del Forms (A-26): si pregunta el capitán y el dorsal, y cómo viene la autorización.
+El Google Forms provisional ya no se usa: las inscripciones solo se hacen desde la web. No hay importación de hojas de respuestas ni opciones (a) y (b) de A-30.
 
 ## R6. Zona horaria y fechas (FR-012, FR-040)
 
 - **Decision**: las fechas del evento se guardan en ISO 8601 **con la diferencia horaria de Madrid escrita**. Por ejemplo, la apertura es `2026-11-25T00:00:00+01:00` y el cierre `2026-12-20T23:59:59+01:00`. El estado se calcula comparando instantes, sin librerías de fechas.
 - **Rationale**: en invierno Madrid va a +01:00 y todas las fechas del torneo caen en invierno. Comparar instantes funciona igual en el servidor y en cualquier navegador.
 - **Alternatives considered**: guardar fechas sin hora y convertir a Madrid con `Intl`, que es más código y más fácil de equivocar. El siguiente evento, si cae en verano, escribe `+02:00`. El esquema exige la diferencia horaria en las fechas.
-
-- **Retirada de la lista (FR-040)**: se calcula a partir de la fecha de la última jornada (`AAAA-MM-DD`) + 7 días, comparando con la fecha de hoy en Madrid obtenida con `Intl.DateTimeFormat` y `timeZone: 'Europe/Madrid'`. Funciona igual en verano y en invierno, sin librerías. En Supabase, lo mismo con `now() at time zone 'Europe/Madrid'`.
 
 ## R7. Pruebas automáticas sin librería nueva
 

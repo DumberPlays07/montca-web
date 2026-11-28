@@ -10,7 +10,6 @@ export interface LugarEvento {
 
 export interface EventoParaInscripcion {
 	inscripcion: {
-		modo: 'canal-montca' | 'web';
 		url: string;
 	};
 }
@@ -29,9 +28,9 @@ export function urlComArribar(lugar: LugarEvento): string {
 }
 
 /**
- * A dónde lleva "Inscriure's": la dirección configurada del evento, sea el formulario de
- * Montca (`canal-montca`) o la página de inscripción de la web (`web`, C-05). Devuelve
- * `null` si no hay dirección: entonces la página muestra el contacto (FR-017, FR-019).
+ * A dónde lleva "Inscriure's": la dirección configurada del evento, la página de inscripción
+ * de la web (C-05). Devuelve `null` si no hay dirección: entonces la página muestra el
+ * contacto (FR-017, FR-019).
  */
 export function destinoInscripcion(evento: EventoParaInscripcion): string | null {
 	const url = evento.inscripcion.url.trim();

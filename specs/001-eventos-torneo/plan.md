@@ -6,24 +6,24 @@
 
 ## Summary
 
-Sección Eventos y página del torneo de Navidad, con estado de inscripciones, botón "Inscriure's", plazas, "Equips inscrits", franja en la portada, preguntas frecuentes, "Com arribar" y JSON-LD.
+Sección Eventos y página del torneo de Navidad, con estado de inscripciones, botón "Inscriure's", plazas libres por categoría (sin lista pública de equipos, HU-19), franja en la portada, preguntas frecuentes, "Com arribar" y JSON-LD.
 
 Enfoque:
 - Web **estática** de Astro. Los datos del evento están en una **colección de contenido YAML** bilingüe.
-- Un **script pequeño en el navegador** recalcula el estado por fechas y pide los equipos a una **vista pública de Supabase**.
-- Los equipos están detrás de la interfaz `FuenteEquipos`, con tres implementaciones: `ninguna`, `prueba` y `supabase`.
+- Un **script pequeño en el navegador** recalcula el estado por fechas y pide los recuentos de equipos por categoría a una **consulta pública de Supabase** (`plazas_por_categoria`).
+- Las plazas están detrás de la interfaz `FuentePlazas`, con tres implementaciones: `ninguna`, `prueba` y `supabase`.
 
-El trabajo va ordenado para que **lo primero que se publique sea la página informativa con el enlace al Google Forms de Montca, sin Supabase ni i18n**. Toda la UI de equipos se hace ya con datos de prueba, y cuando esté A-14 solo cambian la capa de datos de Saúl y una variable de entorno.
+El trabajo va ordenado para que **lo primero que se publique sea la página informativa con el contacto para apuntarse, sin Supabase ni i18n**. Toda la UI de plazas se hace ya con datos de prueba, y cuando exista la consulta pública solo cambian la capa de datos de Saúl y una variable de entorno.
 
 ## Technical Context
 
 **Language/Version**: TypeScript (tsconfig estricto de Astro), Node ≥ 22.23 (`package.json`).
 
-**Primary Dependencies**: Astro 7.4.11 (ya instalado). **Ninguna librería nueva** en la web. La importación del Forms (R5) se decide en A-30; si necesitara una librería, se justifica en su PR.
+**Primary Dependencies**: Astro 7.4.11 (ya instalado). **Ninguna librería nueva** en la web.
 
 **Storage**:
 - Contenido YAML en el repo (eventos).
-- Supabase Postgres en la UE (equipos y jugadores, A-14). Se lee desde el navegador solo a través de la vista `equipos_publicos`.
+- Supabase Postgres en la UE (inscripciones, A-14). Se lee desde el navegador solo a través de la consulta pública `plazas_por_categoria`.
 
 **Testing**: `node --test` sobre `.ts` (comprobado en Node 22.23.5, sin dependencias), con el script `npm test`. Las comprobaciones manuales están en [quickstart.md](quickstart.md).
 
@@ -32,7 +32,7 @@ El trabajo va ordenado para que **lo primero que se publique sea la página info
 **Project Type**: web (Astro, sin servidor propio).
 
 **Performance Goals**:
-- La primera pantalla del torneo se pinta sin esperar a ninguna petición de datos; los equipos llegan después.
+- La primera pantalla del torneo se pinta sin esperar a ninguna petición de datos; los contadores llegan después.
 - Una sola petición de datos por página.
 - JavaScript de la página por debajo de ~5 KB comprimido.
 
@@ -52,11 +52,11 @@ El trabajo va ordenado para que **lo primero que se publique sea la página info
 
 | Principio | Cumple | Cómo |
 |---|---|---|
-| I. Móvil primero | ✅ | Diseño a 375 px ([diseno.md](diseno.md)); dos toques desde la portada hasta el Forms y uno desde la página (SC-002) |
+| I. Móvil primero | ✅ | Diseño a 375 px ([diseno.md](diseno.md)); dos toques desde la portada hasta la inscripción y uno desde la página (SC-002) |
 | II. VAL y CAST | ✅ | Textos de interfaz en el diccionario provisional `textos-eventos.ts` y del evento en su YAML `{ca, es}`. El esquema hace fallar el build si falta un idioma. Mismo patrón provisional que B-09, sin tocar `src/i18n` |
-| III. No se inventan datos | ✅ | Precio "pendent" y sin `offers`; normas, dirección y URL del Forms vacías hasta que las dé Montca; datos de prueba con el prefijo "Prova ·" y nunca en producción (el build falla) |
-| IV. Privacidad y menores (v2.0.0) | ✅ (con A-30) | Solo se publica lo de `docs/legal/tratamientos.md` T7 (FR-039) y se retira a los 7 días (FR-040); menores sin autorización fuera; Supabase en la UE; importación sin pasar por ordenadores personales ni sacar la clave de servicio de Netlify (A-30). El Google Forms guarda datos en Google (EE. UU., cubierto por el Marco de Privacidad UE-EE. UU.): la constitución v2.0.0 lo admite si consta en la privacidad, que es lo que hace **A-30 (#70)**; hasta entonces el botón no se publica |
-| V. Accesibilidad | ✅ | `<details>` nativos; capitán con texto; foco visible; 44 px; sin movimiento |
+| III. No se inventan datos | ✅ | Precio "pendent" y sin `offers`; normas, dirección y página de inscripción vacías hasta que existan; datos de prueba nunca en producción (el build falla) |
+| IV. Privacidad y menores (v2.0.0) | ✅ | Solo se publican recuentos por categoría, sin ningún dato personal ni nombre de equipo (FR-026, HU-19); `docs/legal/tratamientos.md` tiene T7 suprimido; Supabase en la UE |
+| V. Accesibilidad | ✅ | `<details>` nativos en las preguntas; el estado del contador se entiende por el texto; foco visible; 44 px; sin movimiento |
 | VI. Sencillez | ✅ | Astro y Netlify estáticos; Supabase ya acordado (decisión del 15/11); sin librerías nuevas en la web; `fetch` en lugar de `supabase-js` |
 | VII. Flujo | ✅ | Issues por zona después del PR de la spec; PR revisado por el otro |
 
@@ -72,9 +72,8 @@ specs/001-eventos-torneo/
 ├── plan.md · research.md · data-model.md · quickstart.md
 ├── contracts/
 │   ├── evento-contenido.md     # YAML del evento
-│   ├── fuente-equipos.md       # interfaz UI ↔ datos y qué cambia con A-14
-│   ├── vista-publica.md        # vista de Supabase + casos compartidos SQL/TS
-│   └── importacion-forms.md    # script de importación del Forms
+│   ├── fuente-plazas.md        # interfaz UI ↔ datos y qué cambia con la consulta pública
+│   └── vista-publica.md        # consulta pública plazas_por_categoria (SQL)
 ├── checklists/requirements.md
 └── tasks.md                    # /speckit-tasks
 ```
@@ -89,13 +88,12 @@ src/
 ├── content/eventos/torneig-nadal-2026.yaml   [S] datos del torneo, VAL y CAST
 ├── lib/eventos/
 │   ├── estado.ts (+ estado.test.ts)          [P] calcularEstado, plazas, evento pasado
-│   ├── vista-publica.ts (+ .test.ts)         [P] regla del nombre público (la misma que la vista SQL)
-│   ├── datos-prueba.ts                       [P] filas inventadas (data-model §5)
-│   ├── fuente-equipos.ts                     [P] interfaz, elección por variable de entorno, fuenteNinguna, fuenteIncrustada
-│   ├── fuente-supabase.ts                    [S] fetch a equipos_publicos (con A-14)
+│   ├── datos-prueba.ts                       [P] recuentos inventados (data-model §5)
+│   ├── fuente-plazas.ts                      [P] interfaz, elección por variable de entorno, fuenteNinguna, fuenteIncrustada
+│   ├── fuente-supabase.ts                    [S] fetch a plazas_por_categoria (con A-14)
 │   ├── enlaces.ts                            [P] URL de "Com arribar", destino de Inscriure's
 │   └── json-ld.ts                            [P] SportsEvent
-├── scripts/eventos-cliente.ts                [P] recalcula estado, pide equipos, pinta plazas y lista
+├── scripts/eventos-cliente.ts                [P] recalcula estado, pide plazas y pinta los contadores
 ├── components/
 │   ├── textos-eventos.ts                     [P] diccionario provisional ca/es (hasta B-07)
 │   ├── textos-navegacion.ts                  [P] + clave y ruta `eventos`
@@ -104,7 +102,7 @@ src/
 │   ├── eventos/CartellEvento.astro           [P] primera pantalla (títol, jornades, esports, lloc)
 │   ├── eventos/EstatInscripcio.astro         [P]
 │   ├── eventos/BotoInscripcio.astro          [P] Inscriure's / contacto si no hay URL
-│   ├── eventos/PlacesIEquips.astro           [P] bloques por categoría + lista (los rellena el script)
+│   ├── eventos/PlazasPorCategoria.astro      [P] un contador por categoría (los rellena el script)
 │   ├── eventos/QueCalSaber.astro             [P]
 │   ├── eventos/PreguntesFrequents.astro      [P]
 │   ├── eventos/ComArribar.astro              [P]
@@ -117,8 +115,7 @@ src/
     ├── esdeveniments/index.astro · [evento].astro
     ├── es/esdeveniments/index.astro · [evento].astro
     └── index.astro                           (+ FranjaEsdeveniment)
-(importación del Forms)                       [S] pendiente de A-30: opción (a) Apps Script + Netlify Function, u opción (b) (contrato: importacion-forms.md)
-supabase/ (o donde decida Saúl)               [S] SQL de tablas, RLS y vista (sin datos)
+supabase/ (o donde decida Saúl)               [S] SQL de la consulta plazas_por_categoria (sin datos)
 package.json                                  [P→S] script "test"
 ```
 
@@ -128,7 +125,7 @@ package.json                                  [P→S] script "test"
 
 Cada entrega deja `main` compilando y se puede revisar por separado.
 
-### Entrega 1 · Página informativa con el Forms (US1). **Lo primero que se publica.**
+### Entrega 1 · Página informativa con el contacto (US1). **Lo primero que se publica.**
 
 No depende de A-14 ni de B-07. Sí depende de B-02 (Netlify) para publicarse.
 
@@ -140,16 +137,15 @@ No depende de A-14 ni de B-07. Sí depende de B-02 (Netlify) para publicarse.
 6. **[P]** `eventos-cliente.ts`, solo la parte del estado por fechas.
 7. **[P]** Comprobaciones del quickstart §1–§2.
 
-**Montca tiene que pasar antes de publicar**: el enlace del Google Forms (si no, sale el contacto) y el visto bueno de los textos en castellano.
+**Montca tiene que pasar antes de publicar**: el visto bueno de los textos en castellano. La página de inscripción llega con C-05; hasta entonces sale el contacto (FR-019).
 
-### Entrega 2 · Plazas y "Equips inscrits" con datos de prueba (US2)
+### Entrega 2 · Contador de plazas con datos de prueba (US2)
 
 Producción sigue con `ninguna`, así que publicarla no cambia nada visible.
 
-1. **[P]** `vista-publica.ts` con los once casos del contrato, y `datos-prueba.ts`.
-2. **[P]** `fuente-equipos.ts` (`ninguna`, `prueba`) y el fallo del build si hay datos de prueba en producción.
-3. **[P]** `PlacesIEquips.astro` con todos sus estados (sin equipos, completa, error) y la parte de equipos de `eventos-cliente.ts`.
-4. **[P]** Quickstart §3, con la prueba de privacidad (SC-003).
+1. **[P]** `datos-prueba.ts` con recuentos inventados y `fuente-plazas.ts` (`ninguna`, `prueba`), con el fallo del build si hay datos de prueba en producción.
+2. **[P]** `PlazasPorCategoria.astro` con todos sus estados (sin datos, "N de M equips", "Completa", error) y la parte de plazas de `eventos-cliente.ts`.
+3. **[P]** Quickstart §3, con la prueba de privacidad (SC-003).
 
 ### Entrega 3 · Franja de la portada (US3)
 
@@ -161,28 +157,23 @@ Producción sigue con `ninguna`, así que publicarla no cambia nada visible.
 1. **[P]** `TargetaEsdeveniment` completa, eventos pasados fuera de la lista y prueba con un segundo YAML local (SC-006).
 2. **[P]** `/impeccable audit` y `/impeccable document` (actualiza `DESIGN.md`).
 
-### En paralelo · Capa de datos (Saúl), cuando esté A-14
+### En paralelo · Capa de datos (Saúl), cuando esté A-14 y la spec de inscripciones
 
-1. **[S]** Tablas, RLS y vista `equipos_publicos` según [vista-publica.md](contracts/vista-publica.md), con sus comprobaciones.
-2. **[S]** `fuente-supabase.ts` según [fuente-equipos.md](contracts/fuente-equipos.md).
-3. **[S]** Importación del Forms según la opción que se decida en A-30 ([importacion-forms.md](contracts/importacion-forms.md)); primera importación en modo simular.
-4. **[S]** A-30 (#70) hecha y comprobado que la lista coincide con `docs/legal/tratamientos.md` T7 y `privacidad.md` 2.7 (FR-039).
-5. **[S]** Variables de Netlify: `PUBLIC_FUENTE_EQUIPOS=supabase`, URL y clave pública. **Este es el único cambio que activa los equipos en producción.**
+1. **[S]** Consulta pública `plazas_por_categoria` según [vista-publica.md](contracts/vista-publica.md), con sus comprobaciones.
+2. **[S]** `fuente-supabase.ts` según [fuente-plazas.md](contracts/fuente-plazas.md).
+3. **[S]** Variables de Netlify: `PUBLIC_FUENTE_PLAZAS=supabase`, URL y clave pública, y borrar `PUBLIC_FUENTE_EQUIPOS` si existe. **Este es el único cambio que activa el contador en producción.**
 
-### Qué cambia cuando esté A-14 (resumen)
+### Qué cambia cuando exista la consulta de plazas (resumen)
 
-| | Antes de A-14 | Con A-14 |
+| | Antes | Después |
 |---|---|---|
-| Página del torneo | Información, estado por fechas, Inscriure's | Además, plazas y "Equips inscrits" reales |
+| Página del torneo | Información, estado por fechas, contacto para apuntarse | Además, el contador de plazas por categoría |
 | Fuente en producción | `ninguna` | `supabase` |
 | Código de UI | Hecho y probado con `prueba` | Sin cambios |
-| Equipos del Forms | En la hoja de Montca | Importados con el script, como `pendiente`; Montca los confirma |
-| Confirmar equipos | — | A mano en Supabase hasta C-06 |
-| Estado `completes` | No puede darse (sin recuento) | Se calcula con los confirmados |
+| Estado `completes` | No puede darse (sin recuento) | Se calcula con los equipos que ocupan plaza |
 
 ## Riesgos
 
-1. **Google Forms y la hoja de Montca**: hasta que esté A-30 (#70), el Forms no está en el registro ni en la privacidad, y el botón no se puede publicar. Si A-30 se retrasa, la entrega 1 sale con el contacto en lugar del botón (FR-019).
-2. **Confirmar equipos sin C-06**: hasta que exista, alguien tiene que cambiar `estado` a mano en Supabase. Si nadie lo hace, la lista sale vacía aunque haya inscritos.
-3. **B-02 (Netlify)** sin hacer: sin él no se publica ni la entrega 1.
-4. **Agrupación del Forms** provisional (A-26): si Montca usa una respuesta por equipo, se rehace la lectura del script, no la UI.
+1. **La consulta `plazas_por_categoria` aún no existe**: hasta que la cree Saúl con la spec de inscripciones, la fuente `supabase` no devuelve nada y el contador no sale.
+2. **B-02 (Netlify)** sin hacer: sin él no se publica ni la entrega 1.
+3. **Netlify con `PUBLIC_FUENTE_EQUIPOS`**: si sigue definida, ya no tiene efecto y conviene borrarla.

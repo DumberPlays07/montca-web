@@ -16,7 +16,7 @@ import { calcularEstado } from '../../lib/eventos/estado';
 import { eventoJsonLd, jsonLdComoTexto } from '../../lib/eventos/json-ld';
 import CartellEvento from './CartellEvento.astro';
 import ComArribar from './ComArribar.astro';
-import PlacesIEquips from './PlacesIEquips.astro';
+import PlazasPorCategoria from './PlazasPorCategoria.astro';
 import PreguntesFrequents from './PreguntesFrequents.astro';
 import QueCalSaber from './QueCalSaber.astro';
 import type { DatosEvento } from './tipos';
@@ -29,7 +29,7 @@ interface Props {
 const { lang, evento } = Astro.props;
 const { inscripcion } = evento;
 
-// Sin fuente de equipos (antes de A-14) el estado solo depende de las fechas y del cierre a mano.
+// Sin fuente de plazas (antes de la consulta pública) el estado solo depende de las fechas y del cierre a mano.
 const estado = calcularEstado(evento, new Date());
 
 const jsonLd = jsonLdComoTexto(
@@ -68,7 +68,7 @@ const imagen = evento.imagenCompartir
 		<CartellEvento lang={lang} evento={evento} estado={estado} />
 
 		<!-- El segundo Inscriure's va dentro: sin plazas quedaría pegado al primero. -->
-		<PlacesIEquips lang={lang} evento={evento} estado={estado} />
+		<PlazasPorCategoria lang={lang} evento={evento} estado={estado} />
 
 		<div class="debajo">
 			<QueCalSaber lang={lang} evento={evento} />

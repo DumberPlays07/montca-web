@@ -1,0 +1,185 @@
+---
+/**
+ * Plazas por categoría de un evento (C-04, HU-19, diseno.md §2): un bloque por categoría con los
+ * equipos que ocupan plaza sobre el máximo ("5 de 8 equips" o "Completa"), el estado de las
+ * inscripciones y la fecha de cierre, y debajo el segundo "Inscriure's". No muestra ningún dato
+ * personal ni ningún nombre de equipo.
+ *
+ * Al construir la web deja la estructura con el sitio de los números ya reservado (T050), para que lo
+ * de debajo no se mueva cuando llegan: `eventos-cliente.ts` pide los recuentos a la fuente elegida
+ * (`FuentePlazas`) y los escribe en cada categoría. El aviso de error es una región `role="status"`
+ * vacía desde el build, que el script rellena si la fuente falla, para que los lectores de pantalla
+ * lo anuncien (T051). Los textos salen de `textos-eventos.ts` (diccionario por idioma), no del script. El máximo de cada categoría
+ * sale de los datos del evento, no de la fuente.
+ *
+ * - Fuente `ninguna` (producción antes de la consulta pública): no sale nada, ni el segundo botón (FR-015).
+ * - Fuente `prueba` (solo local y vistas previas): la página incrusta al construir únicamente los
+ *   recuentos de ejemplo (SC-003).
+ * - El build falla con `prueba` en producción o con `supabase` sin configurar (FR-035).
+ */
+import type { DatosEvento } from './tipos';
+import BotoInscripcio from './BotoInscripcio.astro';
+import EstatInscripcio from './EstatInscripcio.astro';
+import type { EstadoInscripcion } from '../../lib/eventos/estado';
+import { diaMes } from '../../lib/eventos/fechas';
+import { validarEntornoFuente } from '../../lib/eventos/fuente-plazas';
+import { jsonLdComoTexto } from '../../lib/eventos/json-ld';
+import type { Idioma } from '../textos-navegacion';
+import { rellenar, t } from '../textos-eventos';
+
+interface Props {
+	lang: Idioma;
+	evento: DatosEvento;
+	estado: EstadoInscripcion;
+}
+
+const { lang, evento, estado } = Astro.props;
+const eventoId = Astro.params.evento;
+
+// El entorno se valida siempre, aunque luego no se enseñe nada: así un error de configuración
+// rompe el build en vez de publicarse sin avisar.
+const fuente = validarEntornoFuente({
+	PUBLIC_FUENTE_PLAZAS: import.meta.env.PUBLIC_FUENTE_PLAZAS,
+	PUBLIC_SUPABASE_URL: import.meta.env.PUBLIC_SUPABASE_URL,
+	PUBLIC_SUPABASE_ANON_KEY: import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+	CONTEXT: process.env.CONTEXT,
+});
+const mostrar = fuente !== 'ninguna';
+
+let plazasIncrustadas: string | null = null;
+if (mostrar && fuente === 'prueba') {
+	// Import dinámico: los datos de prueba solo se cargan con esta fuente.
+	const { plazasPrueba } = await import('../../lib/eventos/datos-prueba');
+	plazasIncrustadas = jsonLdComoTexto(plazasPrueba);
+}
+
+const fechaCierre = diaMes(evento.inscripcion.cierre);
+---
+
+{
+	mostrar && (
+		<div class="plazas-evento" data-plazas-evento data-evento-id={eventoId}>
+			<section class="bloque" aria-labelledby="titol-places">
+				<h2 id="titol-places">{t(lang, 'placesPerCategoria')}</h2>
+
+				<EstatInscripcio
+					lang={lang}
+					estado={estado}
+					apertura={evento.inscripcion.apertura}
+					cierre={evento.inscripcion.cierre}
+				/>
+				{/* Con las inscripciones abiertas, la fecha de cierre ya sale en la línea de estado. */}
+				<p class="cierre">{rellenar(t(lang, 'cierreInscripciones'), { fecha: fechaCierre })}</p>
+
+				<p class="aviso" role="status" data-error></p>
+
+				<div class="categorias" data-categorias>
+					{evento.categorias.map((categoria) => (
+						<section
+							class="categoria"
+							data-categoria={categoria.id}
+							data-max-equipos={categoria.maxEquipos}
+							aria-labelledby={`titol-categoria-${categoria.id}`}
+						>
+							<h3 id={`titol-categoria-${categoria.id}`}>{categoria.nombre[lang]}</h3>
+							<p class="nacidos">
+								{t(lang, 'nascuts')}: {categoria.nacidos[lang]}
+							</p>
+							<p class="plazas" data-plazas />
+						</section>
+					))}
+				</div>
+			</section>
+
+			<div class="segundo-boton">
+				<BotoInscripcio
+					lang={lang}
+					estado={estado}
+					nombreEvento={evento.nombre[lang]}
+					inscripcion={evento.inscripcion}
+				/>
+			</div>
+
+			<span
+				hidden
+				data-textos
+				data-texto-ocupados={t(lang, 'equipsOcupats')}
+				data-texto-completa={t(lang, 'completa')}
+				data-texto-error={t(lang, 'errorCargaPlazas')}
+			/>
+
+			{plazasIncrustadas !== null && (
+				<script type="application/json" data-plazas-publicas={eventoId} set:html={plazasIncrustadas} />
+			)}
+		</div>
+	)
+}
+
+<style>
+	.plazas-evento {
+		display: grid;
+		gap: var(--espacio-6);
+		margin-top: var(--espacio-12);
+	}
+
+	h2 {
+		margin: 0 0 var(--espacio-4);
+		font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+	}
+
+	.cierre {
+		margin: var(--espacio-1) 0 var(--espacio-4);
+	}
+
+	/* Con las inscripciones abiertas, la línea de estado ya dice "fins al 20/12": no se repite. */
+	.bloque :global(.estat[data-estado='obertes']) + .cierre {
+		display: none;
+	}
+
+	/* Vacío ocupa su línea: así el aviso de error no empuja las categorías al aparecer (T050). */
+	.aviso {
+		max-width: 60ch;
+		min-height: 1.5em;
+		margin: 0 0 var(--espacio-4);
+		font-weight: 600;
+		line-height: 1.5;
+	}
+
+	.categorias {
+		display: grid;
+		gap: var(--espacio-4);
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+		align-items: start;
+	}
+
+	/* Plano Herba clara: lo que está más cerca se distingue por el color, no por sombra (DESIGN.md). */
+	.categoria {
+		padding: var(--espacio-4);
+		background: var(--color-herba-clara);
+		border-radius: var(--radio-boton);
+	}
+
+	h3 {
+		margin: 0;
+		font-size: 1.25rem;
+	}
+
+	.nacidos {
+		margin: var(--espacio-1) 0 var(--espacio-3);
+	}
+
+	/* Una línea reservada (1.5rem × 1.2) para que el número no mueva nada al llegar (T050). */
+	.plazas {
+		min-height: 1.8rem;
+		margin: 0;
+		color: var(--color-verd-bosc);
+		font-size: 1.5rem;
+		font-weight: 800;
+		line-height: 1.2;
+	}
+
+	.segundo-boton {
+		max-width: 28rem;
+	}
+
+</style>

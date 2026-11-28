@@ -2,12 +2,12 @@
 /**
  * Botón "Inscriure's" de un evento (C-04, FR-016 a FR-019).
  *
- * - Con dirección de inscripción: botón teja que la abre y, en modo "canal de Montca",
- *   la nota de cómo funciona la inscripción (FR-018).
+ * - Con dirección de inscripción (la página de inscripción de la web): botón teja que la abre.
  * - Sin dirección: en su lugar, cómo escribir a Montca para apuntarse (WhatsApp o, sin
  *   número, correo). Nunca un botón roto (FR-019).
  *
- * Con "pròximament" o "tancades" no se muestra: sale con `hidden` y `eventos-cliente.ts`
+ * Solo se muestra con las inscripciones abiertas ("obertes"): sin lista de espera, con "completes",
+ * "pròximament" o "tancades" no hay a dónde apuntarse. Sale con `hidden` y `eventos-cliente.ts`
  * lo muestra u oculta según el estado del momento.
  */
 import Icono from '../Icono.astro';
@@ -22,18 +22,15 @@ interface Props {
 	estado: EstadoInscripcion;
 	nombreEvento: string;
 	inscripcion: {
-		modo: 'canal-montca' | 'web';
 		url: string;
-		nota?: { ca: string; es: string };
 	};
 }
 
 const { lang, estado, nombreEvento, inscripcion } = Astro.props;
 
-const ESTADOS_CON_BOTON: EstadoInscripcion[] = ['obertes', 'completes'];
+const ESTADOS_CON_BOTON: EstadoInscripcion[] = ['obertes'];
 const destino = destinoInscripcion({ inscripcion });
 const esExterno = destino !== null && /^https?:\/\//.test(destino);
-const nota = inscripcion.modo === 'canal-montca' ? inscripcion.nota?.[lang] : undefined;
 
 const enlaceWhatsapp = urlWhatsapp(
 	lang,
@@ -57,7 +54,6 @@ const enlaceCorreo = `mailto:${CORREO_CONTACTO}?subject=${encodeURIComponent(asu
 					{t(lang, 'inscriure')}
 					{esExterno && <span class="solo-lector"> ({t(lang, 'nuevaPestana')})</span>}
 				</a>
-				{nota && <p class="nota">{nota}</p>}
 			</>
 		) : (
 			<>
