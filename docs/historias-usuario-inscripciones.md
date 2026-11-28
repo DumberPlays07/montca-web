@@ -745,4 +745,4 @@ Estos textos se muestran tal cual junto a cada casilla y se guardan literalmente
 - **A7 · Futuras actividades (opcional):**
   «Quiero recibir por correo electrónico información sobre futuras actividades y eventos organizados por Montca Actiu».
 
-**Pendiente de redactar (juvenil/sénior):** textos de «normas y condiciones del torneo», «declaración de aptitud para participar», «protección de datos», «derechos de imagen» y «futuras actividades» en versión para adultos.
+**Juvenil/sénior:** los textos de las cinco casillas (normas y condiciones, aptitud, protección de datos, derechos de imagen y futuras actividades) están en `docs/legal/consentimientos.md`, aprobados por Montca el 28/11/2026.
