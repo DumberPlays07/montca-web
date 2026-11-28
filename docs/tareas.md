@@ -1,6 +1,6 @@
 # Tareas · Web Montca Actiu
 
-Actualizado: 2026-11-25 (catálogo y Repte de Montca: A-08 y A-09 empezadas; el mapa pasa a ser el menú de la web: nuevas B-21, B-22, B-23 y A-31; B-19 se replantea). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
+Actualizado: 2026-11-28 (A-03 y A-26 descartadas y C-04, C-05 y C-06 ajustadas a las historias de inscripción; antes, 2026-11-25: catálogo y Repte de Montca: A-08 y A-09 empezadas; el mapa pasa a ser el menú de la web: nuevas B-21, B-22, B-23 y A-31; B-19 se replantea). Las decisiones que justifican este reparto están en [decisiones.md](decisiones.md).
 
 Cada tarea está clasificada por **cómo se hace**:
 
@@ -13,7 +13,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No aplica. Al acabar una tarea se cambia aquí mismo, en su fila.
 
-> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. Como la web no llega, Montca inscribe con un **Google Forms** propio (mismos datos que C-05; autorización del tutor en papel o por Softco); cuando esté la inscripción por la web, se podrá usar también. Los equipos del Forms se importan después a la base de datos: **nunca al repo**. El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. El **Google Forms provisional de Montca ya no se usa** (28/11/2026): las inscripciones solo se hacen desde la web (C-05). El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
 
 
 
@@ -27,7 +27,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ---------------- | ------ |
 | A-01 | Fecha del torneo de Navidad, fecha de apertura y cierre de inscripciones, deporte, lugar, precio (si lo hay)                                                    | M         | C-04, C-05       | ✅ Acabada (precio final y pago → A-26) |
 | A-02 | Confirmar reglas del torneo: categorías (infantil+cadet / sénior), máximos de equipos y jugadores, edades exactas de cada categoría                             | M         | C-05             | ✅ Acabada |
-| A-03 | Comprobar si la autorización del tutor **por correo** es válida legalmente (firma digital y papel en Softco ya están aceptadas)                                 | M + S     | C-05             | ⬜ Pendiente |
+| A-03 | Comprobar si la autorización del tutor **por correo** es válida legalmente (firma digital y papel en Softco ya están aceptadas)                                 | M + S     | C-05             | ➖ Descartada (28/11/2026): la autorización del tutor es solo en la web, con verificación por código de correo (D-6); ya no hay firma digital, papel ni autorización por correo que validar |
 | A-04 | Quién de Montca gestiona solicitudes e inscritos (personas y correos), y qué plazo de respuesta se comprometen a cumplir                                        | M         | C-03, C-06       | 🟡 Empezada: plazo < 24 h; falta quién gestiona |
 | A-05 | Ilustración a medida del mapa de Mariola (cada botón, un pico): boceto, visto bueno de Montca y versión final                                                   | P + M     | C-02             | ✅ Acabada: PR #12. Imagen en `src/assets/mapa/`, picos en `src/data/picos-mapa.json` (lista provisional hasta A-09); versión en alta resolución hecha en A-29 (PR #72) |
 | A-06 | ¿Las actividades normales de la agenda tienen "Apunta't" con plazas, o se piden por formulario/WhatsApp?                                                        | M + S + P | C-02, C-06       | ⬜ Pendiente |
@@ -38,7 +38,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             | ✅ Acabada: el teléfono de contacto y el domicilio son los de Iker, según Montca (datos en el Drive) |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       | ✅ Acabada: las del torneo, en [info-montca.md](info-montca.md). Las de escuelas/AMPA se añaden cuando se haga B-11 |
 | A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       | ✅ Acabada: 722 79 60 66 (principal) y 657 39 47 01, en `src/components/contacto.ts` (PR #67) |
-| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | 🟡 Empezada: hasta que esté la web se apuntan por Google Forms (mismos datos que C-05) y la autorización se entrega en papel o por Softco. Falta: precio final y pago, quién confirma equipos, si la casilla del tutor sustituye a la firma, cómo se agrupan los jugadores en equipos en el Forms, y lo del seguro (aseguradora, datos que se le pasan, menores de 14 sin DNI) |
+| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | ➖ Descartada (28/11/2026): las historias de inscripción lo resuelven: precio y pago (10 € por transferencia, RN-17 y HU-11), quién confirma (los webmasters marcan los pagos, HU-12), sin DNI de jugadores y solo datos de inscripción para la aseguradora (D-1), y autorización solo en la web (D-6). |
 
 ### A2. Cuentas e infraestructura
 
@@ -60,7 +60,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad, capas de los formularios y cookies en [legal/](legal/), pendientes de la revisión legal de Montca; falta el aviso legal |
 | A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en [legal/consentimientos.md](legal/consentimientos.md), pendiente de la revisión legal de Montca |
 | A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
-| A-30 | Meter el Google Forms de Montca en el registro de tratamientos y en la privacidad (canal, encargado, plazo y borrado de la hoja de respuestas) y confirmar que el Forms informa de la privacidad (issue #70) | S + M | Bloquea publicar el botón al Forms (C-04) | ⬜ Pendiente |
+| A-30 | Meter el Google Forms de Montca en el registro de tratamientos y en la privacidad (canal, encargado, plazo y borrado de la hoja de respuestas) y confirmar que el Forms informa de la privacidad (issue #70) | S + M | Bloquea publicar el botón al Forms (C-04) | ➖ Descartada (28/11/2026): el Google Forms provisional ya no se usa; las inscripciones solo se hacen desde la web |
 
 ### A4. Equipo (Saúl + Pablo)
 
@@ -111,9 +111,9 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | C-01 | **Actividades**: modelo de datos, ficha y página de cada actividad (sin reels hasta D-01)                                                       | S (datos) + P (UI) | Astro content collections (por confirmar) | B-07, A-08                   | ⬜ Pendiente |
 | C-02 | **Portada**: buscador (Qui sou? / Què vos ve de gust?) que filtra mapa y agenda; usa `MapaMariola` de B-19 y añade la transición al filtrar                                                                 | P                  | Astro + JS en cliente                     | C-01, A-05, A-06, B-19       | ⬜ Pendiente |
 | C-03 | **Formulario de solicitudes + CRM**                                                                                                             | S                  | Astro + Apps Script + Google Sheets       | A-13, B-08                   | ⬜ Pendiente |
-| C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, lista de equipos inscritos por categoría, botón Inscribir-se               | S (datos) + P (UI) | Astro + Supabase                          | A-14, A-01                   | 🟡 Empezada: spec aprobada (#69, en `specs/001-eventos-torneo/`); falta implementar |
-| C-05 | **Inscripción de equipos**: página de inscripción, capitán, enlace para jugadores, límites, menores                                             | S                  | Supabase + Netlify Functions + correo     | C-04, A-02, A-03, A-18, B-08 | ⬜ Pendiente |
-| C-06 | **Gestión para Montca**: ver inscritos, validar autorizaciones, abrir/cerrar inscripciones, crear eventos; fechas de la agenda si así se decide | S                  | Supabase (login) + Astro                  | C-04, A-04                   | ⬜ Pendiente |
+| C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, contador de plazas libres por categoría (HU-19, sin lista pública de equipos), botón Inscribir-se               | S (datos) + P (UI) | Astro + Supabase                          | A-14, A-01                   | 🟡 Empezada: spec aprobada (#69, en `specs/001-eventos-torneo/`); falta implementar |
+| C-05 | **Inscripción de equipos**: página de inscripción, capitán, enlace y código para jugadores, límites, menores (con verificación del tutor)                                             | S                  | Supabase + Netlify Functions + correo     | C-04, A-02, A-18, B-08 | ⬜ Pendiente |
+| C-06 | **Gestión para Montca**: ver inscritos, marcar pagos, abrir/cerrar inscripciones, crear eventos; fechas de la agenda si así se decide | S                  | Supabase (login) + Astro                  | C-04, A-04                   | ⬜ Pendiente |
 | C-07 | **Avisos por correo**: confirmaciones, "qué llevar", recordatorio el día antes                                                                  | S                  | Netlify Scheduled Functions + correo      | C-05, A-15                   | ⬜ Pendiente |
 
 ### Qué tiene que cubrir cada spec (para no olvidarlo al escribirla)
@@ -145,47 +145,44 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 **C-04 · Eventos y torneo**
 - Sección Eventos independiente del formulario de contacto; el torneo de Navidad es el primer evento.
 - Página del torneo: información, fechas (27/12/2026 y 3/1/2027), lugar (Poliesportiu Municipal de Cocentaina), deportes (fútbol sala, básquet y pádel; **cada equipo juega los tres**), precio (máx. 10 € por jugador), categorías, normas. Datos públicos en [info-montca.md](info-montca.md).
-- Apartado "Equips inscrits": aparece cuando hay al menos un equipo **confirmado** (los pendientes no salen); separado en dos categorías: **Infantil/Cadet** y **Juvenil/Sènior**.
+- Contador de plazas por categoría: equipos que ocupan plaza sobre el máximo («5 de 8 equipos» o «Completa»), sin ningún dato personal ni lista de equipos o de jugadores (HU-19 y D-4 de las [historias](historias-usuario-inscripciones.md)).
 - Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
-- Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
-- Datos públicos de cada equipo: nombre del equipo, nombres y dorsales de los jugadores y quién es el capitán. De los adultos, nombre y primer apellido; de los menores, solo el primer nombre. La lista se quita de la web una semana después del torneo.
+- Estado de inscripciones (pròximament / obertes / completes / tancades) y fecha de cierre.
 - Pensado para reutilizarse con el siguiente evento sin reprogramar.
 - Mientras las inscripciones estén abiertas, franja del torneo en lo alto de la portada, visible sin hacer scroll.
 - Preguntas frecuentes en la página del torneo: el texto está en [info-montca.md](info-montca.md).
 - Enlace "Com arribar" al lugar del torneo y datos `Event` para buscadores.
 
-**C-05 · Inscripción de equipos** (diseño de Saúl del 2026-11-18; los casos raros se cierran en `clarify`)
+**C-05 · Inscripción de equipos** (diseño de Saúl del 2026-11-18, actualizado el 2026-11-28 según las [historias de usuario](historias-usuario-inscripciones.md), que mandan; los casos raros se cierran en `clarify`)
 - Cualquier jugador puede crear un equipo; quien lo crea queda como **administrador del equipo**.
-- Lo primero que se pregunta es la **edad**: mayor de edad → formulario de adultos; menor → formulario de menores (uno solo para todos los menores, sin distinguir categoría).
-- **Adultos**: nombre y apellidos, DNI, fecha de nacimiento, correo, dorsal, teléfono (solo si es el administrador del equipo, y entonces obligatorio), casilla de derechos de imagen (opcional) y casilla para recibir información de otras actividades (opcional).
-- **Menores**: nombre y apellidos, DNI, fecha de nacimiento y dorsal del menor; teléfono y correo del menor (solo si es el administrador del equipo, y entonces obligatorios); datos del tutor legal (nombre y apellidos, DNI, fecha de nacimiento para comprobar que es mayor de edad, teléfono y correo); casilla de derechos de imagen del menor (opcional); casilla para recibir información de otras actividades en el correo del tutor (opcional); **autorización del tutor para que el menor participe, la única casilla obligatoria**.
-- La casilla de imagen es una sola en cada formulario (en el de menores, sin separar por edad). Se guarda si cada jugador la ha marcado, para la lista de C-06.
-- Al crear el equipo, el administrador recibe **por correo un enlace único del equipo** para pasarlo a quien quiera. **Solo se entra en un equipo con ese enlace.** Quien entra sigue los mismos pasos: edad → formulario de adulto o de menor.
+- Lo primero que se pide es la **fecha de nacimiento del capitán**, que decide la categoría y el formulario: juvenil/sénior (2010 o antes) o infantil/cadete (2011–2014). En infantil/cadete se piden el correo del tutor y un teléfono de contacto, y esa fecha no se guarda (HU-01).
+- **Juvenil/sénior** (HU-06): nombre y apellidos, fecha de nacimiento, correo, teléfono de todos los jugadores y contacto de emergencia opcional. Casillas: normas, aptitud y protección de datos (obligatorias), imagen y futuras actividades (opcionales). Sin DNI ni dorsal.
+- **Infantil/cadete**, lo rellena el tutor (HU-07, HU-08): del menor, nombre y apellidos y fecha de nacimiento (sin teléfono, correo ni DNI); del tutor, nombre y apellidos, DNI, fecha de nacimiento (para comprobar que es mayor de edad), correo, teléfono y relación con el menor; segundo contacto de emergencia opcional; datos de salud opcionales (casilla A4 solo si se rellenan); casillas A1 a A7 con los textos del Anexo A.
+- **Verificación del tutor** (HU-09): el menor solo queda inscrito al verificar el código que llega al correo del tutor. Recordatorio a las 24 h y borrado a las 48 h. La autorización es **solo en la web**: sin firma digital, papel ni Softco.
+- La casilla de imagen es una sola en cada formulario. Se guarda si cada persona la ha marcado, para la lista de C-06.
+- Al crear el equipo, el capitán (o su tutor, en infantil/cadete) recibe **por correo el enlace de invitación, un código de 6 cifras y un enlace de gestión**. Se entra en un equipo con el enlace o con el código (con límite de intentos) y se llega al formulario de la categoría del equipo.
 - Categoría por año de nacimiento: **Infantil/Cadet** 2011–2014 · **Juvenil/Sènior** 2010 o antes. Hay menores en las dos.
 - Límites: Infantil/Cadet máx. 8 equipos, 5–10 jugadores · Juvenil/Sènior máx. 6 equipos, 5–12 jugadores.
-- Estados: **pendiente** (no llega al mínimo o falta la revisión de Montca) → **confirmado** (llega al mínimo y Montca lo revisa). Solo los confirmados ocupan plaza y salen en la web. Con las plazas llenas, los demás equipos van a **lista de espera**.
+- Estados del equipo, calculados solos (HU-17): **creado** (menos de 5 jugadores) → **inscrito** (5 o más) → **completo** (10 en infantil/cadete, 12 en juvenil/sénior). Un equipo `creado` ya ocupa plaza de su categoría.
 - Página de confirmación tras crear el equipo: dice que el enlace llega por correo. Otra más sencilla para cada jugador que se apunta.
 - Las páginas con enlace de equipo no se indexan (`noindex`).
-- Dorsal obligatorio, del 1 al 99, sin repetirse dentro del equipo; se muestra junto al nombre del jugador.
-- El administrador del equipo no ve los datos de sus jugadores, solo lo que ve todo el mundo.
+- El capitán (o su tutor) ve en su panel (HU-15) solo el nombre y el estado de cada jugador, sin datos de contacto ni de salud.
 - Casos a resolver en `clarify`:
   - Equipo que no llega al mínimo antes del cierre.
   - Enlace reenviado a desconocidos.
   - Jugador que se borra.
   - Jugador nacido en un año que no es de la categoría del equipo.
-  - El mismo DNI en dos equipos.
-  - Menores de 14 sin DNI.
-  - Si la casilla del tutor sustituye a la firma digital o al papel en Softco (A-26).
   - Equipos apuntados antes de que esté la web.
 
-**C-06 · Gestión para Montca**
+**C-06 · Gestión para Montca** (actualizado el 2026-11-28 según las [historias de usuario](historias-usuario-inscripciones.md))
 - Acceso con login solo para las personas de A-04.
-- Ver equipos y jugadores, estado de cada autorización, marcar como verificada la entregada en papel.
+- Ver equipos y jugadores, el estado de cada inscripción y marcar los pagos (HU-12). La autorización del tutor se verifica sola con el código: no hay nada que validar a mano.
 - Jugadores sin permiso de imagen marcados en la vista de equipos, y **lista de quién no puede salir en fotos y vídeos** (nombre y equipo) para pasarla a los encargados de redes sociales.
-- Revisar y **confirmar** equipos; pasar equipos de la **lista de espera** cuando quede una plaza libre.
+- Ver el estado de cada equipo (creado, inscrito, completo; se calcula solo) y filtrar por estado (HU-12, HU-17).
 - Dar de alta a mano los equipos que se apunten antes de que la inscripción por la web esté lista.
 - Exportar inscritos.
 - Abrir y cerrar inscripciones, crear el siguiente evento.
+- Borrar los datos de cada tipo cuando acaba su plazo de conservación (HU-18).
 
 **C-07 · Avisos por correo**
 - Confirmación al inscribirse, aviso al capitán cuando se apunta alguien, recordatorio el día antes con punto de encuentro, hora y qué traer.
@@ -210,7 +207,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 
 ## Orden recomendado
 
-1. **Base** (en paralelo): A-11 (comprar el dominio ya) · A-27, A-28 → B-02 · B-07 · A-20, A-21, A-22 · A-13, A-14 · pedir a Montca A-07, A-08 y lo de A-26.
+1. **Base** (en paralelo): A-11 (comprar el dominio ya) · A-27, A-28 → B-02 · B-07 · A-20, A-21, A-22 · A-13, A-14 · pedir a Montca A-07 y A-08.
 2. **Spec Kit listo**: B-03, B-04.
 3. **Legal**: A-17, A-18, A-19 → B-08.
 4. **Camino del torneo** (prioridad por fecha): C-04 → C-05 → C-06 (mínimo) → C-07.
