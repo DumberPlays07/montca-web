@@ -13,7 +13,7 @@ Quién: **S** = Saúl, **P** = Pablo, **M** = Montca. Talla: S (<2 h) · M (medi
 
 Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No aplica. Al acabar una tarea se cambia aquí mismo, en su fila.
 
-> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. Como la web no llega, Montca inscribe con un **Google Forms** propio (mismos datos que C-05; autorización del tutor en papel o por Softco); cuando esté la inscripción por la web, se podrá usar también. Los equipos del Forms se importan después a la base de datos: **nunca al repo**. El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
+> **Fecha crítica: torneo de Navidad** (27/12/2026 y 3/1/2027). Las inscripciones al torneo empiezan el **25/11/2026** y cierran el **20/12/2026**. El **Google Forms provisional de Montca ya no se usa** (28/11/2026): las inscripciones solo se hacen desde la web (C-05). El camino *legal → eventos → inscripción de equipos* manda sobre la portada bonita. Ver "Orden recomendado" al final.
 
 
 
@@ -38,7 +38,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-10 | Datos de la asociación para los textos legales: nombre legal, CIF, domicilio, correo de contacto, responsable de datos                                          | M         | B-08             | ✅ Acabada: el teléfono de contacto y el domicilio son los de Iker, según Montca (datos en el Drive) |
 | A-23 | Preguntas frecuentes: las dudas que más les llegan sobre el torneo y de escuelas/AMPA, con su respuesta                                                         | M + S     | C-04, B-11       | ✅ Acabada: las del torneo, en [info-montca.md](info-montca.md). Las de escuelas/AMPA se añaden cuando se haga B-11 |
 | A-24 | Número de WhatsApp de Montca para los enlaces `wa.me` (404, botón de WhatsApp)                                                                                  | M         | B-01, B-10       | ✅ Acabada: 722 79 60 66 (principal) y 657 39 47 01, en `src/components/contacto.ts` (PR #67) |
-| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | ➖ Descartada (28/11/2026): las historias de inscripción lo resuelven: precio y pago (10 € por transferencia, RN-17 y HU-11), quién confirma (los webmasters marcan los pagos, HU-12), sin DNI de jugadores y solo datos de inscripción para la aseguradora (D-1), y autorización solo en la web (D-6). Queda por decidir cómo se agrupan los jugadores en equipos en el Google Forms provisional |
+| A-26 | Preguntar a Montca lo que falta: precio final y forma de pago, quién revisa y confirma equipos, cómo se apuntan los equipos hasta que esté la web, si la casilla del tutor sustituye a la firma; seguro: qué aseguradora o tipo de seguro, qué datos de los jugadores se le pasan y qué documento acepta para menores de 14 sin DNI | S         | C-05, C-06, B-08 | ➖ Descartada (28/11/2026): las historias de inscripción lo resuelven: precio y pago (10 € por transferencia, RN-17 y HU-11), quién confirma (los webmasters marcan los pagos, HU-12), sin DNI de jugadores y solo datos de inscripción para la aseguradora (D-1), y autorización solo en la web (D-6). |
 
 ### A2. Cuentas e infraestructura
 
@@ -60,7 +60,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | A-17 | Redactar aviso legal, política de privacidad y política de cookies (plantilla + revisión de alguien con criterio legal) | S + M | **Antes de publicar cualquier formulario** | 🟡 Empezada: borradores de privacidad, capas de los formularios y cookies en [legal/](legal/), pendientes de la revisión legal de Montca; falta el aviso legal |
 | A-18 | Texto de consentimiento de derechos de imagen (adultos) y de autorización parental + imagen (menores)                   | S + M | Bloquea C-05                               | 🟡 Empezada: borrador en [legal/consentimientos.md](legal/consentimientos.md), pendiente de la revisión legal de Montca |
 | A-19 | Definir qué datos se piden, para qué, cuánto tiempo se guardan y quién los ve                                           | S + M | Entra en la privacidad y en las specs      | ✅ Acabada: [legal/tratamientos.md](legal/tratamientos.md), plazos validados por Montca |
-| A-30 | Meter el Google Forms de Montca en el registro de tratamientos y en la privacidad (canal, encargado, plazo y borrado de la hoja de respuestas) y confirmar que el Forms informa de la privacidad (issue #70) | S + M | Bloquea publicar el botón al Forms (C-04) | ⬜ Pendiente |
+| A-30 | Meter el Google Forms de Montca en el registro de tratamientos y en la privacidad (canal, encargado, plazo y borrado de la hoja de respuestas) y confirmar que el Forms informa de la privacidad (issue #70) | S + M | Bloquea publicar el botón al Forms (C-04) | ➖ Descartada (28/11/2026): el Google Forms provisional ya no se usa; las inscripciones solo se hacen desde la web |
 
 ### A4. Equipo (Saúl + Pablo)
 
@@ -111,7 +111,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 | C-01 | **Actividades**: modelo de datos, ficha y página de cada actividad (sin reels hasta D-01)                                                       | S (datos) + P (UI) | Astro content collections (por confirmar) | B-07, A-08                   | ⬜ Pendiente |
 | C-02 | **Portada**: buscador (Qui sou? / Què vos ve de gust?) que filtra mapa y agenda; usa `MapaMariola` de B-19 y añade la transición al filtrar                                                                 | P                  | Astro + JS en cliente                     | C-01, A-05, A-06, B-19       | ⬜ Pendiente |
 | C-03 | **Formulario de solicitudes + CRM**                                                                                                             | S                  | Astro + Apps Script + Google Sheets       | A-13, B-08                   | ⬜ Pendiente |
-| C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, botón Inscribir-se (sin lista pública de equipos, D-4 de las [historias](historias-usuario-inscripciones.md))               | S (datos) + P (UI) | Astro + Supabase                          | A-14, A-01                   | 🟡 Empezada: spec aprobada (#69, en `specs/001-eventos-torneo/`); falta implementar |
+| C-04 | **Eventos y torneo de Navidad**: sección Eventos, página del torneo, contador de plazas libres por categoría (HU-19, sin lista pública de equipos), botón Inscribir-se               | S (datos) + P (UI) | Astro + Supabase                          | A-14, A-01                   | 🟡 Empezada: spec aprobada (#69, en `specs/001-eventos-torneo/`); falta implementar |
 | C-05 | **Inscripción de equipos**: página de inscripción, capitán, enlace y código para jugadores, límites, menores (con verificación del tutor)                                             | S                  | Supabase + Netlify Functions + correo     | C-04, A-02, A-18, B-08 | ⬜ Pendiente |
 | C-06 | **Gestión para Montca**: ver inscritos, marcar pagos, abrir/cerrar inscripciones, crear eventos; fechas de la agenda si así se decide | S                  | Supabase (login) + Astro                  | C-04, A-04                   | ⬜ Pendiente |
 | C-07 | **Avisos por correo**: confirmaciones, "qué llevar", recordatorio el día antes                                                                  | S                  | Netlify Scheduled Functions + correo      | C-05, A-15                   | ⬜ Pendiente |
@@ -145,9 +145,9 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 **C-04 · Eventos y torneo**
 - Sección Eventos independiente del formulario de contacto; el torneo de Navidad es el primer evento.
 - Página del torneo: información, fechas (27/12/2026 y 3/1/2027), lugar (Poliesportiu Municipal de Cocentaina), deportes (fútbol sala, básquet y pádel; **cada equipo juega los tres**), precio (máx. 10 € por jugador), categorías, normas. Datos públicos en [info-montca.md](info-montca.md).
-- Sin apartado "Equips inscrits": la web no publica ninguna lista de equipos ni de jugadores (D-4 de las [historias](historias-usuario-inscripciones.md)).
+- Contador de plazas por categoría: equipos que ocupan plaza sobre el máximo («5 de 8 equipos» o «Completa»), sin ningún dato personal ni lista de equipos o de jugadores (HU-19 y D-4 de las [historias](historias-usuario-inscripciones.md)).
 - Debajo, botón **Inscriure's** → lleva a otra página (la de inscripción, C-05).
-- Plazas de equipos libres por categoría; estado de inscripciones (pròximament / obertes / completes / tancades).
+- Estado de inscripciones (pròximament / obertes / completes / tancades) y fecha de cierre.
 - Pensado para reutilizarse con el siguiente evento sin reprogramar.
 - Mientras las inscripciones estén abiertas, franja del torneo en lo alto de la portada, visible sin hacer scroll.
 - Preguntas frecuentes en la página del torneo: el texto está en [info-montca.md](info-montca.md).
@@ -207,7 +207,7 @@ Estado: ✅ Acabada (con su PR) · 🟡 Empezada · ⬜ Pendiente · ➖ No apli
 
 ## Orden recomendado
 
-1. **Base** (en paralelo): A-11 (comprar el dominio ya) · A-27, A-28 → B-02 · B-07 · A-20, A-21, A-22 · A-13, A-14 · pedir a Montca A-07, A-08 y lo de A-26.
+1. **Base** (en paralelo): A-11 (comprar el dominio ya) · A-27, A-28 → B-02 · B-07 · A-20, A-21, A-22 · A-13, A-14 · pedir a Montca A-07 y A-08.
 2. **Spec Kit listo**: B-03, B-04.
 3. **Legal**: A-17, A-18, A-19 → B-08.
 4. **Camino del torneo** (prioridad por fecha): C-04 → C-05 → C-06 (mínimo) → C-07.
