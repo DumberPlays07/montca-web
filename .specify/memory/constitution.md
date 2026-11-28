@@ -12,6 +12,8 @@ ancho de unos 375 px antes de darse por terminada.
 El idioma por defecto es el valenciano y el castellano es la segunda opción, con selector
 VAL / CAST. Todo texto visible MUST salir de los diccionarios de idioma o del contenido por
 idioma (fichas, textos legales) y MUST NOT escribirse directamente en componentes o páginas. Cada texto nuevo MUST existir en los dos idiomas.
+El trato es de tú en general, pero los textos legales, los formularios de inscripción y los correos
+que envía la web MUST usar el trato de usted (vosté en los textos en valenciano).
 
 ### III. No se inventan datos
 Los precios, las fechas, las plazas, los testimonios y los datos de seguridad MUST provenir de
@@ -59,7 +61,7 @@ en todo momento.
 - Las categorías de actividades usan los identificadores en valenciano ya definidos: `activitats`,
   `rutes`, `sports`, `repte`, `camp`, `aventura`.
 - Las marcas propias se escriben tal cual: Montca Actiu, Montca Sports, Repte 5 Cims y Montca Camp.
-- El tono es cercano pero serio: tutea y es amable, y transmite seguridad.
+- El tono es cercano pero serio: la web tutea en general, es amable y transmite seguridad. Los textos legales, los formularios de inscripción y los correos que envía la web usan el trato de usted (vosté en valenciano).
 - Las decisiones técnicas o de producto que cambien lo anterior se anotan en `docs/decisiones.md`.
 
 ## Gobierno
@@ -72,4 +74,4 @@ MAJOR si se elimina o redefine un principio, MINOR si se añade un principio o s
 amplía su alcance, PATCH para aclaraciones de redacción. Toda revisión de PR MUST comprobar que
 se cumplen estos principios.
 
-**Versión**: 2.0.0 | **Ratificada**: 2026-11-17 | **Última modificación**: 2026-11-19
+**Versión**: 2.1.0 | **Ratificada**: 2026-11-17 | **Última modificación**: 2026-11-28

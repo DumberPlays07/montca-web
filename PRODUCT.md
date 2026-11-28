@@ -49,7 +49,7 @@ Montca es una asociación local sin ánimo de lucro, no una empresa de turismo a
 ## Brand Commitments
 
 - Nombre: **Montca Actiu**. Marcas propias: **Montca Sports**, **Repte 5 Cims** (con *Passaport* de sellos) y **Montca Camp**.
-- Tono: **cercano pero serio**. Tutea y es amable, pero transmite seguridad, que es lo que necesitan los padres y los centros educativos.
+- Tono: **cercano pero serio**. La web tutea en general y es amable, pero transmite seguridad, que es lo que necesitan los padres y los centros educativos. Los textos legales, los formularios de inscripción y los correos que envía la web usan el trato de usted (vosté en valenciano), como dice la constitución 2.1.0.
 - Los monitores de Montca no están certificados a día de hoy (2026-11-16): la web no habla de títulos ni de certificados. Si eso cambia, se actualiza este archivo.
 - Los textos de la interfaz van en valenciano (Apunta't, Avisa'm, Lo vull per al meu grup, Ho portem al teu poble).
 
