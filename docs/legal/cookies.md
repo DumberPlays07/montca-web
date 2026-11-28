@@ -7,6 +7,7 @@ Notas para quien lo revise (no forman parte del texto publicado):
 - La web no tiene banner de cookies porque no usa ninguna que necesite consentimiento: solo almacenamiento técnico, exento según el art. 22.2 de la LSSI y la guía de cookies de la AEPD.
 - El idioma va en la dirección de la página (`/es/...`) y no se guarda en el navegador. Las fuentes tipográficas se alojan en la propia web.
 - Este texto solo es cierto mientras la web no cargue nada de terceros. Antes de añadir analítica, vídeos o publicaciones incrustadas, mapas incrustados o fuentes externas, se revisa esta política y, si hace falta, se pone el banner (B-15). Ver [decisiones.md](../decisiones.md), sección 3.
+- Actualizado el 2026-11-28 según las [historias de usuario de las inscripciones](../historias-usuario-inscripciones.md) v3.1: el inicio de sesión de los webmasters (Supabase Auth guarda la sesión en el navegador) y el flujo de verificación por código no cambian la conclusión. La sesión es almacenamiento técnico necesario, exento de consentimiento, y el flujo de verificación no guarda nada en el dispositivo. Esto último se confirma al hacer B-17.
 - Antes de publicar (B-17), hay que comprobarlo en el navegador: en las herramientas de desarrollo, pestaña "Aplicación" (o "Almacenamiento"), las páginas públicas no deben guardar ninguna cookie ni dato.
 
 ---
@@ -27,9 +28,9 @@ La única información que se guarda en su dispositivo es técnica:
 
 | Nombre | Para qué sirve | Quién la instala | Duración |
 | ------ | -------------- | ---------------- | -------- |
-| Sesión de la zona de gestión | Mantener iniciada la sesión de las personas de Montca Actiu que gestionan las inscripciones | Esta web (servicio Supabase) | Hasta que la persona cierra la sesión, aunque cierre el navegador |
+| Sesión de la zona de gestión (inicio de sesión de Supabase Auth) | Mantener iniciada la sesión de las personas de Montca Actiu que gestionan las inscripciones, que entran con su correo y contraseña. Las cuentas las crea el equipo: no hay registro público | Esta web (servicio Supabase) | Hasta que la persona cierra la sesión, aunque cierre el navegador |
 
-Solo se instala si usted entra en la zona de gestión, que es privada. Si solo visita la web o se inscribe en un evento, no se guarda nada en su dispositivo.
+Solo se instala si usted entra en la zona de gestión, que es privada. Si solo visita la web o se inscribe en un evento, no se guarda nada en su dispositivo. Esto incluye la verificación del correo con un código que reciben los tutores de los menores y los enlaces privados de cada equipo: funcionan con la dirección de la página y con lo que usted escribe, sin guardar nada en su dispositivo.
 
 Este tipo de almacenamiento es estrictamente necesario para que funcione un servicio que usted solicita, por lo que la ley no exige su consentimiento (art. 22.2 de la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico).
 
