@@ -9,7 +9,8 @@
  * de debajo no se mueva cuando llegan: `eventos-cliente.ts` pide los recuentos a la fuente elegida
  * (`FuentePlazas`) y los escribe en cada categoría. El aviso de error es una región `role="status"`
  * vacía desde el build, que el script rellena si la fuente falla, para que los lectores de pantalla
- * lo anuncien (T051). Los textos salen de `textos-eventos.ts` (diccionario por idioma), no del script. El máximo de cada categoría
+ * lo anuncien (T051). Sin JavaScript, ese mismo hueco lleva un `<noscript>` que avisa de que hacen
+ * falta los scripts para ver las plazas, así el espacio reservado no cambia. Los textos salen de `textos-eventos.ts` (diccionario por idioma), no del script. El máximo de cada categoría
  * sale de los datos del evento, no de la fuente.
  *
  * - Fuente `ninguna` (producción antes de la consulta pública): no sale nada, ni el segundo botón (FR-015).
@@ -71,7 +72,9 @@ const fechaCierre = diaMes(evento.inscripcion.cierre);
 				{/* Con las inscripciones abiertas, la fecha de cierre ya sale en la línea de estado. */}
 				<p class="cierre">{rellenar(t(lang, 'cierreInscripciones'), { fecha: fechaCierre })}</p>
 
-				<p class="aviso" role="status" data-error></p>
+				<p class="aviso" role="status" data-error>
+						<noscript>{t(lang, 'plazasSinJavaScript')}</noscript>
+					</p>
 
 				<div class="categorias" data-categorias>
 					{evento.categorias.map((categoria) => (
