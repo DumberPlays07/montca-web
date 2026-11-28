@@ -106,6 +106,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | 2026-11-19 | El idioma va **solo en la dirección de la página** (`/es/...`); no se guarda la preferencia en el navegador | B-07 ya usa rutas por idioma y así no se guarda nada en el dispositivo | Acordada |
 | 2026-11-19 | Las **fuentes tipográficas se alojan en la propia web**, nunca desde Google Fonts u otro servidor externo | Cargarlas de fuera envía la IP de cada visita a un tercero | Acordada (Pablo la aprueba en el PR #59; ya funciona así con Fontsource) |
 | 2026-11-28 | Las historias de usuario de las inscripciones ([historias-usuario-inscripciones.md](historias-usuario-inscripciones.md)) mandan sobre los documentos legales. Se actualizan `docs/legal/` en consecuencia: se dejan de pedir DNI de jugadores y dorsal, se suprime la lista pública de equipos, la autorización del tutor es solo en la web con verificación por código y se añade el tratamiento de datos de salud de menores | Montca ha aclarado cómo funcionan las inscripciones; las historias recogen esas aclaraciones y es lo que se va a implementar | Acordada |
+| 2026-11-28 | Se sustituye la lista pública de equipos por un contador de plazas libres por categoría, sin datos personales (HU-19). El Google Forms provisional deja de usarse: las inscripciones solo se hacen desde la web | La lista pública y los dorsales se suprimen (D-3 y D-4 de las historias) y las inscripciones pasan a ser solo por la web | Acordada |
 
 ## 4. Forma de trabajar
 
@@ -144,7 +145,7 @@ Lo que hay en el repositorio no es intocable: se hace lo más útil para la asoc
 | "Avisa'm" (Montca Camp, eventos sin fecha): ¿tipo dentro del formulario de contacto o lista aparte?                  | Saúl                             | Formulario                |
 | Qué archivos actuales del repo se eliminan                                                                           | Los dos                          | Limpieza                  |
 | ¿Tiene Montca un local abierto al público? (decide `LocalBusiness` o `SportsOrganization`). El domicilio es un piso particular, así que casi seguro `SportsOrganization` | Montca                           | SEO técnico               |
-| Cómo se apuntan los equipos desde el 23/11 hasta que la web esté lista, y cómo se pasan después a la web               | Montca + Saúl                    | Inscripción de equipos    |
+| Cómo se apuntan los equipos desde el 23/11 hasta que la web esté lista, y cómo se pasan después a la web — Sustituida (28/11/2026): el Google Forms provisional deja de usarse y las inscripciones solo se hacen desde la web, ver decisión del 28/11/2026 | Montca + Saúl                    | Inscripción de equipos    |
 | ¿La casilla de autorización del tutor sustituye a la firma digital o al papel en Softco, o hace falta además? — Sustituida (28/11/2026), ver decisión del 28/11/2026 | Montca + Saúl                    | Inscripción de equipos    |
 | Número de WhatsApp para los enlaces `wa.me`: ¿el mismo teléfono de contacto?                                          | Montca                           | B-01, B-10                |
 | ¿Se publica el repo? (falta el visto bueno de Pablo)                                                                   | Los dos                          | B-02                      |
